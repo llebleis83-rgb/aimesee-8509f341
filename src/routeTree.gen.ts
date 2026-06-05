@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app.index'
+import { Route as AppFavorisRouteImport } from './routes/_app.favoris'
 import { Route as AppProduitIdRouteImport } from './routes/_app.produit.$id'
 
 const AppRoute = AppRouteImport.update({
@@ -22,6 +23,11 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppFavorisRoute = AppFavorisRouteImport.update({
+  id: '/favoris',
+  path: '/favoris',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppProduitIdRoute = AppProduitIdRouteImport.update({
   id: '/produit/$id',
   path: '/produit/$id',
@@ -30,24 +36,27 @@ const AppProduitIdRoute = AppProduitIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
+  '/favoris': typeof AppFavorisRoute
   '/produit/$id': typeof AppProduitIdRoute
 }
 export interface FileRoutesByTo {
+  '/favoris': typeof AppFavorisRoute
   '/': typeof AppIndexRoute
   '/produit/$id': typeof AppProduitIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
+  '/_app/favoris': typeof AppFavorisRoute
   '/_app/': typeof AppIndexRoute
   '/_app/produit/$id': typeof AppProduitIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/produit/$id'
+  fullPaths: '/' | '/favoris' | '/produit/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/produit/$id'
-  id: '__root__' | '/_app' | '/_app/' | '/_app/produit/$id'
+  to: '/favoris' | '/' | '/produit/$id'
+  id: '__root__' | '/_app' | '/_app/favoris' | '/_app/' | '/_app/produit/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -70,6 +79,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/favoris': {
+      id: '/_app/favoris'
+      path: '/favoris'
+      fullPath: '/favoris'
+      preLoaderRoute: typeof AppFavorisRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/produit/$id': {
       id: '/_app/produit/$id'
       path: '/produit/$id'
@@ -81,11 +97,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppRouteChildren {
+  AppFavorisRoute: typeof AppFavorisRoute
   AppIndexRoute: typeof AppIndexRoute
   AppProduitIdRoute: typeof AppProduitIdRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppFavorisRoute: AppFavorisRoute,
   AppIndexRoute: AppIndexRoute,
   AppProduitIdRoute: AppProduitIdRoute,
 }
