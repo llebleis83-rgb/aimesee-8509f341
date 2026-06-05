@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app.index'
+import { Route as AppHistoriqueRouteImport } from './routes/_app.historique'
 import { Route as AppFavorisRouteImport } from './routes/_app.favoris'
 import { Route as AppProduitIdRouteImport } from './routes/_app.produit.$id'
 
@@ -21,6 +22,11 @@ const AppRoute = AppRouteImport.update({
 const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHistoriqueRoute = AppHistoriqueRouteImport.update({
+  id: '/historique',
+  path: '/historique',
   getParentRoute: () => AppRoute,
 } as any)
 const AppFavorisRoute = AppFavorisRouteImport.update({
@@ -37,10 +43,12 @@ const AppProduitIdRoute = AppProduitIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/favoris': typeof AppFavorisRoute
+  '/historique': typeof AppHistoriqueRoute
   '/produit/$id': typeof AppProduitIdRoute
 }
 export interface FileRoutesByTo {
   '/favoris': typeof AppFavorisRoute
+  '/historique': typeof AppHistoriqueRoute
   '/': typeof AppIndexRoute
   '/produit/$id': typeof AppProduitIdRoute
 }
@@ -48,15 +56,22 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
   '/_app/favoris': typeof AppFavorisRoute
+  '/_app/historique': typeof AppHistoriqueRoute
   '/_app/': typeof AppIndexRoute
   '/_app/produit/$id': typeof AppProduitIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/favoris' | '/produit/$id'
+  fullPaths: '/' | '/favoris' | '/historique' | '/produit/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/favoris' | '/' | '/produit/$id'
-  id: '__root__' | '/_app' | '/_app/favoris' | '/_app/' | '/_app/produit/$id'
+  to: '/favoris' | '/historique' | '/' | '/produit/$id'
+  id:
+    | '__root__'
+    | '/_app'
+    | '/_app/favoris'
+    | '/_app/historique'
+    | '/_app/'
+    | '/_app/produit/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -79,6 +94,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/historique': {
+      id: '/_app/historique'
+      path: '/historique'
+      fullPath: '/historique'
+      preLoaderRoute: typeof AppHistoriqueRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/favoris': {
       id: '/_app/favoris'
       path: '/favoris'
@@ -98,12 +120,14 @@ declare module '@tanstack/react-router' {
 
 interface AppRouteChildren {
   AppFavorisRoute: typeof AppFavorisRoute
+  AppHistoriqueRoute: typeof AppHistoriqueRoute
   AppIndexRoute: typeof AppIndexRoute
   AppProduitIdRoute: typeof AppProduitIdRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppFavorisRoute: AppFavorisRoute,
+  AppHistoriqueRoute: AppHistoriqueRoute,
   AppIndexRoute: AppIndexRoute,
   AppProduitIdRoute: AppProduitIdRoute,
 }
