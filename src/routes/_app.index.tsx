@@ -8,18 +8,18 @@ export const Route = createFileRoute("/_app/")({
 });
 
 const CATEGORIES = [
-  { emoji: "🍔", label: "Alimentation" },
-  { emoji: "🥤", label: "Boissons" },
-  { emoji: "💄", label: "Cosmétiques" },
-  { emoji: "👗", label: "Mode" },
-  { emoji: "💻", label: "Tech" },
-  { emoji: "🏠", label: "Maison" },
-  { emoji: "🧴", label: "Hygiène" },
-  { emoji: "⚽", label: "Sport" },
-  { emoji: "🧸", label: "Jouets" },
-  { emoji: "🎮", label: "Divertissement" },
-  { emoji: "🌿", label: "Bio & Écolo" },
-  { emoji: "✈️", label: "Voyage" },
+  { icon: Utensils, label: "Alimentation" },
+  { icon: Coffee, label: "Boissons" },
+  { icon: Sparkles, label: "Cosmétiques" },
+  { icon: Shirt, label: "Mode" },
+  { icon: Laptop, label: "Tech" },
+  { icon: Sofa, label: "Maison" },
+  { icon: Droplets, label: "Hygiène" },
+  { icon: Dumbbell, label: "Sport" },
+  { icon: Gamepad2, label: "Jouets" },
+  { icon: Film, label: "Divertissement" },
+  { icon: Leaf, label: "Bio & Écolo" },
+  { icon: Plane, label: "Voyage" },
 ];
 
 function Home() {
