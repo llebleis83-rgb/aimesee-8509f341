@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Search, ScanLine, User } from "lucide-react";
+import { Search, ScanLine, User, Utensils, Coffee, Sparkles, Shirt, Laptop, Sofa, Droplets, Dumbbell, Gamepad2, Film, Leaf, Plane } from "lucide-react";
 import { useState } from "react";
 import { RECENT_SEARCHES } from "@/lib/aimesee-data";
 
@@ -8,18 +8,18 @@ export const Route = createFileRoute("/_app/")({
 });
 
 const CATEGORIES = [
-  { emoji: "🍔", label: "Alimentation" },
-  { emoji: "🥤", label: "Boissons" },
-  { emoji: "💄", label: "Cosmétiques" },
-  { emoji: "👗", label: "Mode" },
-  { emoji: "💻", label: "Tech" },
-  { emoji: "🏠", label: "Maison" },
-  { emoji: "🧴", label: "Hygiène" },
-  { emoji: "⚽", label: "Sport" },
-  { emoji: "🧸", label: "Jouets" },
-  { emoji: "🎮", label: "Divertissement" },
-  { emoji: "🌿", label: "Bio & Écolo" },
-  { emoji: "✈️", label: "Voyage" },
+  { icon: Utensils, label: "Alimentation" },
+  { icon: Coffee, label: "Boissons" },
+  { icon: Sparkles, label: "Cosmétiques" },
+  { icon: Shirt, label: "Mode" },
+  { icon: Laptop, label: "Tech" },
+  { icon: Sofa, label: "Maison" },
+  { icon: Droplets, label: "Hygiène" },
+  { icon: Dumbbell, label: "Sport" },
+  { icon: Gamepad2, label: "Jouets" },
+  { icon: Film, label: "Divertissement" },
+  { icon: Leaf, label: "Bio & Écolo" },
+  { icon: Plane, label: "Voyage" },
 ];
 
 function Home() {
@@ -132,31 +132,44 @@ function Home() {
         Catégories
       </p>
       <div className="grid grid-cols-4 gap-2">
-        {CATEGORIES.map((c) => (
-          <button
-            key={c.label}
-            className="flex flex-col items-center"
-            style={{
-              background: "var(--surface)",
-              border: "0.5px solid var(--border)",
-              borderRadius: "12px",
-              padding: "12px 8px",
-            }}
-          >
-            <span style={{ fontSize: "20px", lineHeight: 1 }}>{c.emoji}</span>
-            <span
+        {CATEGORIES.map((c) => {
+          const Icon = c.icon;
+          return (
+            <button
+              key={c.label}
+              className="flex flex-col items-center"
               style={{
-                fontSize: "11px",
-                fontWeight: 400,
-                color: "var(--body-text)",
-                marginTop: "4px",
-                textAlign: "center",
+                background: "var(--surface)",
+                border: "0.5px solid var(--border)",
+                borderRadius: "12px",
+                padding: "12px 8px",
               }}
             >
-              {c.label}
-            </span>
-          </button>
-        ))}
+              <div
+                className="flex items-center justify-center"
+                style={{
+                  width: "36px",
+                  height: "36px",
+                  borderRadius: "8px",
+                  background: "var(--light-green)",
+                }}
+              >
+                <Icon size={18} color="var(--primary)" strokeWidth={1.75} />
+              </div>
+              <span
+                style={{
+                  fontSize: "11px",
+                  fontWeight: 400,
+                  color: "var(--body-text)",
+                  marginTop: "4px",
+                  textAlign: "center",
+                }}
+              >
+                {c.label}
+              </span>
+            </button>
+          );
+        })}
       </div>
 
       {/* Recent */}
@@ -198,6 +211,63 @@ function Home() {
           </button>
         ))}
       </div>
+
+      {/* Produit du jour */}
+      <button
+        onClick={() => go("Nutella")}
+        className="w-full text-left active:opacity-80 transition-opacity"
+        style={{
+          background: "var(--surface)",
+          border: "0.5px solid var(--border)",
+          borderRadius: "14px",
+          padding: "16px",
+          marginTop: "16px",
+        }}
+      >
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-3">
+            <div
+              style={{
+                width: "44px",
+                height: "44px",
+                borderRadius: "8px",
+                background: "var(--border)",
+                flexShrink: 0,
+              }}
+            />
+            <div>
+              <p style={{ fontSize: "15px", fontWeight: 500, color: "var(--dark-text)" }}>
+                Nutella
+              </p>
+              <p style={{ fontSize: "12px", color: "var(--muted-text)" }}>Ferrero</p>
+            </div>
+          </div>
+          <span
+            style={{
+              fontSize: "10px",
+              color: "var(--primary)",
+              background: "var(--light-green)",
+              borderRadius: "20px",
+              padding: "3px 10px",
+              whiteSpace: "nowrap",
+              flexShrink: 0,
+            }}
+          >
+            À la une
+          </span>
+        </div>
+        <p
+          style={{
+            fontSize: "13px",
+            color: "var(--body-text)",
+            fontStyle: "italic",
+            lineHeight: 1.5,
+            marginTop: "12px",
+          }}
+        >
+          Contient de l'huile de palme certifiée RSPO. Ferrero rapporte 100% d'approvisionnement ségrégué depuis 2015.
+        </p>
+      </button>
     </div>
   );
 }
