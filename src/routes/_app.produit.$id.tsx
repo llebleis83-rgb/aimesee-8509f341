@@ -215,12 +215,12 @@ function ProductSheet() {
                       color: "var(--primary)",
                       borderRadius: "20px",
                       padding: "2px 8px",
-                      fontSize: "10px",
+                      fontSize: "11px",
                     }}
                   >
                     {a.tag}
                   </span>
-                  <span style={{ fontSize: "12px", color: "var(--muted-text)" }}>
+                  <span style={{ fontSize: "12px", color: "var(--muted-text)", lineHeight: 1.5 }}>
                     {a.note}
                   </span>
                 </div>
@@ -228,6 +228,7 @@ function ProductSheet() {
             </Link>
           ))}
         </div>
+        <div style={{ height: "24px" }} />
       </div>
     </div>
   );
