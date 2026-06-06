@@ -9,10 +9,10 @@ export const Route = createFileRoute("/_app/historique")({
 function Historique() {
   return (
     <div className="px-5 pt-12">
-      <h1 style={{ fontSize: "17px", fontWeight: 500, color: "var(--dark-text)" }}>
+      <h1 style={{ fontSize: "20px", fontWeight: 500, color: "var(--dark-text)" }}>
         Historique
       </h1>
-      <p style={{ fontSize: "11px", color: "var(--muted-text)", marginTop: "2px" }}>
+      <p style={{ fontSize: "13px", color: "var(--muted-text)", marginTop: "2px" }}>
         Tes dernières recherches
       </p>
 
@@ -27,10 +27,10 @@ function Historique() {
               borderTop: i === 0 ? "none" : "0.5px solid var(--surface)",
             }}
           >
-            <Clock size={16} color="var(--placeholder)" strokeWidth={1.5} />
+            <Clock size={18} color="var(--placeholder)" strokeWidth={1.5} />
             <div className="flex-1 min-w-0">
-              <div style={{ fontSize: "11px", color: "var(--dark-text)" }}>{h.name}</div>
-              <div style={{ fontSize: "9px", color: "var(--placeholder)", marginTop: "1px" }}>
+              <div style={{ fontSize: "13px", color: "var(--dark-text)" }}>{h.name}</div>
+              <div style={{ fontSize: "11px", color: "var(--placeholder)", marginTop: "1px" }}>
                 {h.when}
               </div>
             </div>

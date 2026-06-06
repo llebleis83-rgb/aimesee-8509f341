@@ -13,10 +13,10 @@ export function BottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 bg-background flex justify-around pt-2"
+      className="fixed bottom-0 left-0 right-0 bg-background flex justify-around pt-3"
       style={{
         borderTop: "0.5px solid var(--border)",
-        paddingBottom: "10px",
+        paddingBottom: "12px",
       }}
     >
       {tabs.map(({ to, label, icon: Icon }) => {
@@ -27,11 +27,11 @@ export function BottomNav() {
           <Link
             key={to}
             to={to}
-            className="flex flex-col items-center justify-center gap-0.5 flex-1 py-1"
-            style={{ color }}
+            className="flex flex-col items-center justify-center flex-1 py-1"
+            style={{ color, gap: "4px" }}
           >
-            <Icon size={20} strokeWidth={active ? 2 : 1.75} />
-            <span style={{ fontSize: "10px", fontWeight: active ? 500 : 400 }}>
+            <Icon size={24} strokeWidth={active ? 2 : 1.75} />
+            <span style={{ fontSize: "11px", fontWeight: active ? 500 : 400 }}>
               {label}
             </span>
           </Link>

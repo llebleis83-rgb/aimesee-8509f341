@@ -21,21 +21,21 @@ function Compte() {
         <div
           className="flex items-center justify-center"
           style={{
-            width: "72px",
-            height: "72px",
+            width: "80px",
+            height: "80px",
             borderRadius: "999px",
             background: "var(--border)",
           }}
         >
-          <User size={32} color="var(--primary)" strokeWidth={1.5} />
+          <User size={36} color="var(--primary)" strokeWidth={1.5} />
         </div>
         <div
           className="mt-3"
-          style={{ fontSize: "13px", fontWeight: 500, color: "var(--dark-text)" }}
+          style={{ fontSize: "16px", fontWeight: 500, color: "var(--dark-text)" }}
         >
           Marie Dupont
         </div>
-        <div style={{ fontSize: "10px", color: "var(--muted-text)", marginTop: "2px" }}>
+        <div style={{ fontSize: "12px", color: "var(--muted-text)", marginTop: "2px" }}>
           marie@email.com
         </div>
       </div>
@@ -47,10 +47,10 @@ function Compte() {
             className="w-full flex items-center gap-3 py-3.5"
             style={{ borderTop: i === 0 ? "none" : "0.5px solid var(--surface)" }}
           >
-            <span style={{ fontSize: "16px" }}>{s.emoji}</span>
+            <span style={{ fontSize: "18px" }}>{s.emoji}</span>
             <span
               className="flex-1 text-left"
-              style={{ fontSize: "12px", color: "var(--dark-text)" }}
+              style={{ fontSize: "13px", color: "var(--dark-text)" }}
             >
               {s.label}
             </span>
@@ -63,7 +63,7 @@ function Compte() {
           style={{ borderTop: "0.5px solid var(--surface)" }}
         >
           <LogOut size={16} color="var(--placeholder)" strokeWidth={1.5} />
-          <span style={{ fontSize: "12px", color: "var(--placeholder)" }}>
+          <span style={{ fontSize: "13px", color: "var(--placeholder)" }}>
             Se déconnecter
           </span>
         </button>

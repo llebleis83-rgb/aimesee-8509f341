@@ -38,34 +38,34 @@ function ProductSheet() {
         <button
           onClick={() => navigate({ to: "/" })}
           className="flex items-center gap-1 mb-3"
-          style={{ color: "var(--muted-text)", fontSize: "12px" }}
+          style={{ color: "var(--muted-text)", fontSize: "13px" }}
         >
-          <ArrowLeft size={14} />
+          <ArrowLeft size={16} />
           Retour
         </button>
 
         <div className="flex items-center gap-3">
           <div
             style={{
-              width: "44px",
-              height: "44px",
+              width: "52px",
+              height: "52px",
               background: "var(--border)",
-              borderRadius: "8px",
+              borderRadius: "10px",
             }}
           />
           <div className="flex-1 min-w-0">
             <div
-              style={{ fontSize: "13px", fontWeight: 500, color: "var(--dark-text)" }}
+              style={{ fontSize: "18px", fontWeight: 500, color: "var(--dark-text)" }}
             >
               {product.name}
             </div>
-            <div style={{ fontSize: "10px", color: "var(--muted-text)" }}>
+            <div style={{ fontSize: "13px", color: "var(--muted-text)" }}>
               {product.brand} · {product.country}
             </div>
           </div>
           <button onClick={() => favStore.toggle(product.id)} aria-label="favori">
             <Heart
-              size={20}
+              size={22}
               color="var(--primary)"
               fill={isFav ? "var(--primary)" : "none"}
               strokeWidth={1.75}
@@ -79,7 +79,7 @@ function ProductSheet() {
         <p
           className="uppercase mb-3"
           style={{
-            fontSize: "9px",
+            fontSize: "11px",
             fontWeight: 500,
             color: "var(--primary)",
             letterSpacing: "0.8px",
@@ -88,39 +88,39 @@ function ProductSheet() {
           Les faits
         </p>
 
-        <div className="flex flex-col gap-2.5">
+        <div className="flex flex-col" style={{ gap: "10px" }}>
           {product.facts.map((f) => (
             <div
               key={f.category}
               style={{
                 background: "white",
                 border: "0.5px solid var(--border)",
-                borderRadius: "12px",
-                padding: "10px 12px",
+                borderRadius: "14px",
+                padding: "14px",
               }}
             >
               <div
-                className="flex items-center gap-1.5 mb-1"
-                style={{ fontSize: "10px", fontWeight: 500, color: "var(--primary)" }}
+                className="flex items-center gap-1.5 mb-1.5"
+                style={{ fontSize: "13px", fontWeight: 500, color: "var(--primary)" }}
               >
                 <span>{f.emoji}</span>
                 <span>{f.category}</span>
               </div>
               <p
                 style={{
-                  fontSize: "10px",
+                  fontSize: "15px",
                   color: "var(--body-text)",
-                  lineHeight: 1.5,
+                  lineHeight: 1.6,
                   fontWeight: 400,
                 }}
               >
                 {f.text}
               </p>
               <div
-                className="flex items-center gap-1 mt-1.5"
-                style={{ fontSize: "9px", color: "var(--placeholder)" }}
+                className="flex items-center gap-1 mt-2"
+                style={{ fontSize: "12px", color: "var(--placeholder)" }}
               >
-                <ExternalLink size={9} />
+                <ExternalLink size={10} />
                 <span>
                   {f.source} · {f.year}
                 </span>
@@ -138,7 +138,7 @@ function ProductSheet() {
         <p
           className="uppercase mb-3"
           style={{
-            fontSize: "9px",
+            fontSize: "11px",
             fontWeight: 500,
             color: "var(--primary)",
             letterSpacing: "0.8px",
@@ -159,8 +159,9 @@ function ProductSheet() {
                   border: active ? "0.5px solid var(--primary)" : "0.5px solid var(--border)",
                   color: active ? "white" : "var(--muted-text)",
                   borderRadius: "20px",
-                  padding: "6px 12px",
-                  fontSize: "11px",
+                  height: "34px",
+                  padding: "0 14px",
+                  fontSize: "12px",
                   fontWeight: active ? 500 : 400,
                 }}
               >
@@ -172,7 +173,7 @@ function ProductSheet() {
 
         <div className="flex flex-col gap-2">
           {filtered.length === 0 && (
-            <p style={{ fontSize: "11px", color: "var(--muted-text)" }}>
+            <p style={{ fontSize: "13px", color: "var(--muted-text)" }}>
               Aucune alternative dans cette catégorie.
             </p>
           )}
@@ -184,15 +185,15 @@ function ProductSheet() {
               className="flex items-center gap-3"
               style={{
                 border: "0.5px solid var(--border)",
-                borderRadius: "12px",
-                padding: "10px 12px",
+                borderRadius: "14px",
+                padding: "14px",
               }}
             >
               <div
                 className="flex items-center justify-center"
                 style={{
-                  width: "40px",
-                  height: "40px",
+                  width: "36px",
+                  height: "36px",
                   background: "var(--light-green)",
                   borderRadius: "8px",
                   fontSize: "18px",
@@ -203,7 +204,7 @@ function ProductSheet() {
               </div>
               <div className="flex-1 min-w-0">
                 <div
-                  style={{ fontSize: "11px", fontWeight: 500, color: "var(--dark-text)" }}
+                  style={{ fontSize: "14px", fontWeight: 500, color: "var(--dark-text)" }}
                 >
                   {a.name}
                 </div>
@@ -214,12 +215,12 @@ function ProductSheet() {
                       color: "var(--primary)",
                       borderRadius: "20px",
                       padding: "2px 8px",
-                      fontSize: "9px",
+                      fontSize: "10px",
                     }}
                   >
                     {a.tag}
                   </span>
-                  <span style={{ fontSize: "9px", color: "var(--muted-text)" }}>
+                  <span style={{ fontSize: "12px", color: "var(--muted-text)" }}>
                     {a.note}
                   </span>
                 </div>
