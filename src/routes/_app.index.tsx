@@ -211,6 +211,63 @@ function Home() {
           </button>
         ))}
       </div>
+
+      {/* Produit du jour */}
+      <button
+        onClick={() => go("Nutella")}
+        className="w-full text-left active:opacity-80 transition-opacity"
+        style={{
+          background: "var(--surface)",
+          border: "0.5px solid var(--border)",
+          borderRadius: "14px",
+          padding: "16px",
+          marginTop: "16px",
+        }}
+      >
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-3">
+            <div
+              style={{
+                width: "44px",
+                height: "44px",
+                borderRadius: "8px",
+                background: "var(--border)",
+                flexShrink: 0,
+              }}
+            />
+            <div>
+              <p style={{ fontSize: "15px", fontWeight: 500, color: "var(--dark-text)" }}>
+                Nutella
+              </p>
+              <p style={{ fontSize: "12px", color: "var(--muted-text)" }}>Ferrero</p>
+            </div>
+          </div>
+          <span
+            style={{
+              fontSize: "10px",
+              color: "var(--primary)",
+              background: "var(--light-green)",
+              borderRadius: "20px",
+              padding: "3px 10px",
+              whiteSpace: "nowrap",
+              flexShrink: 0,
+            }}
+          >
+            À la une
+          </span>
+        </div>
+        <p
+          style={{
+            fontSize: "13px",
+            color: "var(--body-text)",
+            fontStyle: "italic",
+            lineHeight: 1.5,
+            marginTop: "12px",
+          }}
+        >
+          Contient de l'huile de palme certifiée RSPO. Ferrero rapporte 100% d'approvisionnement ségrégué depuis 2015.
+        </p>
+      </button>
     </div>
   );
 }
