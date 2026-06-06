@@ -1,11 +1,26 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Search, ScanLine } from "lucide-react";
+import { Search, ScanLine, User } from "lucide-react";
 import { useState } from "react";
 import { RECENT_SEARCHES } from "@/lib/aimesee-data";
 
 export const Route = createFileRoute("/_app/")({
   component: Home,
 });
+
+const CATEGORIES = [
+  { emoji: "🍔", label: "Alimentation" },
+  { emoji: "🥤", label: "Boissons" },
+  { emoji: "💄", label: "Cosmétiques" },
+  { emoji: "👗", label: "Mode" },
+  { emoji: "💻", label: "Tech" },
+  { emoji: "🏠", label: "Maison" },
+  { emoji: "🧴", label: "Hygiène" },
+  { emoji: "⚽", label: "Sport" },
+  { emoji: "🧸", label: "Jouets" },
+  { emoji: "🎮", label: "Divertissement" },
+  { emoji: "🌿", label: "Bio & Écolo" },
+  { emoji: "✈️", label: "Voyage" },
+];
 
 function Home() {
   const navigate = useNavigate();
@@ -22,20 +37,41 @@ function Home() {
 
   return (
     <div className="px-5 pt-12">
-      <h1
-        style={{
-          fontSize: "32px",
-          fontWeight: 500,
-          color: "var(--dark-text)",
-          letterSpacing: "-0.5px",
-        }}
-      >
-        aimesee
-      </h1>
-      <p style={{ fontSize: "14px", color: "var(--muted-text)", marginTop: "2px" }}>
-        Faits. Sources. Tu décides.
-      </p>
+      {/* Header */}
+      <div className="flex items-start justify-between">
+        <div>
+          <h1
+            style={{
+              fontSize: "32px",
+              fontWeight: 500,
+              color: "var(--dark-text)",
+              letterSpacing: "-0.5px",
+              lineHeight: 1.1,
+            }}
+          >
+            aimesee
+          </h1>
+          <p style={{ fontSize: "14px", color: "var(--muted-text)", marginTop: "4px" }}>
+            Faits. Sources. Tu décides.
+          </p>
+        </div>
+        <button
+          onClick={() => navigate({ to: "/compte" })}
+          aria-label="Mon compte"
+          className="flex items-center justify-center shrink-0"
+          style={{
+            width: "32px",
+            height: "32px",
+            borderRadius: "9999px",
+            background: "var(--light-green)",
+            marginTop: "4px",
+          }}
+        >
+          <User size={18} color="var(--primary)" strokeWidth={1.75} />
+        </button>
+      </div>
 
+      {/* Search + Scan */}
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -66,7 +102,7 @@ function Home() {
 
       <button
         onClick={() => go("Nutella")}
-        className="mt-3 w-full flex items-center justify-center gap-2 active:opacity-80 transition-opacity"
+        className="w-full flex items-center justify-center gap-2 active:opacity-80 transition-opacity"
         style={{
           background: "var(--primary)",
           color: "white",
@@ -74,56 +110,78 @@ function Home() {
           height: "54px",
           fontSize: "16px",
           fontWeight: 500,
+          marginTop: "10px",
         }}
       >
         <ScanLine size={20} />
         Scanner un code-barres
       </button>
 
-      {/* Statistics section */}
-      <div className="mt-5 flex gap-2.5">
-        {[
-          { num: "2 847", label: "produits analysés" },
-          { num: "14 320", label: "faits sourcés" },
-          { num: "312", label: "alternatives" },
-        ].map((stat) => (
-          <div
-            key={stat.label}
-            className="flex-1 text-center"
-            style={{
-              background: "var(--surface)",
-              border: "0.5px solid var(--border)",
-              borderRadius: "12px",
-              padding: "14px",
-            }}
-          >
-            <div style={{ fontSize: "20px", fontWeight: 500, color: "var(--dark-text)" }}>
-              {stat.num}
-            </div>
-            <div style={{ fontSize: "11px", fontWeight: 400, color: "var(--muted-text)", marginTop: "4px" }}>
-              {stat.label}
-            </div>
-          </div>
-        ))}
-      </div>
-
+      {/* Categories */}
       <p
-        className="mt-8 mb-3 uppercase"
+        className="uppercase"
         style={{
           fontSize: "11px",
           fontWeight: 500,
           color: "var(--placeholder)",
           letterSpacing: "0.8px",
+          marginTop: "24px",
+          marginBottom: "12px",
+        }}
+      >
+        Catégories
+      </p>
+      <div className="grid grid-cols-4 gap-2">
+        {CATEGORIES.map((c) => (
+          <button
+            key={c.label}
+            className="flex flex-col items-center"
+            style={{
+              background: "var(--surface)",
+              border: "0.5px solid var(--border)",
+              borderRadius: "12px",
+              padding: "12px 8px",
+            }}
+          >
+            <span style={{ fontSize: "20px", lineHeight: 1 }}>{c.emoji}</span>
+            <span
+              style={{
+                fontSize: "11px",
+                fontWeight: 400,
+                color: "var(--body-text)",
+                marginTop: "4px",
+                textAlign: "center",
+              }}
+            >
+              {c.label}
+            </span>
+          </button>
+        ))}
+      </div>
+
+      {/* Recent */}
+      <p
+        className="uppercase"
+        style={{
+          fontSize: "11px",
+          fontWeight: 500,
+          color: "var(--placeholder)",
+          letterSpacing: "0.8px",
+          marginTop: "24px",
+          marginBottom: "12px",
         }}
       >
         Recherches récentes
       </p>
-
-      <div className="flex flex-wrap gap-2">
+      <div
+        className="flex gap-2 overflow-x-auto -mx-5 px-5"
+        style={{ flexWrap: "nowrap", scrollbarWidth: "none" }}
+      >
         {RECENT_SEARCHES.map((name) => (
           <button
             key={name}
             onClick={() => go(name)}
+            className="shrink-0"
             style={{
               background: "var(--surface)",
               border: "0.5px solid var(--border)",
@@ -133,6 +191,7 @@ function Home() {
               padding: "0 16px",
               fontSize: "13px",
               fontWeight: 400,
+              whiteSpace: "nowrap",
             }}
           >
             {name}

@@ -47,8 +47,8 @@ function ProductSheet() {
         <div className="flex items-center gap-3">
           <div
             style={{
-              width: "52px",
-              height: "52px",
+              width: "44px",
+              height: "44px",
               background: "var(--border)",
               borderRadius: "10px",
             }}
@@ -103,7 +103,7 @@ function ProductSheet() {
                 className="flex items-center gap-1.5 mb-1.5"
                 style={{ fontSize: "13px", fontWeight: 500, color: "var(--primary)" }}
               >
-                <span>{f.emoji}</span>
+                <span style={{ fontSize: "14px" }}>{f.emoji}</span>
                 <span>{f.category}</span>
               </div>
               <p
@@ -120,7 +120,7 @@ function ProductSheet() {
                 className="flex items-center gap-1 mt-2"
                 style={{ fontSize: "12px", color: "var(--placeholder)" }}
               >
-                <ExternalLink size={10} />
+                <ExternalLink size={14} />
                 <span>
                   {f.source} · {f.year}
                 </span>
@@ -215,12 +215,12 @@ function ProductSheet() {
                       color: "var(--primary)",
                       borderRadius: "20px",
                       padding: "2px 8px",
-                      fontSize: "10px",
+                      fontSize: "11px",
                     }}
                   >
                     {a.tag}
                   </span>
-                  <span style={{ fontSize: "12px", color: "var(--muted-text)" }}>
+                  <span style={{ fontSize: "12px", color: "var(--muted-text)", lineHeight: 1.5 }}>
                     {a.note}
                   </span>
                 </div>
@@ -228,6 +228,7 @@ function ProductSheet() {
             </Link>
           ))}
         </div>
+        <div style={{ height: "24px" }} />
       </div>
     </div>
   );

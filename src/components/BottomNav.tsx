@@ -1,11 +1,10 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, Heart, History, User } from "lucide-react";
+import { Home, Heart, History } from "lucide-react";
 
 const tabs = [
   { to: "/", label: "Accueil", icon: Home },
   { to: "/favoris", label: "Favoris", icon: Heart },
   { to: "/historique", label: "Historique", icon: History },
-  { to: "/compte", label: "Mon compte", icon: User },
 ] as const;
 
 export function BottomNav() {
