@@ -24,7 +24,7 @@ function Home() {
     <div className="px-5 pt-12">
       <h1
         style={{
-          fontSize: "24px",
+          fontSize: "32px",
           fontWeight: 500,
           color: "var(--dark-text)",
           letterSpacing: "-0.5px",
@@ -32,7 +32,7 @@ function Home() {
       >
         aimesee
       </h1>
-      <p style={{ fontSize: "11px", color: "var(--muted-text)", marginTop: "2px" }}>
+      <p style={{ fontSize: "14px", color: "var(--muted-text)", marginTop: "2px" }}>
         Faits. Sources. Tu décides.
       </p>
 
@@ -44,21 +44,22 @@ function Home() {
         className="mt-8"
       >
         <div
-          className="flex items-center gap-2 px-3"
+          className="flex items-center gap-2"
           style={{
             background: "var(--surface)",
             border: "0.5px solid var(--border)",
             borderRadius: "12px",
-            height: "44px",
+            height: "52px",
+            padding: "0 16px",
           }}
         >
-          <Search size={16} color="var(--muted-text)" />
+          <Search size={18} color="var(--muted-text)" />
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Rechercher un produit ou une marque..."
             className="flex-1 bg-transparent outline-none"
-            style={{ fontSize: "13px", color: "var(--dark-text)" }}
+            style={{ fontSize: "15px", color: "var(--dark-text)" }}
           />
         </div>
       </form>
@@ -69,20 +70,47 @@ function Home() {
         style={{
           background: "var(--primary)",
           color: "white",
-          borderRadius: "12px",
-          height: "44px",
-          fontSize: "13px",
+          borderRadius: "14px",
+          height: "54px",
+          fontSize: "16px",
           fontWeight: 500,
         }}
       >
-        <ScanLine size={16} />
+        <ScanLine size={20} />
         Scanner un code-barres
       </button>
+
+      {/* Statistics section */}
+      <div className="mt-5 flex gap-2.5">
+        {[
+          { num: "2 847", label: "produits analysés" },
+          { num: "14 320", label: "faits sourcés" },
+          { num: "312", label: "alternatives" },
+        ].map((stat) => (
+          <div
+            key={stat.label}
+            className="flex-1 text-center"
+            style={{
+              background: "var(--surface)",
+              border: "0.5px solid var(--border)",
+              borderRadius: "12px",
+              padding: "14px",
+            }}
+          >
+            <div style={{ fontSize: "20px", fontWeight: 500, color: "var(--dark-text)" }}>
+              {stat.num}
+            </div>
+            <div style={{ fontSize: "11px", fontWeight: 400, color: "var(--muted-text)", marginTop: "4px" }}>
+              {stat.label}
+            </div>
+          </div>
+        ))}
+      </div>
 
       <p
         className="mt-8 mb-3 uppercase"
         style={{
-          fontSize: "9px",
+          fontSize: "11px",
           fontWeight: 500,
           color: "var(--placeholder)",
           letterSpacing: "0.8px",
@@ -100,9 +128,10 @@ function Home() {
               background: "var(--surface)",
               border: "0.5px solid var(--border)",
               color: "var(--primary)",
-              borderRadius: "20px",
-              padding: "6px 14px",
-              fontSize: "12px",
+              borderRadius: "18px",
+              height: "36px",
+              padding: "0 16px",
+              fontSize: "13px",
               fontWeight: 400,
             }}
           >
