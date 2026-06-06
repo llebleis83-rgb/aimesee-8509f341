@@ -132,31 +132,44 @@ function Home() {
         Catégories
       </p>
       <div className="grid grid-cols-4 gap-2">
-        {CATEGORIES.map((c) => (
-          <button
-            key={c.label}
-            className="flex flex-col items-center"
-            style={{
-              background: "var(--surface)",
-              border: "0.5px solid var(--border)",
-              borderRadius: "12px",
-              padding: "12px 8px",
-            }}
-          >
-            <span style={{ fontSize: "20px", lineHeight: 1 }}>{c.emoji}</span>
-            <span
+        {CATEGORIES.map((c) => {
+          const Icon = c.icon;
+          return (
+            <button
+              key={c.label}
+              className="flex flex-col items-center"
               style={{
-                fontSize: "11px",
-                fontWeight: 400,
-                color: "var(--body-text)",
-                marginTop: "4px",
-                textAlign: "center",
+                background: "var(--surface)",
+                border: "0.5px solid var(--border)",
+                borderRadius: "12px",
+                padding: "12px 8px",
               }}
             >
-              {c.label}
-            </span>
-          </button>
-        ))}
+              <div
+                className="flex items-center justify-center"
+                style={{
+                  width: "36px",
+                  height: "36px",
+                  borderRadius: "8px",
+                  background: "var(--light-green)",
+                }}
+              >
+                <Icon size={18} color="var(--primary)" strokeWidth={1.75} />
+              </div>
+              <span
+                style={{
+                  fontSize: "11px",
+                  fontWeight: 400,
+                  color: "var(--body-text)",
+                  marginTop: "4px",
+                  textAlign: "center",
+                }}
+              >
+                {c.label}
+              </span>
+            </button>
+          );
+        })}
       </div>
 
       {/* Recent */}
