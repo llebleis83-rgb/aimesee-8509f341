@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Search, ScanLine, User } from "lucide-react";
+import { Search, ScanLine, User, Utensils, Coffee, Sparkles, Shirt, Laptop, Sofa, Droplets, Dumbbell, Gamepad2, Film, Leaf, Plane } from "lucide-react";
 import { useState } from "react";
 import { RECENT_SEARCHES } from "@/lib/aimesee-data";
 
