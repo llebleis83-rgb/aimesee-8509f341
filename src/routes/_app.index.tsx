@@ -1,7 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Search, ScanLine, User, Utensils, Coffee, Sparkles, Shirt, Laptop, Sofa, Droplets, Dumbbell, Gamepad2, Film, Leaf, Plane } from "lucide-react";
 import { useState } from "react";
-import { RECENT_SEARCHES } from "@/lib/aimesee-data";
 
 export const Route = createFileRoute("/_app/")({
   component: Home,
@@ -36,7 +35,7 @@ function Home() {
   };
 
   return (
-    <div className="px-5 pt-12">
+    <div className="px-5 pt-12 flex flex-col" style={{ minHeight: "calc(100vh - 88px)" }}>
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
@@ -71,52 +70,6 @@ function Home() {
         </button>
       </div>
 
-      {/* Search + Scan */}
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (q.trim()) go(q.trim());
-        }}
-        className="mt-8"
-      >
-        <div
-          className="flex items-center gap-2"
-          style={{
-            background: "var(--surface)",
-            border: "0.5px solid var(--border)",
-            borderRadius: "12px",
-            height: "52px",
-            padding: "0 16px",
-          }}
-        >
-          <Search size={18} color="var(--muted-text)" />
-          <input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Rechercher un produit ou une marque..."
-            className="flex-1 bg-transparent outline-none"
-            style={{ fontSize: "15px", color: "var(--dark-text)" }}
-          />
-        </div>
-      </form>
-
-      <button
-        onClick={() => go("Nutella")}
-        className="w-full flex items-center justify-center gap-2 active:opacity-80 transition-opacity"
-        style={{
-          background: "var(--primary)",
-          color: "white",
-          borderRadius: "14px",
-          height: "54px",
-          fontSize: "16px",
-          fontWeight: 500,
-          marginTop: "10px",
-        }}
-      >
-        <ScanLine size={20} />
-        Scanner un code-barres
-      </button>
-
       {/* Categories */}
       <p
         className="uppercase"
@@ -125,13 +78,13 @@ function Home() {
           fontWeight: 500,
           color: "var(--placeholder)",
           letterSpacing: "0.8px",
-          marginTop: "24px",
-          marginBottom: "12px",
+          marginTop: "32px",
+          marginBottom: "0px",
         }}
       >
         Catégories
       </p>
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-4 gap-2" style={{ marginTop: "24px" }}>
         {CATEGORIES.map((c) => {
           const Icon = c.icon;
           return (
@@ -172,102 +125,56 @@ function Home() {
         })}
       </div>
 
-      {/* Recent */}
-      <p
-        className="uppercase"
-        style={{
-          fontSize: "11px",
-          fontWeight: 500,
-          color: "var(--placeholder)",
-          letterSpacing: "0.8px",
-          marginTop: "24px",
-          marginBottom: "12px",
-        }}
-      >
-        Recherches récentes
-      </p>
-      <div
-        className="flex gap-2 overflow-x-auto -mx-5 px-5"
-        style={{ flexWrap: "nowrap", scrollbarWidth: "none" }}
-      >
-        {RECENT_SEARCHES.map((name) => (
-          <button
-            key={name}
-            onClick={() => go(name)}
-            className="shrink-0"
-            style={{
-              background: "var(--surface)",
-              border: "0.5px solid var(--border)",
-              color: "var(--primary)",
-              borderRadius: "18px",
-              height: "36px",
-              padding: "0 16px",
-              fontSize: "13px",
-              fontWeight: 400,
-              whiteSpace: "nowrap",
-            }}
-          >
-            {name}
-          </button>
-        ))}
-      </div>
+      {/* Spacer pushes search + scan to bottom */}
+      <div className="flex-1" style={{ minHeight: "24px" }} />
 
-      {/* Produit du jour */}
-      <button
-        onClick={() => go("Nutella")}
-        className="w-full text-left active:opacity-80 transition-opacity"
-        style={{
-          background: "var(--surface)",
-          border: "0.5px solid var(--border)",
-          borderRadius: "14px",
-          padding: "16px",
-          marginTop: "16px",
+      {/* Search + Scan */}
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (q.trim()) go(q.trim());
         }}
       >
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-3">
-            <div
-              style={{
-                width: "44px",
-                height: "44px",
-                borderRadius: "8px",
-                background: "var(--border)",
-                flexShrink: 0,
-              }}
-            />
-            <div>
-              <p style={{ fontSize: "15px", fontWeight: 500, color: "var(--dark-text)" }}>
-                Nutella
-              </p>
-              <p style={{ fontSize: "12px", color: "var(--muted-text)" }}>Ferrero</p>
-            </div>
-          </div>
-          <span
-            style={{
-              fontSize: "10px",
-              color: "var(--primary)",
-              background: "var(--light-green)",
-              borderRadius: "20px",
-              padding: "3px 10px",
-              whiteSpace: "nowrap",
-              flexShrink: 0,
-            }}
-          >
-            À la une
-          </span>
-        </div>
-        <p
+        <div
+          className="flex items-center gap-2"
           style={{
-            fontSize: "13px",
-            color: "var(--body-text)",
-            fontStyle: "italic",
-            lineHeight: 1.5,
-            marginTop: "12px",
+            background: "var(--surface)",
+            border: "0.5px solid var(--border)",
+            borderRadius: "12px",
+            height: "52px",
+            padding: "0 16px",
           }}
         >
-          Contient de l'huile de palme certifiée RSPO. Ferrero rapporte 100% d'approvisionnement ségrégué depuis 2015.
-        </p>
+          <Search size={18} color="var(--muted-text)" />
+          <input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Rechercher un produit ou une marque..."
+            className="flex-1 bg-transparent outline-none"
+            style={{ fontSize: "15px", color: "var(--dark-text)" }}
+          />
+        </div>
+      </form>
+
+      <button
+        onClick={() => go("Nutella")}
+        className="w-full flex items-center justify-center gap-2 active:opacity-80 transition-opacity"
+        style={{
+          background: "var(--primary)",
+          color: "white",
+          borderRadius: "14px",
+          height: "54px",
+          fontSize: "16px",
+          fontWeight: 500,
+          marginTop: "10px",
+        }}
+      >
+        <ScanLine size={20} />
+        Scanner un code-barres
       </button>
+
+      <div style={{ paddingBottom: "32px" }} />
     </div>
   );
 }
+
