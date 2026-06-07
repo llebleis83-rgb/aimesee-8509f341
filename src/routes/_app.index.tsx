@@ -1,27 +1,12 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Search, ScanLine, User, Utensils, Coffee, Sparkles, Shirt, Laptop, Sofa, Droplets, Dumbbell, Gamepad2, Film, Leaf, Plane } from "lucide-react";
+import { Search, User, Flashlight } from "lucide-react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/_app/")({
-  component: Home,
+  component: Scanner,
 });
 
-const CATEGORIES = [
-  { icon: Utensils, label: "Alimentation" },
-  { icon: Coffee, label: "Boissons" },
-  { icon: Sparkles, label: "Cosmétiques" },
-  { icon: Shirt, label: "Mode" },
-  { icon: Laptop, label: "Tech" },
-  { icon: Sofa, label: "Maison" },
-  { icon: Droplets, label: "Hygiène" },
-  { icon: Dumbbell, label: "Sport" },
-  { icon: Gamepad2, label: "Jouets" },
-  { icon: Film, label: "Divertissement" },
-  { icon: Leaf, label: "Bio & Écolo" },
-  { icon: Plane, label: "Voyage" },
-];
-
-function Home() {
+function Scanner() {
   const navigate = useNavigate();
   const [q, setQ] = useState("");
 
@@ -34,26 +19,36 @@ function Home() {
     navigate({ to: "/produit/$id", params: { id: slug } });
   };
 
+  const Corner = ({ style }: { style: React.CSSProperties }) => (
+    <div
+      style={{
+        position: "absolute",
+        width: "32px",
+        height: "32px",
+        borderColor: "#FFFFFF",
+        borderStyle: "solid",
+        ...style,
+      }}
+    />
+  );
+
   return (
-    <div className="px-5 pt-12 flex flex-col" style={{ minHeight: "calc(100vh - 88px)" }}>
+    <div className="flex flex-col" style={{ minHeight: "calc(100vh - 64px)" }}>
       {/* Header */}
-      <div className="flex items-start justify-between">
-        <div>
-          <h1
-            style={{
-              fontSize: "32px",
-              fontWeight: 500,
-              color: "var(--dark-text)",
-              letterSpacing: "-0.5px",
-              lineHeight: 1.1,
-            }}
-          >
-            aimesee
-          </h1>
-          <p style={{ fontSize: "14px", color: "var(--muted-text)", marginTop: "4px" }}>
-            Faits. Sources. Tu décides.
-          </p>
-        </div>
+      <header
+        className="flex items-center justify-between"
+        style={{ background: "#FFFFFF", padding: "12px 16px" }}
+      >
+        <h1
+          style={{
+            fontSize: "24px",
+            fontWeight: 500,
+            color: "#1A2E1A",
+            letterSpacing: "-0.3px",
+          }}
+        >
+          aimesee
+        </h1>
         <button
           onClick={() => navigate({ to: "/compte" })}
           aria-label="Mon compte"
@@ -62,119 +57,101 @@ function Home() {
             width: "32px",
             height: "32px",
             borderRadius: "9999px",
-            background: "var(--light-green)",
-            marginTop: "4px",
+            background: "#EAF3DE",
           }}
         >
-          <User size={18} color="var(--primary)" strokeWidth={1.75} />
+          <User size={18} color="#5B8C6A" strokeWidth={1.75} />
+        </button>
+      </header>
+
+      {/* Viewfinder */}
+      <div
+        className="relative"
+        style={{
+          background: "#1A2E1A",
+          borderRadius: "20px",
+          margin: "0 12px",
+          height: "60vh",
+        }}
+      >
+        {/* Scan frame: 4 corner brackets */}
+        <div
+          className="absolute"
+          style={{
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "220px",
+            height: "220px",
+          }}
+        >
+          <Corner style={{ top: 0, left: 0, borderWidth: "2px 0 0 2px" }} />
+          <Corner style={{ top: 0, right: 0, borderWidth: "2px 2px 0 0" }} />
+          <Corner style={{ bottom: 0, left: 0, borderWidth: "0 0 2px 2px" }} />
+          <Corner style={{ bottom: 0, right: 0, borderWidth: "0 2px 2px 0" }} />
+          <div
+            style={{
+              position: "absolute",
+              top: "calc(100% + 16px)",
+              left: 0,
+              right: 0,
+              textAlign: "center",
+              fontSize: "12px",
+              fontWeight: 400,
+              color: "rgba(255,255,255,0.6)",
+            }}
+          >
+            Pointez vers un code-barres
+          </div>
+        </div>
+
+        {/* Torch */}
+        <button
+          aria-label="Lampe torche"
+          className="absolute flex items-center justify-center"
+          style={{
+            bottom: "16px",
+            right: "16px",
+            width: "36px",
+            height: "36px",
+            borderRadius: "9999px",
+            background: "rgba(255,255,255,0.15)",
+          }}
+        >
+          <Flashlight size={18} color="#FFFFFF" strokeWidth={1.75} />
         </button>
       </div>
 
-      {/* Categories */}
-      <p
-        className="uppercase"
-        style={{
-          fontSize: "11px",
-          fontWeight: 500,
-          color: "var(--placeholder)",
-          letterSpacing: "0.8px",
-          marginTop: "32px",
-          marginBottom: "0px",
-        }}
-      >
-        Catégories
-      </p>
-      <div className="grid grid-cols-4 gap-2" style={{ marginTop: "24px" }}>
-        {CATEGORIES.map((c) => {
-          const Icon = c.icon;
-          return (
-            <button
-              key={c.label}
-              className="flex flex-col items-center"
-              style={{
-                background: "var(--surface)",
-                border: "0.5px solid var(--border)",
-                borderRadius: "12px",
-                padding: "12px 8px",
-              }}
-            >
-              <div
-                className="flex items-center justify-center"
-                style={{
-                  width: "36px",
-                  height: "36px",
-                  borderRadius: "8px",
-                  background: "var(--light-green)",
-                }}
-              >
-                <Icon size={18} color="var(--primary)" strokeWidth={1.75} />
-              </div>
-              <span
-                style={{
-                  fontSize: "11px",
-                  fontWeight: 400,
-                  color: "var(--body-text)",
-                  marginTop: "4px",
-                  textAlign: "center",
-                }}
-              >
-                {c.label}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Spacer pushes search + scan to bottom */}
-      <div className="flex-1" style={{ minHeight: "24px" }} />
-
-      {/* Search + Scan */}
+      {/* Search */}
       <form
         onSubmit={(e) => {
           e.preventDefault();
           if (q.trim()) go(q.trim());
         }}
+        style={{ marginTop: "12px", marginLeft: "16px", marginRight: "16px" }}
       >
         <div
           className="flex items-center gap-2"
           style={{
-            background: "var(--surface)",
-            border: "0.5px solid var(--border)",
-            borderRadius: "12px",
+            background: "#F4F7F4",
+            border: "0.5px solid #DDE8DD",
+            borderRadius: "14px",
             height: "52px",
             padding: "0 16px",
           }}
         >
-          <Search size={18} color="var(--muted-text)" />
+          <Search size={18} color="#7A9A7A" />
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Rechercher un produit ou une marque..."
+            placeholder="Ou recherchez par nom de produit..."
             className="flex-1 bg-transparent outline-none"
-            style={{ fontSize: "15px", color: "var(--dark-text)" }}
+            style={{ fontSize: "15px", color: "#1A2E1A" }}
           />
         </div>
       </form>
 
-      <button
-        onClick={() => go("Nutella")}
-        className="w-full flex items-center justify-center gap-2 active:opacity-80 transition-opacity"
-        style={{
-          background: "var(--primary)",
-          color: "white",
-          borderRadius: "14px",
-          height: "54px",
-          fontSize: "16px",
-          fontWeight: 500,
-          marginTop: "10px",
-        }}
-      >
-        <ScanLine size={20} />
-        Scanner un code-barres
-      </button>
-
-      <div style={{ paddingBottom: "32px" }} />
+      <div style={{ paddingBottom: "16px" }} />
     </div>
   );
 }
-
