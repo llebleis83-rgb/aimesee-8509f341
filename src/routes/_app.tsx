@@ -8,7 +8,7 @@ export const Route = createFileRoute("/_app")({
 function AppLayout() {
   return (
     <div className="min-h-screen bg-background flex justify-center">
-      <div className="w-full max-w-[480px] relative pb-[88px]">
+      <div className="w-full max-w-[480px] relative pb-[64px]">
         <Outlet />
         <BottomNav />
       </div>
