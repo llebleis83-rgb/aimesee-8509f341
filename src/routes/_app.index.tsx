@@ -131,7 +131,7 @@ function Scanner() {
           if (q.trim()) go(q.trim());
         }}
         className="shrink-0"
-        style={{ margin: "28px 16px 20px" }}
+        style={{ margin: "24px 16px" }}
       >
         <div
           className="flex items-center gap-2"
