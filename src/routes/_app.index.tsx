@@ -33,21 +33,20 @@ function Scanner() {
   );
 
   return (
-    <div className="flex flex-col" style={{ minHeight: "calc(100vh - 64px)" }}>
+    <div className="flex flex-col" style={{ height: "calc(100vh - 64px)" }}>
       {/* Header */}
       <header
-        className="flex items-center justify-between"
-        style={{ background: "#FFFFFF", padding: "24px 20px 16px" }}
+        className="flex items-center justify-between shrink-0"
+        style={{ background: "#FFFFFF", padding: "32px 20px 28px" }}
       >
         <h1
           style={{
-            fontSize: "24px",
+            fontSize: "28px",
             fontWeight: 500,
             color: "#1A2E1A",
-            letterSpacing: "-0.3px",
+            letterSpacing: "-0.4px",
           }}
         >
-
           aimesee
         </h1>
         <button
@@ -65,74 +64,75 @@ function Scanner() {
         </button>
       </header>
 
-      {/* Viewfinder */}
-      <div
-        className="relative"
-        style={{
-          background: "#1A2E1A",
-          borderRadius: "20px",
-          margin: "0 16px",
-          height: "52vh",
-        }}
-      >
-
-        {/* Scan frame: 4 corner brackets */}
+      {/* Viewfinder (dominant, centered) */}
+      <div className="flex-1 flex items-center justify-center" style={{ padding: "0 16px" }}>
         <div
-          className="absolute"
+          className="relative w-full"
           style={{
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: "220px",
-            height: "220px",
+            background: "#1A2E1A",
+            borderRadius: "20px",
+            height: "100%",
+            maxHeight: "560px",
           }}
         >
-          <Corner style={{ top: 0, left: 0, borderWidth: "2px 0 0 2px" }} />
-          <Corner style={{ top: 0, right: 0, borderWidth: "2px 2px 0 0" }} />
-          <Corner style={{ bottom: 0, left: 0, borderWidth: "0 0 2px 2px" }} />
-          <Corner style={{ bottom: 0, right: 0, borderWidth: "0 2px 2px 0" }} />
+          {/* Scan frame: 4 corner brackets */}
           <div
+            className="absolute"
             style={{
-              position: "absolute",
-              top: "calc(100% + 16px)",
-              left: 0,
-              right: 0,
-              textAlign: "center",
-              fontSize: "12px",
-              fontWeight: 400,
-              color: "rgba(255,255,255,0.6)",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "240px",
+              height: "240px",
             }}
           >
-            Pointez vers un code-barres
+            <Corner style={{ top: 0, left: 0, borderWidth: "2px 0 0 2px" }} />
+            <Corner style={{ top: 0, right: 0, borderWidth: "2px 2px 0 0" }} />
+            <Corner style={{ bottom: 0, left: 0, borderWidth: "0 0 2px 2px" }} />
+            <Corner style={{ bottom: 0, right: 0, borderWidth: "0 2px 2px 0" }} />
+            <div
+              style={{
+                position: "absolute",
+                top: "calc(100% + 16px)",
+                left: 0,
+                right: 0,
+                textAlign: "center",
+                fontSize: "12px",
+                fontWeight: 400,
+                color: "rgba(255,255,255,0.6)",
+              }}
+            >
+              Pointez vers un code-barres
+            </div>
           </div>
-        </div>
 
-        {/* Torch */}
-        <button
-          aria-label="Lampe torche"
-          className="absolute flex items-center justify-center"
-          style={{
-            bottom: "16px",
-            right: "16px",
-            width: "36px",
-            height: "36px",
-            borderRadius: "9999px",
-            background: "rgba(255,255,255,0.15)",
-          }}
-        >
-          <Flashlight size={18} color="#FFFFFF" strokeWidth={1.75} />
-        </button>
+          {/* Torch */}
+          <button
+            aria-label="Lampe torche"
+            className="absolute flex items-center justify-center"
+            style={{
+              bottom: "16px",
+              right: "16px",
+              width: "36px",
+              height: "36px",
+              borderRadius: "9999px",
+              background: "rgba(255,255,255,0.15)",
+            }}
+          >
+            <Flashlight size={18} color="#FFFFFF" strokeWidth={1.75} />
+          </button>
+        </div>
       </div>
 
-      {/* Search */}
+      {/* Search (pinned bottom) */}
       <form
         onSubmit={(e) => {
           e.preventDefault();
           if (q.trim()) go(q.trim());
         }}
-        style={{ marginTop: "20px", marginBottom: "0px", marginLeft: "16px", marginRight: "16px" }}
+        className="shrink-0"
+        style={{ margin: "28px 16px 20px" }}
       >
-
         <div
           className="flex items-center gap-2"
           style={{
@@ -153,8 +153,7 @@ function Scanner() {
           />
         </div>
       </form>
-      <div style={{ height: "32px" }} />
-
     </div>
   );
 }
+
