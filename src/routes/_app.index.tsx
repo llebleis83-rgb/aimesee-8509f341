@@ -153,6 +153,8 @@ function Scanner() {
           />
         </div>
       </form>
+      <div style={{ height: "32px" }} />
+
     </div>
   );
 }
