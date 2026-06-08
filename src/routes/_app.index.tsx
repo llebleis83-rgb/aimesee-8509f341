@@ -37,7 +37,7 @@ function Scanner() {
       {/* Header */}
       <header
         className="flex items-center justify-between"
-        style={{ background: "#FFFFFF", padding: "20px 16px" }}
+        style={{ background: "#FFFFFF", padding: "24px 20px 16px" }}
       >
         <h1
           style={{
@@ -47,6 +47,7 @@ function Scanner() {
             letterSpacing: "-0.3px",
           }}
         >
+
           aimesee
         </h1>
         <button
@@ -70,10 +71,11 @@ function Scanner() {
         style={{
           background: "#1A2E1A",
           borderRadius: "20px",
-          margin: "8px 12px 16px",
-          height: "55vh",
+          margin: "0 16px",
+          height: "52vh",
         }}
       >
+
         {/* Scan frame: 4 corner brackets */}
         <div
           className="absolute"
@@ -128,8 +130,9 @@ function Scanner() {
           e.preventDefault();
           if (q.trim()) go(q.trim());
         }}
-        style={{ marginTop: "20px", marginBottom: "24px", marginLeft: "16px", marginRight: "16px" }}
+        style={{ marginTop: "20px", marginBottom: "0px", marginLeft: "16px", marginRight: "16px" }}
       >
+
         <div
           className="flex items-center gap-2"
           style={{
@@ -150,6 +153,8 @@ function Scanner() {
           />
         </div>
       </form>
+      <div style={{ height: "32px" }} />
+
     </div>
   );
 }
