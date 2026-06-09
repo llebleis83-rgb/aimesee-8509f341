@@ -185,14 +185,14 @@ function Categories() {
       </div>
 
       {AVAILABLE.map((c) => (
-        <AvailableRow key={c.label} icon={c.icon} label={`${c.emoji} ${c.label}`} />
+        <AvailableRow key={c.label} icon={c.icon} label={c.label} />
       ))}
 
       <div style={{ marginTop: "16px", marginBottom: "4px" }}>
         <SectionLabel>Bientôt disponible</SectionLabel>
       </div>
       {COMING_SOON.map((c) => (
-        <ComingSoonRow key={c.label} icon={c.icon} label={`${c.emoji} ${c.label}`} />
+        <ComingSoonRow key={c.label} icon={c.icon} label={c.label} />
       ))}
     </div>
   );
