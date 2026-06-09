@@ -10,9 +10,10 @@ import {
   Newspaper,
   ExternalLink,
   CornerDownRight,
+  ChevronRight,
   type LucideIcon,
 } from "lucide-react";
-import { useMemo, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { PRODUCTS } from "@/lib/aimesee-data";
 import { favStore, useFavorites } from "@/lib/favorites-store";
 
@@ -20,7 +21,7 @@ export const Route = createFileRoute("/_app/produit/$id")({
   component: ProductSheet,
 });
 
-const COLORS = {
+const C = {
   bg: "#F4F7F4",
   border: "#DDE8DD",
   borderSoft: "#F4F7F4",
@@ -34,61 +35,15 @@ const COLORS = {
 
 const FONT = "'DM Sans', system-ui, sans-serif";
 
-function SectionLabel({ children }: { children: ReactNode }) {
-  return (
-    <div
-      style={{
-        fontFamily: FONT,
-        fontSize: "10px",
-        fontWeight: 500,
-        color: COLORS.faint,
-        textTransform: "uppercase",
-        letterSpacing: "0.05em",
-        padding: "14px 14px 6px",
-      }}
-    >
-      {children}
-    </div>
-  );
-}
+const SCROLLBAR_CSS = `
+.aim-scroll::-webkit-scrollbar { width: 3px; background: transparent; }
+.aim-scroll::-webkit-scrollbar-track { background: transparent; }
+.aim-scroll::-webkit-scrollbar-thumb { background: #DDE8DD; border-radius: 4px; }
+.aim-scroll { scrollbar-width: thin; scrollbar-color: #DDE8DD transparent; }
+`;
 
-function Card({ children }: { children: ReactNode }) {
-  return (
-    <div
-      style={{
-        border: `0.5px solid ${COLORS.border}`,
-        borderRadius: "14px",
-        padding: "12px",
-        margin: "0 12px 8px",
-        background: "white",
-      }}
-    >
-      {children}
-    </div>
-  );
-}
-
-function CardHeader({ Icon, label }: { Icon: LucideIcon; label: string }) {
-  return (
-    <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px" }}>
-      <div
-        style={{
-          width: "28px",
-          height: "28px",
-          background: COLORS.lightGreen,
-          borderRadius: "8px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Icon size={16} color={COLORS.primary} strokeWidth={1.75} />
-      </div>
-      <span style={{ fontFamily: FONT, fontSize: "12px", fontWeight: 500, color: COLORS.primary }}>
-        {label}
-      </span>
-    </div>
-  );
+function K({ children }: { children: ReactNode }) {
+  return <span style={{ fontWeight: 500, color: C.dark }}>{children}</span>;
 }
 
 function SourceLine({ children }: { children: ReactNode }) {
@@ -98,10 +53,10 @@ function SourceLine({ children }: { children: ReactNode }) {
         display: "flex",
         alignItems: "center",
         gap: "4px",
-        marginTop: "8px",
+        marginTop: "10px",
         fontFamily: FONT,
-        fontSize: "10px",
-        color: COLORS.faint,
+        fontSize: "11px",
+        color: C.faint,
       }}
     >
       <ExternalLink size={11} strokeWidth={1.75} />
@@ -115,28 +70,29 @@ function FactRow({ children, last }: { children: ReactNode; last?: boolean }) {
     <div
       style={{
         display: "flex",
-        gap: "8px",
+        gap: "10px",
         padding: "8px 0",
-        borderBottom: last ? "none" : `0.5px solid ${COLORS.borderSoft}`,
+        borderBottom: last ? "none" : `0.5px solid ${C.border}`,
       }}
     >
       <div
         style={{
-          width: "6px",
-          height: "6px",
+          width: "7px",
+          height: "7px",
           borderRadius: "50%",
-          background: COLORS.primary,
-          marginTop: "5px",
+          background: C.primary,
+          marginTop: "7px",
           flexShrink: 0,
         }}
       />
       <p
         style={{
           fontFamily: FONT,
-          fontSize: "11px",
+          fontSize: "13px",
           fontWeight: 400,
-          color: COLORS.body,
-          lineHeight: 1.6,
+          color: C.body,
+          lineHeight: 1.7,
+          margin: 0,
         }}
       >
         {children}
@@ -145,54 +101,163 @@ function FactRow({ children, last }: { children: ReactNode; last?: boolean }) {
   );
 }
 
-function K({ children }: { children: ReactNode }) {
-  return <span style={{ fontWeight: 500, color: COLORS.dark }}>{children}</span>;
-}
-
-// Tree node row for actionnariat
 function TreeRow({
   indent,
   bgGreen,
   left,
   leftSub,
   right,
+  rightStrong,
 }: {
   indent?: boolean;
   bgGreen?: boolean;
   left: string;
   leftSub?: string;
-  right: ReactNode;
+  right: string;
+  rightStrong?: boolean;
 }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: "8px", height: "36px" }}>
-      {indent && <CornerDownRight size={12} color={COLORS.border} strokeWidth={1.75} />}
+    <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "4px 0" }}>
+      {indent ? (
+        <CornerDownRight size={12} color={C.border} strokeWidth={1.75} style={{ flexShrink: 0 }} />
+      ) : null}
       <div
         style={{
           flex: 1,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          background: bgGreen ? COLORS.lightGreen : COLORS.borderSoft,
-          border: `0.5px solid ${bgGreen ? COLORS.primary : COLORS.border}`,
+          background: bgGreen ? C.lightGreen : "white",
+          border: `0.5px solid ${bgGreen ? C.primary : C.border}`,
           borderRadius: "8px",
-          padding: "5px 10px",
+          padding: "7px 12px",
         }}
       >
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <span style={{ fontFamily: FONT, fontSize: "11px", fontWeight: 500, color: COLORS.dark }}>
+          <span style={{ fontFamily: FONT, fontSize: "13px", fontWeight: 500, color: C.dark }}>
             {left}
           </span>
           {leftSub && (
-            <span style={{ fontFamily: FONT, fontSize: "10px", color: COLORS.muted }}>
-              {leftSub}
-            </span>
+            <span style={{ fontFamily: FONT, fontSize: "11px", color: C.muted }}>{leftSub}</span>
           )}
         </div>
-        <span style={{ fontFamily: FONT, fontSize: "10px", color: COLORS.muted }}>{right}</span>
+        <span
+          style={{
+            fontFamily: FONT,
+            fontSize: rightStrong ? "13px" : "11px",
+            fontWeight: rightStrong ? 500 : 400,
+            color: rightStrong ? C.primary : C.muted,
+          }}
+        >
+          {right}
+        </span>
       </div>
     </div>
   );
 }
+
+type SectionDef = { id: string; label: string; Icon: LucideIcon; content: ReactNode };
+
+const SECTIONS: SectionDef[] = [
+  {
+    id: "actionnariat",
+    label: "Actionnariat",
+    Icon: Building2,
+    content: (
+      <>
+        <TreeRow bgGreen left="Nutella" right="Marque" />
+        <TreeRow indent left="Ferrero SpA" right="Société mère · Italie" />
+        <TreeRow indent left="Ferrero International SA" right="Holding · Luxembourg" />
+        <TreeRow
+          indent
+          left="Famille Ferrero"
+          leftSub="Giovanni Ferrero, PDG"
+          right="100%"
+          rightStrong
+        />
+        <SourceLine>OpenCorporates · 2024</SourceLine>
+      </>
+    ),
+  },
+  {
+    id: "politique",
+    label: "Politique & Lobbying",
+    Icon: Landmark,
+    content: (
+      <>
+        <FactRow>
+          <K>Ferrero Group</K> est inscrit au registre de transparence de l'UE. Budget de lobbying
+          déclaré : entre <K>500 000€ et 1M€</K> en 2023.
+        </FactRow>
+        <FactRow>
+          <K>Giovanni Ferrero</K> a participé au financement du parti <K>Forza Italia</K> à hauteur
+          de <K>100 000€</K> en 2021, selon le registre italien des dons politiques.
+        </FactRow>
+        <FactRow last>
+          Ferrero est membre de <K>FoodDrinkEurope</K>, principal lobby agroalimentaire auprès de la{" "}
+          <K>Commission européenne</K>.
+        </FactRow>
+        <SourceLine>Registre de transparence UE · 2023 — Registre italien · 2021</SourceLine>
+      </>
+    ),
+  },
+  {
+    id: "ecologie",
+    label: "Écologie",
+    Icon: Leaf,
+    content: (
+      <>
+        <FactRow last>
+          Contient <K>57% d'huile de palme</K>. La production est liée à la déforestation en
+          Indonésie et Malaisie — <K>2,3M d'hectares</K> de forêts perdus entre 2000 et 2022.
+        </FactRow>
+        <SourceLine>WWF · Rapport forêts 2023</SourceLine>
+      </>
+    ),
+  },
+  {
+    id: "fabrication",
+    label: "Fabrication",
+    Icon: MapPin,
+    content: (
+      <>
+        <FactRow last>
+          Produit principalement en <K>Italie (Cuneo, Piémont)</K> et en <K>Allemagne</K>. Les
+          noisettes proviennent à <K>70% de Turquie</K>. Aucun site de production en France.
+        </FactRow>
+        <SourceLine>Open Food Facts · 2024</SourceLine>
+      </>
+    ),
+  },
+  {
+    id: "travail",
+    label: "Conditions de travail",
+    Icon: Users,
+    content: (
+      <>
+        <FactRow last>
+          Les plantations fournisseurs font l'objet d'un suivi par l'<K>OIT</K> depuis 2019 pour des
+          conditions insuffisantes sur <K>3 sites en Indonésie</K>.
+        </FactRow>
+        <SourceLine>OIT · Rapport Indonésie 2022</SourceLine>
+      </>
+    ),
+  },
+  {
+    id: "scandales",
+    label: "Scandales",
+    Icon: Newspaper,
+    content: (
+      <>
+        <FactRow last>
+          <K>Avril 2022</K> : rappel de plusieurs lots <K>Kinder</K> suite à une contamination à la{" "}
+          <K>salmonelle</K> dans une usine belge. <K>150 cas</K> signalés en Europe.
+        </FactRow>
+        <SourceLine>DGCCRF · Avril 2022</SourceLine>
+      </>
+    ),
+  },
+];
 
 const FILTERS = [
   { id: "ecologique", label: "Écologique" },
@@ -203,17 +268,47 @@ const FILTERS = [
 
 const ALTS: Record<string, { name: string; tag: string; note: string }[]> = {
   ecologique: [
-    { name: "Nocciolata Bio", tag: "Sans huile de palme", note: "Rigoni di Asiago · Italie" },
-    { name: "Ethiquable Noisette", tag: "Bio certifié", note: "SCOP · Équitable" },
+    {
+      name: "Nocciolata Bio",
+      tag: "Sans huile de palme",
+      note: "Certifié bio, huile de tournesol, cacao équitable.",
+    },
+    {
+      name: "Ethiquable Noisette",
+      tag: "Bio certifié",
+      note: "Ingrédients biologiques, emballage recyclable.",
+    },
   ],
   france: [
-    { name: "Jean Hervé", tag: "Fabriqué en France", note: "PME · Drôme" },
-    { name: "Kaoka", tag: "Origine Drôme", note: "Cacao équitable" },
+    {
+      name: "Jean Hervé",
+      tag: "Fabriqué en France",
+      note: "PME bretonne, fabrication 100% française.",
+    },
+    {
+      name: "Kaoka Noisette",
+      tag: "Origine Drôme",
+      note: "Cacao Fairtrade, fabrication dans la Drôme.",
+    },
   ],
-  equitable: [{ name: "Kaoka Noisette", tag: "Fairtrade certifié", note: "Filière équitable" }],
+  equitable: [
+    {
+      name: "Kaoka Noisette",
+      tag: "Fairtrade certifié",
+      note: "Cacao acheté directement auprès de coopératives.",
+    },
+  ],
   independant: [
-    { name: "Jean Hervé", tag: "PME indépendante", note: "Drôme · France" },
-    { name: "Nocciolata", tag: "Groupe familial", note: "Rigoni di Asiago" },
+    {
+      name: "Jean Hervé",
+      tag: "PME indépendante",
+      note: "Aucun fonds d'investissement au capital.",
+    },
+    {
+      name: "Nocciolata",
+      tag: "Groupe familial",
+      note: "Rigoni di Asiago, entreprise familiale italienne.",
+    },
   ],
 };
 
@@ -223,21 +318,31 @@ function ProductSheet() {
   const product = PRODUCTS[id] ?? PRODUCTS.nutella;
   const favorites = useFavorites();
   const isFav = favorites.has(product.id);
+  const [open, setOpen] = useState<Record<string, boolean>>({ actionnariat: true });
   const [activeFilter, setActiveFilter] = useState<string>("ecologique");
+  const alternatives = ALTS[activeFilter] ?? [];
 
-  const alternatives = useMemo(() => ALTS[activeFilter] ?? [], [activeFilter]);
+  const toggle = (sid: string) => setOpen((o) => ({ ...o, [sid]: !o[sid] }));
 
   return (
-    <div style={{ fontFamily: FONT, background: "white", minHeight: "100vh" }}>
+    <div
+      style={{
+        fontFamily: FONT,
+        background: "white",
+        height: "calc(100vh - 64px)",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <style>{SCROLLBAR_CSS}</style>
+
       {/* Sticky header */}
       <div
         style={{
-          position: "sticky",
-          top: 0,
-          zIndex: 10,
-          background: COLORS.bg,
-          borderBottom: `0.5px solid ${COLORS.border}`,
-          padding: "12px 16px 14px",
+          background: C.bg,
+          borderBottom: `0.5px solid ${C.border}`,
+          padding: "10px 14px 14px",
+          flexShrink: 0,
         }}
       >
         <button
@@ -249,7 +354,7 @@ function ProductSheet() {
             fontFamily: FONT,
             fontSize: "11px",
             fontWeight: 400,
-            color: COLORS.muted,
+            color: C.muted,
             marginBottom: "10px",
             background: "transparent",
             border: "none",
@@ -266,7 +371,7 @@ function ProductSheet() {
             style={{
               width: "42px",
               height: "42px",
-              background: COLORS.border,
+              background: C.border,
               borderRadius: "10px",
               display: "flex",
               alignItems: "center",
@@ -274,13 +379,11 @@ function ProductSheet() {
               flexShrink: 0,
             }}
           >
-            <Building2 size={20} color={COLORS.primary} strokeWidth={1.75} />
+            <Building2 size={20} color={C.primary} strokeWidth={1.75} />
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: "16px", fontWeight: 500, color: COLORS.dark }}>
-              {product.name}
-            </div>
-            <div style={{ fontSize: "11px", fontWeight: 400, color: COLORS.muted }}>
+            <div style={{ fontSize: "16px", fontWeight: 500, color: C.dark }}>{product.name}</div>
+            <div style={{ fontSize: "11px", fontWeight: 400, color: C.muted }}>
               {product.brand} · {product.country} · Pâte à tartiner
             </div>
           </div>
@@ -292,7 +395,7 @@ function ProductSheet() {
               height: "34px",
               borderRadius: "50%",
               background: "white",
-              border: `0.5px solid ${COLORS.border}`,
+              border: `0.5px solid ${C.border}`,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -302,139 +405,154 @@ function ProductSheet() {
           >
             <Heart
               size={16}
-              color={COLORS.primary}
-              fill={isFav ? COLORS.primary : "none"}
+              color={isFav ? C.primary : C.faint}
+              fill={isFav ? C.primary : "none"}
               strokeWidth={1.75}
             />
           </button>
         </div>
       </div>
 
-      <SectionLabel>Les faits</SectionLabel>
-
-      {/* Card 1 — Actionnariat */}
-      <Card>
-        <CardHeader Icon={Building2} label="Actionnariat" />
-        <div>
-          <TreeRow bgGreen left="Nutella" right="Marque" />
-          <TreeRow indent left="Ferrero SpA" right="Société mère · Italie" />
-          <TreeRow indent left="Ferrero International SA" right="Holding · Luxembourg" />
-          <TreeRow
-            indent
-            left="Famille Ferrero"
-            leftSub="Giovanni Ferrero, PDG"
-            right={<span style={{ fontWeight: 500, color: COLORS.primary, fontSize: "11px" }}>100%</span>}
-          />
-        </div>
-        <SourceLine>OpenCorporates · 2024</SourceLine>
-      </Card>
-
-      {/* Card 2 — Politique & Lobbying */}
-      <Card>
-        <CardHeader Icon={Landmark} label="Politique & Lobbying" />
-        <div>
-          <FactRow>
-            <K>Ferrero Group</K> est inscrit au registre de transparence de l'UE. Budget de lobbying déclaré : entre <K>500 000€ et 1M€</K> en 2023.
-          </FactRow>
-          <FactRow>
-            <K>Giovanni Ferrero</K> a participé au financement du parti <K>Forza Italia</K> à hauteur de <K>100 000€</K> en 2021, selon le registre italien des dons politiques.
-          </FactRow>
-          <FactRow last>
-            Ferrero est membre de <K>FoodDrinkEurope</K>, principal lobby agroalimentaire auprès de la <K>Commission européenne</K>.
-          </FactRow>
-        </div>
-        <SourceLine>Registre de transparence UE · 2023 — Registre italien · 2021</SourceLine>
-      </Card>
-
-      {/* Card 3 — Écologie */}
-      <Card>
-        <CardHeader Icon={Leaf} label="Écologie" />
-        <FactRow last>
-          Contient <K>57% d'huile de palme</K>. La production est liée à la déforestation en Indonésie et Malaisie — <K>2,3M d'hectares perdus</K> entre 2000 et 2022.
-        </FactRow>
-        <SourceLine>WWF · Rapport forêts 2023</SourceLine>
-      </Card>
-
-      {/* Card 4 — Fabrication */}
-      <Card>
-        <CardHeader Icon={MapPin} label="Fabrication" />
-        <FactRow last>
-          Produit principalement en <K>Italie (Cuneo, Piémont)</K> et en <K>Allemagne</K>. Les noisettes proviennent à <K>70% de Turquie</K>. Aucun site de production en France.
-        </FactRow>
-        <SourceLine>Open Food Facts · 2024</SourceLine>
-      </Card>
-
-      {/* Card 5 — Conditions de travail */}
-      <Card>
-        <CardHeader Icon={Users} label="Conditions de travail" />
-        <FactRow last>
-          Les plantations fournisseurs font l'objet d'un suivi par l'<K>OIT</K> depuis 2019 pour des conditions insuffisantes sur <K>3 sites en Indonésie</K>.
-        </FactRow>
-        <SourceLine>OIT · Rapport Indonésie 2022</SourceLine>
-      </Card>
-
-      {/* Card 6 — Scandales */}
-      <Card>
-        <CardHeader Icon={Newspaper} label="Scandales" />
-        <FactRow last>
-          <K>Avril 2022</K> : rappel de plusieurs lots <K>Kinder</K> suite à une contamination à la <K>salmonelle</K> dans une usine belge. <K>150 cas</K> signalés en Europe.
-        </FactRow>
-        <SourceLine>DGCCRF · Avril 2022</SourceLine>
-      </Card>
-
-      {/* Divider */}
-      <div style={{ borderTop: `0.5px solid ${COLORS.border}`, margin: "4px 12px 0" }} />
-
-      <SectionLabel>Produits similaires</SectionLabel>
-
-      {/* Filter chips */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", padding: "0 12px 8px" }}>
-        {FILTERS.map((f) => {
-          const active = activeFilter === f.id;
+      {/* Scrollable area */}
+      <div className="aim-scroll" style={{ flex: 1, overflowY: "auto" }}>
+        {SECTIONS.map(({ id: sid, label, Icon, content }) => {
+          const isOpen = !!open[sid];
           return (
-            <button
-              key={f.id}
-              onClick={() => setActiveFilter(f.id)}
-              style={{
-                height: "30px",
-                padding: "0 12px",
-                borderRadius: "20px",
-                fontFamily: FONT,
-                fontSize: "10px",
-                fontWeight: active ? 500 : 400,
-                background: active ? COLORS.primary : COLORS.borderSoft,
-                color: active ? "white" : COLORS.muted,
-                border: active ? `0.5px solid ${COLORS.primary}` : `0.5px solid ${COLORS.border}`,
-                cursor: "pointer",
-              }}
-            >
-              {f.label}
-            </button>
+            <div key={sid}>
+              <button
+                onClick={() => toggle(sid)}
+                style={{
+                  width: "100%",
+                  height: "56px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                  padding: "0 14px",
+                  borderBottom: `0.5px solid ${C.borderSoft}`,
+                  background: "white",
+                  border: "none",
+                  cursor: "pointer",
+                  textAlign: "left",
+                  fontFamily: FONT,
+                }}
+              >
+                <div
+                  style={{
+                    width: "34px",
+                    height: "34px",
+                    background: C.lightGreen,
+                    borderRadius: "8px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                  }}
+                >
+                  <Icon size={16} color={C.primary} strokeWidth={1.75} />
+                </div>
+                <span style={{ flex: 1, fontSize: "14px", fontWeight: 500, color: C.dark }}>
+                  {label}
+                </span>
+                <ChevronRight
+                  size={16}
+                  color={isOpen ? C.primary : C.border}
+                  strokeWidth={1.75}
+                  style={{
+                    transform: isOpen ? "rotate(90deg)" : "rotate(0deg)",
+                    transition: "transform 0.2s",
+                  }}
+                />
+              </button>
+              {isOpen && (
+                <div
+                  style={{
+                    background: C.bg,
+                    padding: "14px",
+                    borderBottom: `0.5px solid ${C.border}`,
+                  }}
+                >
+                  {content}
+                </div>
+              )}
+            </div>
           );
         })}
-      </div>
 
-      {/* Alternatives */}
-      <div>
+        {/* Divider */}
+        <div
+          style={{
+            height: "8px",
+            background: C.bg,
+            borderTop: `0.5px solid ${C.border}`,
+            borderBottom: `0.5px solid ${C.border}`,
+          }}
+        />
+
+        {/* Produits similaires */}
+        <div
+          style={{
+            fontSize: "10px",
+            fontWeight: 500,
+            color: C.faint,
+            textTransform: "uppercase",
+            letterSpacing: "0.05em",
+            padding: "14px 14px 8px",
+          }}
+        >
+          Produits similaires
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "6px",
+            padding: "0 14px 12px",
+          }}
+        >
+          {FILTERS.map((f) => {
+            const active = activeFilter === f.id;
+            return (
+              <button
+                key={f.id}
+                onClick={() => setActiveFilter(f.id)}
+                style={{
+                  height: "32px",
+                  padding: "0 14px",
+                  borderRadius: "20px",
+                  fontFamily: FONT,
+                  fontSize: "11px",
+                  fontWeight: active ? 500 : 400,
+                  background: active ? C.primary : "white",
+                  color: active ? "white" : C.muted,
+                  border: `0.5px solid ${active ? C.primary : C.border}`,
+                  cursor: "pointer",
+                }}
+              >
+                {f.label}
+              </button>
+            );
+          })}
+        </div>
+
         {alternatives.map((a, i) => (
           <div
             key={`${a.name}-${i}`}
             style={{
-              border: `0.5px solid ${COLORS.border}`,
+              border: `0.5px solid ${C.border}`,
               borderRadius: "14px",
-              padding: "10px 12px",
-              margin: "6px 12px",
+              padding: "12px",
+              margin: "0 12px 8px",
               background: "white",
               display: "flex",
-              alignItems: "center",
               gap: "10px",
             }}
           >
             <div
               style={{
-                width: "34px",
-                height: "34px",
-                background: COLORS.lightGreen,
+                width: "36px",
+                height: "36px",
+                background: C.lightGreen,
                 borderRadius: "8px",
                 display: "flex",
                 alignItems: "center",
@@ -442,18 +560,18 @@ function ProductSheet() {
                 flexShrink: 0,
               }}
             >
-              <Leaf size={16} color={COLORS.primary} strokeWidth={1.75} />
+              <Leaf size={18} color={C.primary} strokeWidth={1.75} />
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: "12px", fontWeight: 500, color: COLORS.dark }}>{a.name}</div>
-              <div style={{ marginTop: "3px" }}>
+              <div style={{ fontSize: "13px", fontWeight: 500, color: C.dark }}>{a.name}</div>
+              <div style={{ marginTop: "4px" }}>
                 <span
                   style={{
-                    fontSize: "10px",
-                    color: COLORS.primary,
-                    background: COLORS.lightGreen,
+                    fontSize: "11px",
+                    color: C.primary,
+                    background: C.lightGreen,
                     borderRadius: "20px",
-                    padding: "2px 8px",
+                    padding: "3px 10px",
                   }}
                 >
                   {a.tag}
@@ -461,10 +579,10 @@ function ProductSheet() {
               </div>
               <div
                 style={{
-                  fontSize: "10px",
+                  fontSize: "11px",
                   fontWeight: 400,
-                  color: COLORS.muted,
-                  marginTop: "3px",
+                  color: C.muted,
+                  marginTop: "4px",
                   lineHeight: 1.5,
                 }}
               >
@@ -473,9 +591,9 @@ function ProductSheet() {
             </div>
           </div>
         ))}
-      </div>
 
-      <div style={{ height: "24px" }} />
+        <div style={{ height: "24px" }} />
+      </div>
     </div>
   );
 }
