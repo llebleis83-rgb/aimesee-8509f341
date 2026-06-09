@@ -149,8 +149,8 @@ function ComingSoonRow({ icon: Icon, label }: { icon: typeof Utensils; label: st
 function Categories() {
   return (
     <div style={{ background: "#FFFFFF", paddingBottom: "24px" }}>
-      <header style={{ padding: "20px 16px 0" }}>
-        <h1 style={{ fontSize: "28px", fontWeight: 500, color: "#1A2E1A" }}>
+      <header style={{ padding: "32px 20px 28px" }}>
+        <h1 style={{ fontSize: "28px", fontWeight: 500, color: "#1A2E1A", letterSpacing: "-0.4px" }}>
           Catégories
         </h1>
       </header>
@@ -184,9 +184,6 @@ function Categories() {
         />
       </div>
 
-      <div style={{ marginTop: "8px", marginBottom: "4px" }}>
-        <SectionLabel>Disponible</SectionLabel>
-      </div>
       {AVAILABLE.map((c) => (
         <AvailableRow key={c.label} icon={c.icon} label={`${c.emoji} ${c.label}`} />
       ))}
