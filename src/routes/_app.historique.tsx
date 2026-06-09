@@ -8,8 +8,8 @@ export const Route = createFileRoute("/_app/historique")({
 
 function Historique() {
   return (
-    <div className="px-5 pt-12">
-      <h1 style={{ fontSize: "20px", fontWeight: 500, color: "var(--dark-text)" }}>
+    <div style={{ padding: "32px 20px 28px" }}>
+      <h1 style={{ fontSize: "28px", fontWeight: 500, color: "#1A2E1A", letterSpacing: "-0.4px" }}>
         Historique
       </h1>
       <p style={{ fontSize: "13px", color: "var(--muted-text)", marginTop: "2px" }}>
