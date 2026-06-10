@@ -5,11 +5,15 @@ export const Route = createFileRoute("/_app/compte")({
   component: Compte,
 });
 
-const settings = [
-  { icon: Bell, label: "Notifications", emoji: "🔔" },
-  { icon: Shield, label: "Confidentialité", emoji: "🛡️" },
-  { icon: Info, label: "À propos de l'app", emoji: "ℹ️" },
-];
+const ICON_CONTAINER = {
+  width: "34px",
+  height: "34px",
+  borderRadius: "8px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  flexShrink: 0,
+} as const;
 
 function Compte() {
   return (
@@ -41,31 +45,72 @@ function Compte() {
       </div>
 
       <div className="px-5 mt-2">
-        {settings.map((s, i) => (
-          <button
-            key={s.label}
-            className="w-full flex items-center gap-3 py-3.5"
-            style={{ borderTop: i === 0 ? "none" : "0.5px solid var(--surface)" }}
+        {/* Notifications */}
+        <button
+          className="w-full flex items-center gap-3 py-3.5"
+          style={{ borderTop: "none" }}
+        >
+          <div style={{ ...ICON_CONTAINER, background: "#EAF3DE" }}>
+            <Bell size={18} color="#5B8C6A" strokeWidth={1.75} />
+          </div>
+          <span
+            className="flex-1 text-left"
+            style={{ fontSize: "13px", color: "var(--dark-text)" }}
           >
-            <span style={{ fontSize: "18px" }}>{s.emoji}</span>
-            <span
-              className="flex-1 text-left"
-              style={{ fontSize: "13px", color: "var(--dark-text)" }}
-            >
-              {s.label}
-            </span>
-            <ChevronRight size={16} color="var(--border)" />
-          </button>
-        ))}
+            Notifications
+          </span>
+          <ChevronRight size={16} color="var(--border)" />
+        </button>
 
+        {/* Confidentialité */}
+        <button
+          className="w-full flex items-center gap-3 py-3.5"
+          style={{ borderTop: "0.5px solid var(--surface)" }}
+        >
+          <div style={{ ...ICON_CONTAINER, background: "#EAF3DE" }}>
+            <Shield size={18} color="#5B8C6A" strokeWidth={1.75} />
+          </div>
+          <span
+            className="flex-1 text-left"
+            style={{ fontSize: "13px", color: "var(--dark-text)" }}
+          >
+            Confidentialité
+          </span>
+          <ChevronRight size={16} color="var(--border)" />
+        </button>
+
+        {/* À propos de l'app */}
+        <button
+          className="w-full flex items-center gap-3 py-3.5"
+          style={{ borderTop: "0.5px solid var(--surface)" }}
+        >
+          <div style={{ ...ICON_CONTAINER, background: "#EAF3DE" }}>
+            <Info size={18} color="#5B8C6A" strokeWidth={1.75} />
+          </div>
+          <span
+            className="flex-1 text-left"
+            style={{ fontSize: "13px", color: "var(--dark-text)" }}
+          >
+            À propos de l&apos;app
+          </span>
+          <ChevronRight size={16} color="var(--border)" />
+        </button>
+
+        {/* Se déconnecter */}
         <button
           className="w-full flex items-center gap-3 py-3.5 mt-4"
           style={{ borderTop: "0.5px solid var(--surface)" }}
         >
-          <LogOut size={16} color="var(--placeholder)" strokeWidth={1.5} />
-          <span style={{ fontSize: "13px", color: "var(--placeholder)" }}>
+          <div style={{ ...ICON_CONTAINER, background: "#FFF5F5" }}>
+            <LogOut size={18} color="#E57373" strokeWidth={1.75} />
+          </div>
+          <span
+            className="flex-1 text-left"
+            style={{ fontSize: "13px", color: "#E57373" }}
+          >
             Se déconnecter
           </span>
+          <ChevronRight size={16} color="#DDE8DD" />
         </button>
       </div>
     </div>
