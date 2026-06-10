@@ -77,6 +77,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "default" },
+      { name: "mobile-web-app-capable", content: "yes" },
       { title: "aimesee — Faits. Sources. Tu décides." },
       { name: "description", content: "Transparence produit : faits sourcés sur les marques que tu consommes." },
       { property: "og:title", content: "aimesee — Faits. Sources. Tu décides." },
