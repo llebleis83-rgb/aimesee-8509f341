@@ -352,17 +352,19 @@ function ProductSheet() {
             alignItems: "center",
             gap: "4px",
             fontFamily: FONT,
-            fontSize: "11px",
-            fontWeight: 400,
-            color: C.muted,
+            fontSize: "13px",
+            fontWeight: 500,
+            color: C.primary,
             marginBottom: "10px",
             background: "transparent",
             border: "none",
-            padding: 0,
+            padding: "10px 8px",
+            marginLeft: "-8px",
+            height: "44px",
             cursor: "pointer",
           }}
         >
-          <ArrowLeft size={13} strokeWidth={1.75} />
+          <ArrowLeft size={14} strokeWidth={1.75} />
           Retour
         </button>
 
