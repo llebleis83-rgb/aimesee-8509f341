@@ -115,10 +115,10 @@ export const PRODUCTS: Record<string, Product> = {
   },
 };
 
-export const FAVORITES_MOCK: { id: string; name: string; brand: string; country: string }[] = [
-  { id: "nutella", name: "Nutella", brand: "Ferrero", country: "Italie" },
-  { id: "evian", name: "Evian", brand: "Danone", country: "France" },
-  { id: "nike-airmax", name: "Nike Air Max", brand: "Nike", country: "USA" },
+export const FAVORITES_MOCK: { id: string; name: string; brand: string; country: string; category: string }[] = [
+  { id: "nutella", name: "Nutella", brand: "Ferrero", country: "Italie", category: "Alimentation" },
+  { id: "evian", name: "Evian", brand: "Danone", country: "France", category: "Boissons" },
+  { id: "nike-airmax", name: "Nike Air Max", brand: "Nike", country: "USA", category: "Mode & Textile" },
 ];
 
 export const HISTORY_MOCK: { id: string; name: string; when: string }[] = [
