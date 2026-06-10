@@ -71,9 +71,3 @@ body {
   height: 100%;
   overscroll-behavior: none;
 }
-#root {
-  height: 100dvh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
