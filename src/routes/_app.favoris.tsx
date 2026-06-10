@@ -147,7 +147,7 @@ function Favoris() {
                           fontSize: "12px",
                           fontWeight: 400,
                           color: "#7A9A7A",
-                          marginTop: "2px",
+                          marginTop: "6px",
                         }}
                       >
                         {p.brand} · {p.country}
