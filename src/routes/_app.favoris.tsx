@@ -105,7 +105,7 @@ function Favoris() {
                   className="flex items-center"
                   style={{
                     width: "100%",
-                    height: "80px",
+                    height: "68px",
                     gap: "12px",
                     padding: "0 16px",
                     borderBottom: "0.5px solid #F4F7F4",
@@ -133,38 +133,39 @@ function Favoris() {
 
                     {/* Center content */}
                     <div className="flex-1 min-w-0">
-                      <div
-                        style={{
-                          fontSize: "15px",
-                          fontWeight: 500,
-                          color: "#1A2E1A",
-                        }}
-                      >
-                        {p.name}
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
+                        <div
+                          style={{
+                            fontSize: "15px",
+                            fontWeight: 500,
+                            color: "#1A2E1A",
+                          }}
+                        >
+                          {p.name}
+                        </div>
+                        <span
+                          style={{
+                            fontSize: "10px",
+                            fontWeight: 400,
+                            color: "#5B8C6A",
+                            background: "#EAF3DE",
+                            borderRadius: "20px",
+                            padding: "2px 8px",
+                            flexShrink: 0,
+                          }}
+                        >
+                          {p.category}
+                        </span>
                       </div>
                       <div
                         style={{
                           fontSize: "12px",
                           fontWeight: 400,
                           color: "#7A9A7A",
-                          marginTop: "6px",
-                        }}
-                      >
-                        {p.brand} · {p.country}
-                      </div>
-                      <div
-                        style={{
-                          display: "inline-block",
-                          fontSize: "10px",
-                          fontWeight: 400,
-                          color: "#5B8C6A",
-                          background: "#EAF3DE",
-                          borderRadius: "20px",
-                          padding: "2px 8px",
                           marginTop: "4px",
                         }}
                       >
-                        {p.category}
+                        {p.brand} · {p.country}
                       </div>
                     </div>
                   </Link>

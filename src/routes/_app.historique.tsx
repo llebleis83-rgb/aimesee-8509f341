@@ -127,63 +127,64 @@ function Historique() {
                   className="flex items-center"
                     style={{
                       width: "100%",
-                      height: "80px",
+                      height: "68px",
                       gap: "14px",
                       padding: "0 16px",
                       borderBottom: "0.5px solid #F4F7F4",
                       background: "#FFFFFF",
                       textDecoration: "none",
                     }}
-                >
-                  {/* Thumbnail */}
-                  <div
-                    className="flex items-center justify-center shrink-0"
-                    style={{
-                      width: "44px",
-                      height: "44px",
-                      background: "#EAF3DE",
-                      borderRadius: "10px",
-                    }}
                   >
-                    <Icon size={20} color="#5B8C6A" strokeWidth={1.5} />
-                  </div>
-
-                  {/* Center content */}
-                  <div className="flex-1 min-w-0">
+                    {/* Thumbnail */}
                     <div
+                      className="flex items-center justify-center shrink-0"
                       style={{
-                        fontSize: "15px",
-                        fontWeight: 500,
-                        color: "#1A2E1A",
-                      }}
-                    >
-                      {h.name}
-                    </div>
-                    <div
-                      style={{
-                        fontSize: "12px",
-                        fontWeight: 400,
-                        color: "#7A9A7A",
-                        marginTop: "6px",
-                      }}
-                    >
-                      {h.when}
-                    </div>
-                    <div
-                      style={{
-                        display: "inline-block",
-                        fontSize: "10px",
-                        fontWeight: 400,
-                        color: "#5B8C6A",
+                        width: "44px",
+                        height: "44px",
                         background: "#EAF3DE",
-                        borderRadius: "20px",
-                        padding: "2px 8px",
-                        marginTop: "4px",
+                        borderRadius: "10px",
                       }}
                     >
-                      {h.category}
+                      <Icon size={20} color="#5B8C6A" strokeWidth={1.5} />
                     </div>
-                  </div>
+
+                    {/* Center content */}
+                    <div className="flex-1 min-w-0">
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
+                        <div
+                          style={{
+                            fontSize: "15px",
+                            fontWeight: 500,
+                            color: "#1A2E1A",
+                          }}
+                        >
+                          {h.name}
+                        </div>
+                        <span
+                          style={{
+                            fontSize: "10px",
+                            fontWeight: 400,
+                            color: "#5B8C6A",
+                            background: "#EAF3DE",
+                            borderRadius: "20px",
+                            padding: "2px 8px",
+                            flexShrink: 0,
+                          }}
+                        >
+                          {h.category}
+                        </span>
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "12px",
+                          fontWeight: 400,
+                          color: "#7A9A7A",
+                          marginTop: "4px",
+                        }}
+                      >
+                        {h.when}
+                      </div>
+                    </div>
 
                   {/* Chevron */}
                   <ChevronRight size={16} color="#DDE8DD" strokeWidth={1.75} />
