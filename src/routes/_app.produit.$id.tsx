@@ -352,7 +352,7 @@ function ProductSheet() {
             alignItems: "center",
             gap: "4px",
             fontFamily: FONT,
-            fontSize: "13px",
+            fontSize: "15px",
             fontWeight: 500,
             color: C.primary,
             marginBottom: "10px",
@@ -364,7 +364,7 @@ function ProductSheet() {
             cursor: "pointer",
           }}
         >
-          <ArrowLeft size={14} strokeWidth={1.75} />
+          <ArrowLeft size={16} strokeWidth={1.75} />
           Retour
         </button>
 
