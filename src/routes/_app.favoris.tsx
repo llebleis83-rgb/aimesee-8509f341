@@ -105,7 +105,7 @@ function Favoris() {
                   className="flex items-center"
                   style={{
                     width: "100%",
-                    height: "72px",
+                    height: "80px",
                     gap: "12px",
                     padding: "0 16px",
                     borderBottom: "0.5px solid #F4F7F4",
@@ -116,7 +116,7 @@ function Favoris() {
                     to="/produit/$id"
                     params={{ id: p.id }}
                     className="flex items-center flex-1"
-                    style={{ gap: "12px", minWidth: 0, textDecoration: "none" }}
+                    style={{ gap: "14px", minWidth: 0, textDecoration: "none" }}
                   >
                     {/* Thumbnail */}
                     <div
