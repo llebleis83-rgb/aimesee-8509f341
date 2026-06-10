@@ -121,11 +121,11 @@ export const FAVORITES_MOCK: { id: string; name: string; brand: string; country:
   { id: "nike-airmax", name: "Nike Air Max", brand: "Nike", country: "USA", category: "Mode & Textile" },
 ];
 
-export const HISTORY_MOCK: { id: string; name: string; when: string }[] = [
-  { id: "nutella", name: "Nutella", when: "aujourd'hui · 14h22" },
-  { id: "evian", name: "Danone", when: "hier · 09h05" },
-  { id: "nike-airmax", name: "Nike Air Max", when: "12 mai · 18h47" },
-  { id: "nutella", name: "Nestlé Kit Kat", when: "10 mai · 11h30" },
+export const HISTORY_MOCK: { id: string; name: string; when: string; category: string }[] = [
+  { id: "nutella", name: "Nutella", when: "aujourd'hui · 14h22", category: "Alimentation" },
+  { id: "evian", name: "Danone", when: "hier · 09h05", category: "Boissons" },
+  { id: "nike-airmax", name: "Nike Air Max", when: "12 mai · 18h47", category: "Mode & Textile" },
+  { id: "nutella", name: "Nestlé Kit Kat", when: "10 mai · 11h30", category: "Alimentation" },
 ];
 
 export const RECENT_SEARCHES = ["Nutella", "Coca-Cola", "Danone", "Nike", "Zara"];
