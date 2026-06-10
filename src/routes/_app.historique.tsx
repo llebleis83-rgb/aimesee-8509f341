@@ -125,15 +125,15 @@ function Historique() {
                   to="/produit/$id"
                   params={{ id: h.id }}
                   className="flex items-center"
-                  style={{
-                    width: "100%",
-                    height: "72px",
-                    gap: "12px",
-                    padding: "0 16px",
-                    borderBottom: "0.5px solid #F4F7F4",
-                    background: "#FFFFFF",
-                    textDecoration: "none",
-                  }}
+                    style={{
+                      width: "100%",
+                      height: "80px",
+                      gap: "14px",
+                      padding: "0 16px",
+                      borderBottom: "0.5px solid #F4F7F4",
+                      background: "#FFFFFF",
+                      textDecoration: "none",
+                    }}
                 >
                   {/* Thumbnail */}
                   <div
@@ -164,7 +164,7 @@ function Historique() {
                         fontSize: "12px",
                         fontWeight: 400,
                         color: "#7A9A7A",
-                        marginTop: "2px",
+                        marginTop: "6px",
                       }}
                     >
                       {h.when}
