@@ -9,7 +9,6 @@ import {
   Users,
   Newspaper,
   ExternalLink,
-  CornerDownRight,
   ChevronRight,
   type LucideIcon,
 } from "lucide-react";
@@ -117,9 +116,13 @@ function TreeRow({
   rightStrong?: boolean;
 }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "4px 0" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: "0", padding: "4px 0" }}>
       {indent ? (
-        <CornerDownRight size={12} color={C.border} strokeWidth={1.75} style={{ flexShrink: 0 }} />
+        <>
+          <div style={{ width: "6px", flexShrink: 0 }} />
+          <div style={{ width: "8px", height: "1px", background: C.border, flexShrink: 0 }} />
+          <div style={{ width: "10px", flexShrink: 0 }} />
+        </>
       ) : null}
       <div
         style={{
@@ -166,15 +169,27 @@ const SECTIONS: SectionDef[] = [
     content: (
       <>
         <TreeRow bgGreen left="Nutella" right="Marque" />
-        <TreeRow indent left="Ferrero SpA" right="Société mère · Italie" />
-        <TreeRow indent left="Ferrero International SA" right="Holding · Luxembourg" />
-        <TreeRow
-          indent
-          left="Famille Ferrero"
-          leftSub="Giovanni Ferrero, PDG"
-          right="100%"
-          rightStrong
-        />
+        <div style={{ position: "relative" }}>
+          <div
+            style={{
+              position: "absolute",
+              left: "6px",
+              top: "18px",
+              bottom: "18px",
+              width: "1px",
+              background: C.border,
+            }}
+          />
+          <TreeRow indent left="Ferrero SpA" right="Société mère · Italie" />
+          <TreeRow indent left="Ferrero International SA" right="Holding · Luxembourg" />
+          <TreeRow
+            indent
+            left="Famille Ferrero"
+            leftSub="Giovanni Ferrero, PDG"
+            right="100%"
+            rightStrong
+          />
+        </div>
         <SourceLine>OpenCorporates · 2024</SourceLine>
       </>
     ),
