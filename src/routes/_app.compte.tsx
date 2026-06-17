@@ -89,10 +89,32 @@ function Row({
 }
 
 function Compte() {
+  const navigate = useNavigate();
   const iconProps = { size: 16, color: "#5B8C6A", strokeWidth: 1.75 };
 
   return (
     <div style={{ fontFamily: "'DM Sans', sans-serif", background: "white", minHeight: "100%" }}>
+      <button
+        onClick={() => navigate({ to: "/" })}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "4px",
+          fontFamily: "'DM Sans', sans-serif",
+          fontSize: "15px",
+          fontWeight: 500,
+          color: "#7A9A7A",
+          background: "transparent",
+          border: "none",
+          padding: "10px 16px",
+          height: "44px",
+          cursor: "pointer",
+        }}
+      >
+        <ArrowLeft size={16} strokeWidth={1.75} />
+        Retour
+      </button>
+
       {/* Hero */}
       <div
         style={{
