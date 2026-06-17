@@ -54,13 +54,25 @@ function Scanner() {
           aria-label="Mon compte"
           className="flex items-center justify-center shrink-0"
           style={{
-            width: "32px",
-            height: "32px",
+            width: "44px",
+            height: "44px",
             borderRadius: "9999px",
-            background: "#EAF3DE",
+            background: "transparent",
+            border: "none",
+            cursor: "pointer",
           }}
         >
-          <User size={18} color="#5B8C6A" strokeWidth={1.75} />
+          <div
+            className="flex items-center justify-center shrink-0"
+            style={{
+              width: "32px",
+              height: "32px",
+              borderRadius: "9999px",
+              background: "#EAF3DE",
+            }}
+          >
+            <User size={18} color="#5B8C6A" strokeWidth={1.75} />
+          </div>
         </button>
       </header>
 
