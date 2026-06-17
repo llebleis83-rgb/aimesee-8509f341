@@ -117,9 +117,13 @@ function TreeRow({
   rightStrong?: boolean;
 }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "4px 0" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: "0", padding: "4px 0" }}>
       {indent ? (
-        <CornerDownRight size={12} color={C.border} strokeWidth={1.75} style={{ flexShrink: 0 }} />
+        <>
+          <div style={{ width: "6px", flexShrink: 0 }} />
+          <div style={{ width: "8px", height: "1px", background: C.border, flexShrink: 0 }} />
+          <div style={{ width: "10px", flexShrink: 0 }} />
+        </>
       ) : null}
       <div
         style={{
