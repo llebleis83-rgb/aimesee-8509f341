@@ -9,7 +9,6 @@ import {
   Users,
   Newspaper,
   ExternalLink,
-  CornerDownRight,
   ChevronRight,
   type LucideIcon,
 } from "lucide-react";
