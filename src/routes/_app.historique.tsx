@@ -198,6 +198,82 @@ function Historique() {
         )}
       </div>
 
+      {/* Confirmation bottom sheet */}
+      {showConfirm && (
+        <>
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: "rgba(0, 0, 0, 0.4)",
+              zIndex: 50,
+            }}
+            onClick={() => setShowConfirm(false)}
+          />
+          <div
+            style={{
+              position: "fixed",
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: "#FFFFFF",
+              borderRadius: "20px 20px 0 0",
+              padding: "24px 16px 32px",
+              zIndex: 51,
+            }}
+          >
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: "18px", fontWeight: 500, color: "#1A2E1A" }}>
+                Effacer l'historique ?
+              </div>
+              <div style={{ fontSize: "14px", fontWeight: 400, color: "#7A9A7A", marginTop: "8px" }}>
+                Cette action est irréversible.
+              </div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "24px" }}>
+              <button
+                onClick={() => {
+                  setHistory([]);
+                  setShowConfirm(false);
+                }}
+                style={{
+                  height: "48px",
+                  borderRadius: "12px",
+                  background: "#FFF5F5",
+                  color: "#E57373",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  border: "none",
+                  cursor: "pointer",
+                  fontFamily: "'DM Sans', sans-serif",
+                }}
+              >
+                Tout effacer
+              </button>
+              <button
+                onClick={() => setShowConfirm(false)}
+                style={{
+                  height: "48px",
+                  borderRadius: "12px",
+                  background: "#F4F7F4",
+                  color: "#3A503A",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  border: "none",
+                  cursor: "pointer",
+                  fontFamily: "'DM Sans', sans-serif",
+                }}
+              >
+                Annuler
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+
       <style>{`
         .hist-scroll::-webkit-scrollbar { width: 3px; }
         .hist-scroll::-webkit-scrollbar-track { background: transparent; }
