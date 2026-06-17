@@ -43,7 +43,7 @@ function Historique() {
         </div>
         {!isEmpty && (
           <button
-            onClick={() => setHistory([])}
+            onClick={() => setShowConfirm(true)}
             style={{
               fontSize: "12px",
               fontWeight: 400,
