@@ -29,12 +29,33 @@ export function BottomNav() {
             key={to}
             to={to}
             className="flex flex-col items-center justify-center flex-1"
-            style={{ color, gap: "4px" }}
+            style={{ color }}
           >
-            <Icon size={24} strokeWidth={active ? 2 : 1.75} />
-            <span style={{ fontSize: "11px", fontWeight: active ? 500 : 400 }}>
-              {label}
-            </span>
+            {active ? (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "4px",
+                  background: "#EAF3DE",
+                  borderRadius: "8px",
+                  padding: "4px 12px",
+                }}
+              >
+                <Icon size={24} strokeWidth={2} />
+                <span style={{ fontSize: "11px", fontWeight: 500 }}>
+                  {label}
+                </span>
+              </div>
+            ) : (
+              <>
+                <Icon size={24} strokeWidth={1.75} />
+                <span style={{ fontSize: "11px", fontWeight: 400 }}>
+                  {label}
+                </span>
+              </>
+            )}
           </Link>
         );
       })}
