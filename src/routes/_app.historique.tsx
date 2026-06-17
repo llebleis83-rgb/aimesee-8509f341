@@ -16,6 +16,7 @@ const CATEGORY_ICON: Record<string, React.ElementType> = {
 function Historique() {
   const navigate = useNavigate();
   const [history, setHistory] = useState(HISTORY_MOCK);
+  const [showConfirm, setShowConfirm] = useState(false);
   const isEmpty = history.length === 0;
 
   return (
