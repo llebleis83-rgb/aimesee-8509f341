@@ -10,6 +10,8 @@ import {
   Newspaper,
   ExternalLink,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
   Loader2,
   type LucideIcon,
 } from "lucide-react";
@@ -48,16 +50,18 @@ function SourceLine({ children }: { children: ReactNode }) {
   return (
     <div
       style={{
-        display: "flex",
+        display: "inline-flex",
         alignItems: "center",
         gap: "4px",
-        marginTop: "10px",
         fontFamily: FONT,
         fontSize: "11px",
         color: C.faint,
+        background: C.bg,
+        borderRadius: "6px",
+        padding: "2px 8px",
       }}
     >
-      <ExternalLink size={11} strokeWidth={1.75} />
+      <ExternalLink size={10} strokeWidth={1.75} />
       <span>{children}</span>
     </div>
   );
@@ -65,19 +69,14 @@ function SourceLine({ children }: { children: ReactNode }) {
 
 function FactRow({ fact, last }: { fact: ProductFact; last?: boolean }) {
   return (
-    <div
-      style={{
-        padding: "8px 0",
-        borderBottom: last ? "none" : `0.5px solid ${C.border}`,
-      }}
-    >
+    <div style={{ marginBottom: last ? 0 : "16px" }}>
       <div style={{ display: "flex", gap: "10px" }}>
         <div
           style={{
-            width: "7px",
-            height: "7px",
+            width: "5px",
+            height: "5px",
             borderRadius: "50%",
-            background: C.primary,
+            background: C.border,
             marginTop: "7px",
             flexShrink: 0,
           }}
@@ -95,9 +94,11 @@ function FactRow({ fact, last }: { fact: ProductFact; last?: boolean }) {
           {fact.text}
         </p>
       </div>
-      <SourceLine>
-        {fact.source_name} · {fact.source_year}
-      </SourceLine>
+      <div style={{ marginTop: "8px" }}>
+        <SourceLine>
+          {fact.source_name} · {fact.source_year}
+        </SourceLine>
+      </div>
     </div>
   );
 }
@@ -469,15 +470,11 @@ function ProductSheet() {
                 <span style={{ flex: 1, fontSize: "14px", fontWeight: 500, color: C.dark }}>
                   {label}
                 </span>
-                <ChevronRight
-                  size={16}
-                  color={isOpen ? C.primary : C.border}
-                  strokeWidth={1.75}
-                  style={{
-                    transform: isOpen ? "rotate(90deg)" : "rotate(0deg)",
-                    transition: "transform 0.2s",
-                  }}
-                />
+                {isOpen ? (
+                  <ChevronUp size={16} color={C.primary} strokeWidth={1.75} />
+                ) : (
+                  <ChevronDown size={16} color={C.border} strokeWidth={1.75} />
+                )}
               </button>
               {isOpen && (
                 <div
@@ -583,19 +580,6 @@ function ProductSheet() {
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: "13px", fontWeight: 500, color: C.dark }}>{a.name}</div>
-              <div style={{ marginTop: "4px" }}>
-                <span
-                  style={{
-                    fontSize: "11px",
-                    color: C.primary,
-                    background: C.lightGreen,
-                    borderRadius: "20px",
-                    padding: "3px 10px",
-                  }}
-                >
-                  {activeFilterDef.tag}
-                </span>
-              </div>
               <div
                 style={{
                   fontSize: "11px",
