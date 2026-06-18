@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { getProductById } from "@/lib/mockProducts";
+import { getBrandById } from "@/lib/mockBrands";
 import { favStore, useFavorites } from "@/lib/favorites-store";
 import { historyStore } from "@/lib/history-store";
 import { CATEGORY_LABEL, type ProductFact, type ShareholderNode } from "@/lib/types";
@@ -293,6 +294,7 @@ function ProductSheet() {
   }
 
   const isFav = favorites.has(product.id);
+  const brand = getBrandById(product.brand_id);
   const toggle = (sid: string) => setOpen((o) => ({ ...o, [sid]: !o[sid] }));
 
   const sections: { id: string; label: string; Icon: LucideIcon; content: ReactNode }[] = [
@@ -300,8 +302,8 @@ function ProductSheet() {
       id: "actionnariat",
       label: "Actionnariat",
       Icon: Building2,
-      content: product.sections.actionnariat.name ? (
-        <ActionnariatBlock root={product.sections.actionnariat} />
+      content: brand && brand.sections.actionnariat.children?.length ? (
+        <ActionnariatBlock root={brand.sections.actionnariat} />
       ) : (
         <EmptyState />
       ),
@@ -310,7 +312,7 @@ function ProductSheet() {
       id: "politique",
       label: "Politique & Lobbying",
       Icon: Landmark,
-      content: <FactsList facts={product.sections.politique.facts} />,
+      content: <FactsList facts={brand?.sections.politique.facts ?? []} />,
     },
     {
       id: "ecologie",
@@ -328,13 +330,13 @@ function ProductSheet() {
       id: "travail",
       label: "Conditions de travail",
       Icon: Users,
-      content: <FactsList facts={product.sections.conditions_travail.facts} />,
+      content: <FactsList facts={brand?.sections.conditions_travail.facts ?? []} />,
     },
     {
       id: "scandales",
       label: "Scandales",
       Icon: Newspaper,
-      content: <FactsList facts={product.sections.scandales.facts} />,
+      content: <FactsList facts={brand?.sections.scandales.facts ?? []} />,
     },
   ];
 
@@ -391,24 +393,38 @@ function ProductSheet() {
         </button>
 
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <div
-            style={{
-              width: "42px",
-              height: "42px",
-              background: C.border,
-              borderRadius: "10px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0,
-            }}
-          >
-            <Building2 size={20} color={C.primary} strokeWidth={1.75} />
-          </div>
+          {product.thumbnail_url ? (
+            <img
+              src={product.thumbnail_url}
+              alt={product.name}
+              style={{
+                width: "42px",
+                height: "42px",
+                borderRadius: "8px",
+                objectFit: "cover",
+                flexShrink: 0,
+              }}
+            />
+          ) : (
+            <div
+              style={{
+                width: "42px",
+                height: "42px",
+                background: C.border,
+                borderRadius: "10px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+              }}
+            >
+              <Building2 size={20} color={C.primary} strokeWidth={1.75} />
+            </div>
+          )}
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontSize: "16px", fontWeight: 500, color: C.dark }}>{product.name}</div>
             <div style={{ fontSize: "11px", fontWeight: 400, color: C.muted }}>
-              {product.brand} · {product.country} · {categoryLabel}
+              {brand?.name ?? ""} · {product.country} · {categoryLabel}
             </div>
           </div>
           <button
