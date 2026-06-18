@@ -141,7 +141,7 @@ function Scanner() {
           onClick={() => navigate({ to: "/categories", search: { focus: "1" } })}
           className="flex items-center justify-center gap-2 w-full"
           style={{
-            background: "#5B8C6A",
+            background: "#1A2E1A",
             borderRadius: "12px",
             height: "48px",
             padding: "0 16px",
