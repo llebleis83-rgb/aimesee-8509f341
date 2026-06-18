@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SearchRouteImport } from './routes/search'
 import { Route as NotFoundRouteImport } from './routes/not-found'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app.index'
@@ -20,6 +21,11 @@ import { Route as AppCategoriesIndexRouteImport } from './routes/_app.categories
 import { Route as AppProduitIdRouteImport } from './routes/_app.produit.$id'
 import { Route as AppCategoriesSlugRouteImport } from './routes/_app.categories.$slug'
 
+const SearchRoute = SearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NotFoundRoute = NotFoundRouteImport.update({
   id: '/not-found',
   path: '/not-found',
@@ -73,6 +79,7 @@ const AppCategoriesSlugRoute = AppCategoriesSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/not-found': typeof NotFoundRoute
+  '/search': typeof SearchRoute
   '/categories': typeof AppCategoriesRouteWithChildren
   '/compte': typeof AppCompteRoute
   '/favoris': typeof AppFavorisRoute
@@ -83,6 +90,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/not-found': typeof NotFoundRoute
+  '/search': typeof SearchRoute
   '/compte': typeof AppCompteRoute
   '/favoris': typeof AppFavorisRoute
   '/historique': typeof AppHistoriqueRoute
@@ -95,6 +103,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
   '/not-found': typeof NotFoundRoute
+  '/search': typeof SearchRoute
   '/_app/categories': typeof AppCategoriesRouteWithChildren
   '/_app/compte': typeof AppCompteRoute
   '/_app/favoris': typeof AppFavorisRoute
@@ -109,6 +118,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/not-found'
+    | '/search'
     | '/categories'
     | '/compte'
     | '/favoris'
@@ -119,6 +129,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/not-found'
+    | '/search'
     | '/compte'
     | '/favoris'
     | '/historique'
@@ -130,6 +141,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_app'
     | '/not-found'
+    | '/search'
     | '/_app/categories'
     | '/_app/compte'
     | '/_app/favoris'
@@ -143,10 +155,18 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   NotFoundRoute: typeof NotFoundRoute
+  SearchRoute: typeof SearchRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/search': {
+      id: '/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof SearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/not-found': {
       id: '/not-found'
       path: '/not-found'
@@ -257,6 +277,7 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   NotFoundRoute: NotFoundRoute,
+  SearchRoute: SearchRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

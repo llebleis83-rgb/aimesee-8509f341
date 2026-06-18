@@ -1,7 +1,6 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Search, User, Flashlight } from "lucide-react";
-import { useMemo, useState } from "react";
-import { getProductByBarcode, searchProductsByName } from "@/lib/mockProducts";
+import { getProductByBarcode } from "@/lib/mockProducts";
 
 export const Route = createFileRoute("/_app/")({
   component: Scanner,
@@ -9,9 +8,6 @@ export const Route = createFileRoute("/_app/")({
 
 function Scanner() {
   const navigate = useNavigate();
-  const [q, setQ] = useState("");
-
-  const results = useMemo(() => searchProductsByName(q).slice(0, 6), [q]);
 
   // Simulated barcode-scan entry point — kept available for any future hardware integration.
   const handleBarcode = (barcode: string) => {
@@ -140,84 +136,25 @@ function Scanner() {
       </div>
 
       {/* Search */}
-      <div className="shrink-0" style={{ margin: "24px 16px", position: "relative" }}>
-        <div
-          className="flex items-center gap-2"
+      <div className="shrink-0" style={{ margin: "24px 16px" }}>
+        <button
+          onClick={() => navigate({ to: "/search" })}
+          className="flex items-center gap-2 w-full"
           style={{
             background: "#F4F7F4",
             border: "0.5px solid #DDE8DD",
             borderRadius: "14px",
             height: "52px",
             padding: "0 16px",
+            cursor: "pointer",
+            textAlign: "left",
           }}
         >
           <Search size={18} color="#7A9A7A" />
-          <input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Ou recherchez par nom de produit..."
-            className="flex-1 bg-transparent outline-none"
-            style={{ fontSize: "15px", color: "#1A2E1A" }}
-          />
-        </div>
-
-        {q.trim() && results.length > 0 && (
-          <div
-            style={{
-              position: "absolute",
-              bottom: "calc(100% + 8px)",
-              left: 0,
-              right: 0,
-              background: "#FFFFFF",
-              border: "0.5px solid #DDE8DD",
-              borderRadius: "14px",
-              overflow: "hidden",
-              boxShadow: "0 8px 24px rgba(26,46,26,0.08)",
-              maxHeight: "280px",
-              overflowY: "auto",
-            }}
-          >
-            {results.map((p) => (
-              <Link
-                key={p.id}
-                to="/produit/$id"
-                params={{ id: p.id }}
-                onClick={() => setQ("")}
-                className="flex items-center"
-                style={{
-                  width: "100%",
-                  height: "68px",
-                  gap: "14px",
-                  padding: "0 16px",
-                  borderBottom: "0.5px solid #F4F7F4",
-                  background: "#FFFFFF",
-                  textDecoration: "none",
-                }}
-              >
-                <div
-                  className="flex items-center justify-center shrink-0"
-                  style={{
-                    width: "44px",
-                    height: "44px",
-                    background: "#EAF3DE",
-                    borderRadius: "10px",
-                    fontSize: "13px",
-                    fontWeight: 500,
-                    color: "#5B8C6A",
-                  }}
-                >
-                  {p.name.slice(0, 1)}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div style={{ fontSize: "15px", fontWeight: 500, color: "#1A2E1A" }}>{p.name}</div>
-                  <div style={{ fontSize: "12px", fontWeight: 400, color: "#7A9A7A", marginTop: "4px" }}>
-                    {p.brand} · {p.country}
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
+          <span style={{ fontSize: "15px", color: "#7A9A7A", flex: 1 }}>
+            Ou recherchez par nom de produit...
+          </span>
+        </button>
       </div>
     </div>
   );
