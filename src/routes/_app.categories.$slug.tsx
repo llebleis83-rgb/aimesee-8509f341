@@ -72,7 +72,7 @@ function CategoryResult() {
         }}
       >
         <button
-          onClick={() => navigate(-1)}
+          onClick={() => window.history.back()}
           className="flex items-center"
           style={{
             background: "transparent",

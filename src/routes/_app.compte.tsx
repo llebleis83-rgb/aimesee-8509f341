@@ -95,7 +95,7 @@ function Compte() {
   return (
     <div style={{ fontFamily: "'DM Sans', sans-serif", background: "white", minHeight: "100%" }}>
       <button
-        onClick={() => navigate(-1)}
+        onClick={() => window.history.back()}
         style={{
           display: "flex",
           alignItems: "center",
