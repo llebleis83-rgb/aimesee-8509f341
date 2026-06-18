@@ -72,7 +72,7 @@ function CategoryResult() {
         }}
       >
         <button
-          onClick={() => navigate({ to: "/categories" })}
+          onClick={() => navigate(-1)}
           className="flex items-center"
           style={{
             background: "transparent",

@@ -361,7 +361,7 @@ function ProductSheet() {
         }}
       >
         <button
-          onClick={() => navigate({ to: "/" })}
+          onClick={() => navigate(-1)}
           style={{
             display: "flex",
             alignItems: "center",
