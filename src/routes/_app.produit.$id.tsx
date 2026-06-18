@@ -50,16 +50,18 @@ function SourceLine({ children }: { children: ReactNode }) {
   return (
     <div
       style={{
-        display: "flex",
+        display: "inline-flex",
         alignItems: "center",
         gap: "4px",
-        marginTop: "10px",
         fontFamily: FONT,
         fontSize: "11px",
         color: C.faint,
+        background: C.bg,
+        borderRadius: "6px",
+        padding: "2px 8px",
       }}
     >
-      <ExternalLink size={11} strokeWidth={1.75} />
+      <ExternalLink size={10} strokeWidth={1.75} />
       <span>{children}</span>
     </div>
   );
