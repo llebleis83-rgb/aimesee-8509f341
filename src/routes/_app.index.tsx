@@ -135,24 +135,24 @@ function Scanner() {
         </div>
       </div>
 
-      {/* Search */}
+      {/* Search CTA */}
       <div className="shrink-0" style={{ margin: "24px 16px" }}>
         <button
           onClick={() => navigate({ to: "/categories", search: { focus: "1" } })}
           className="flex items-center gap-2 w-full"
           style={{
             background: "#F4F7F4",
-            border: "0.5px solid #DDE8DD",
-            borderRadius: "14px",
-            height: "52px",
+            border: "1px solid #DDE8DD",
+            borderRadius: "12px",
+            height: "48px",
             padding: "0 16px",
             cursor: "pointer",
             textAlign: "left",
           }}
         >
           <Search size={18} color="#7A9A7A" />
-          <span style={{ fontSize: "15px", color: "#7A9A7A", flex: 1 }}>
-            Ou recherchez par nom de produit...
+          <span style={{ fontSize: "14px", fontWeight: 400, color: "#7A9A7A" }}>
+            Rechercher un produit
           </span>
         </button>
       </div>
