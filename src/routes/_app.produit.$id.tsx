@@ -10,6 +10,8 @@ import {
   Newspaper,
   ExternalLink,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
   Loader2,
   type LucideIcon,
 } from "lucide-react";
