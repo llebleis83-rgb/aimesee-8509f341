@@ -12,6 +12,7 @@ import {
   ChevronRight,
   ChevronDown,
   ChevronUp,
+  Clock,
   Loader2,
   type LucideIcon,
 } from "lucide-react";
@@ -67,7 +68,39 @@ function SourceLine({ children }: { children: ReactNode }) {
   );
 }
 
-function FactRow({ fact, last }: { fact: ProductFact; last?: boolean }) {
+function EmptyState() {
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: "6px",
+        padding: "16px 0",
+      }}
+    >
+      <Clock size={20} color={C.faint} strokeWidth={1.75} />
+      <span style={{ fontFamily: FONT, fontSize: "13px", fontWeight: 400, color: C.faint }}>
+        Données en cours de collecte
+      </span>
+      <span style={{ fontFamily: FONT, fontSize: "12px", fontWeight: 400, color: C.faint }}>
+        Cette section sera disponible prochainement.
+      </span>
+    </div>
+  );
+}
+
+function FactsList({ facts }: { facts: ProductFact[] }) {
+  if (facts.length === 0) return <EmptyState />;
+  return (
+    <>
+      {facts.map((f, i, arr) => (
+        <FactRow key={i} fact={f} last={i === arr.length - 1} />
+      ))}
+    </>
+  );
+}
+
   return (
     <div style={{ marginBottom: last ? 0 : "20px" }}>
       <div style={{ display: "flex", gap: "10px" }}>
@@ -267,67 +300,41 @@ function ProductSheet() {
       id: "actionnariat",
       label: "Actionnariat",
       Icon: Building2,
-      content: <ActionnariatBlock root={product.sections.actionnariat} />,
+      content: product.sections.actionnariat.name ? (
+        <ActionnariatBlock root={product.sections.actionnariat} />
+      ) : (
+        <EmptyState />
+      ),
     },
     {
       id: "politique",
       label: "Politique & Lobbying",
       Icon: Landmark,
-      content: (
-        <>
-          {product.sections.politique.facts.map((f, i, arr) => (
-            <FactRow key={i} fact={f} last={i === arr.length - 1} />
-          ))}
-        </>
-      ),
+      content: <FactsList facts={product.sections.politique.facts} />,
     },
     {
       id: "ecologie",
       label: "Écologie",
       Icon: Leaf,
-      content: (
-        <>
-          {product.sections.ecologie.facts.map((f, i, arr) => (
-            <FactRow key={i} fact={f} last={i === arr.length - 1} />
-          ))}
-        </>
-      ),
+      content: <FactsList facts={product.sections.ecologie.facts} />,
     },
     {
       id: "fabrication",
       label: "Fabrication",
       Icon: MapPin,
-      content: (
-        <>
-          {product.sections.fabrication.facts.map((f, i, arr) => (
-            <FactRow key={i} fact={f} last={i === arr.length - 1} />
-          ))}
-        </>
-      ),
+      content: <FactsList facts={product.sections.fabrication.facts} />,
     },
     {
       id: "travail",
       label: "Conditions de travail",
       Icon: Users,
-      content: (
-        <>
-          {product.sections.conditions_travail.facts.map((f, i, arr) => (
-            <FactRow key={i} fact={f} last={i === arr.length - 1} />
-          ))}
-        </>
-      ),
+      content: <FactsList facts={product.sections.conditions_travail.facts} />,
     },
     {
       id: "scandales",
       label: "Scandales",
       Icon: Newspaper,
-      content: (
-        <>
-          {product.sections.scandales.facts.map((f, i, arr) => (
-            <FactRow key={i} fact={f} last={i === arr.length - 1} />
-          ))}
-        </>
-      ),
+      content: <FactsList facts={product.sections.scandales.facts} />,
     },
   ];
 
