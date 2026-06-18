@@ -19,26 +19,35 @@ export interface ProductSection {
   facts: ProductFact[];
 }
 
+export interface Brand {
+  id: string;
+  name: string;
+  country: string;
+  logo_url?: string;
+  sections: {
+    actionnariat: ShareholderNode;
+    politique: ProductSection;
+    conditions_travail: ProductSection;
+    scandales: ProductSection;
+  };
+}
+
 export interface Product {
   id: string;
   name: string;
-  brand: string;
   country: string;
+  barcode?: string;
   category_slug: string;
   thumbnail_url?: string;
-  barcode?: string;
+  brand_id: string;
   is_ecological: boolean;
   is_made_in_france: boolean;
   is_fair_trade: boolean;
   is_independent: boolean;
   similar_product_ids: string[];
   sections: {
-    actionnariat: ShareholderNode;
-    politique: ProductSection;
     ecologie: ProductSection;
     fabrication: ProductSection;
-    conditions_travail: ProductSection;
-    scandales: ProductSection;
   };
 }
 
