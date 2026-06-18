@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Utensils,
   CupSoda,
@@ -19,12 +19,12 @@ export const Route = createFileRoute("/_app/categories")({
 });
 
 const AVAILABLE = [
-  { icon: Utensils, label: "Alimentation", emoji: "🍔" },
-  { icon: CupSoda, label: "Boissons", emoji: "🥤" },
-  { icon: Droplets, label: "Hygiène & Soins", emoji: "🧴" },
-  { icon: Sparkles, label: "Cosmétiques", emoji: "💄" },
-  { icon: Sofa, label: "Entretien maison", emoji: "🏠" },
-  { icon: Shirt, label: "Mode & Textile", emoji: "👗" },
+  { icon: Utensils, label: "Alimentation", slug: "alimentation", emoji: "🍔" },
+  { icon: CupSoda, label: "Boissons", slug: "boissons", emoji: "🥤" },
+  { icon: Droplets, label: "Hygiène & Soins", slug: "hygiene-soins", emoji: "🧴" },
+  { icon: Sparkles, label: "Cosmétiques", slug: "cosmetiques", emoji: "💄" },
+  { icon: Sofa, label: "Entretien maison", slug: "entretien-maison", emoji: "🏠" },
+  { icon: Shirt, label: "Mode & Textile", slug: "mode-textile", emoji: "👗" },
 ];
 
 const COMING_SOON = [
@@ -50,15 +50,18 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-function AvailableRow({ icon: Icon, label }: { icon: typeof Utensils; label: string }) {
+function AvailableRow({ icon: Icon, label, slug }: { icon: typeof Utensils; label: string; slug: string }) {
   return (
-    <button
+    <Link
+      to="/categories/$slug"
+      params={{ slug }}
       className="flex items-center"
       style={{
         width: "100%",
         height: "64px",
         background: "#FFFFFF",
         borderBottom: "0.5px solid #F4F7F4",
+        textDecoration: "none",
       }}
     >
       <div
@@ -87,7 +90,7 @@ function AvailableRow({ icon: Icon, label }: { icon: typeof Utensils; label: str
         {label}
       </span>
       <ChevronRight size={16} color="#DDE8DD" strokeWidth={1.75} style={{ marginRight: "16px", flexShrink: 0 }} />
-    </button>
+    </Link>
   );
 }
 
@@ -185,7 +188,7 @@ function Categories() {
       </div>
 
       {AVAILABLE.map((c) => (
-        <AvailableRow key={c.label} icon={c.icon} label={c.label} />
+        <AvailableRow key={c.label} icon={c.icon} label={c.label} slug={c.slug} />
       ))}
 
       <div style={{ marginTop: "16px", marginBottom: "4px" }}>
