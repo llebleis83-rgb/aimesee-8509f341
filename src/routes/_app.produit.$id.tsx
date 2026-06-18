@@ -100,7 +100,7 @@ function FactsList({ facts }: { facts: ProductFact[] }) {
     </>
   );
 }
-
+function FactRow({ fact, last }: { fact: ProductFact; last?: boolean }) {
   return (
     <div style={{ marginBottom: last ? 0 : "20px" }}>
       <div style={{ display: "flex", gap: "10px" }}>
