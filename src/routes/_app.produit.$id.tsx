@@ -57,8 +57,8 @@ function SourceLine({ children }: { children: ReactNode }) {
         fontSize: "11px",
         color: C.faint,
         background: C.bg,
-        borderRadius: "6px",
-        padding: "2px 8px",
+        borderRadius: "20px",
+        padding: "3px 10px",
       }}
     >
       <ExternalLink size={10} strokeWidth={1.75} />
@@ -69,7 +69,7 @@ function SourceLine({ children }: { children: ReactNode }) {
 
 function FactRow({ fact, last }: { fact: ProductFact; last?: boolean }) {
   return (
-    <div style={{ marginBottom: last ? 0 : "16px" }}>
+    <div style={{ marginBottom: last ? 0 : "20px" }}>
       <div style={{ display: "flex", gap: "10px" }}>
         <div
           style={{
@@ -94,7 +94,7 @@ function FactRow({ fact, last }: { fact: ProductFact; last?: boolean }) {
           {fact.text}
         </p>
       </div>
-      <div style={{ marginTop: "8px" }}>
+      <div style={{ marginTop: "6px" }}>
         <SourceLine>
           {fact.source_name} · {fact.source_year}
         </SourceLine>
