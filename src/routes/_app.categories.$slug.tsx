@@ -13,20 +13,12 @@ import {
   Sofa,
   Utensils,
 } from "lucide-react";
-import { FAVORITES_MOCK } from "@/lib/aimesee-data";
+import { getProductsByCategory } from "@/lib/mockProducts";
+import { CATEGORY_LABEL } from "@/lib/types";
 
 export const Route = createFileRoute("/_app/categories/$slug")({
   component: CategoryResult,
 });
-
-const SLUG_TO_CATEGORY: Record<string, string> = {
-  alimentation: "Alimentation",
-  boissons: "Boissons",
-  "hygiene-soins": "Hygiène & Soins",
-  cosmetiques: "Cosmétiques",
-  "entretien-maison": "Entretien maison",
-  "mode-textile": "Mode & Textile",
-};
 
 const CATEGORY_ICON: Record<string, React.ElementType> = {
   Alimentation: Utensils,
@@ -38,9 +30,12 @@ const CATEGORY_ICON: Record<string, React.ElementType> = {
 };
 
 const ROW_ICON: Record<string, React.ElementType> = {
-  Alimentation: Cookie,
-  Boissons: Droplets,
-  "Mode & Textile": Shirt,
+  alimentation: Cookie,
+  boissons: Droplets,
+  "hygiene-soins": Droplets,
+  cosmetiques: Sparkles,
+  "entretien-maison": Sofa,
+  "mode-textile": Shirt,
 };
 
 function CategoryResult() {
@@ -48,21 +43,16 @@ function CategoryResult() {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
 
-  const categoryName = SLUG_TO_CATEGORY[slug] || slug;
+  const categoryName = CATEGORY_LABEL[slug] || slug;
   const FallbackIcon = CATEGORY_ICON[categoryName] || PackageSearch;
 
-  const allProducts = useMemo(
-    () => FAVORITES_MOCK.filter((p) => p.category === categoryName),
-    [categoryName],
-  );
+  const allProducts = useMemo(() => getProductsByCategory(slug), [slug]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return allProducts;
     return allProducts.filter(
-      (p) =>
-        p.name.toLowerCase().includes(q) ||
-        p.brand.toLowerCase().includes(q),
+      (p) => p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q),
     );
   }, [allProducts, query]);
 
@@ -208,7 +198,7 @@ function CategoryResult() {
         ) : (
           <div>
             {filtered.map((p) => {
-              const Icon = ROW_ICON[p.category] || Cookie;
+              const Icon = ROW_ICON[p.category_slug] || Cookie;
               return (
                 <Link
                   key={p.id}
