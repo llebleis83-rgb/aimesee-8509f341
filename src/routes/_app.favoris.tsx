@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Heart, Cookie, Droplets, Shirt, CupSoda, Sparkles, Sofa, Utensils } from "lucide-react";
 import { getProductById } from "@/lib/mockProducts";
+import { getBrandById } from "@/lib/mockBrands";
 import { favStore, useFavorites } from "@/lib/favorites-store";
 import { CATEGORY_LABEL } from "@/lib/types";
 
@@ -91,12 +92,21 @@ function Favoris() {
                     className="flex items-center flex-1"
                     style={{ gap: "14px", minWidth: 0, textDecoration: "none" }}
                   >
-                    <div
-                      className="flex items-center justify-center shrink-0"
-                      style={{ width: "44px", height: "44px", background: "#EAF3DE", borderRadius: "10px" }}
-                    >
-                      <Icon size={20} color="#5B8C6A" strokeWidth={1.5} />
-                    </div>
+                    {p.thumbnail_url ? (
+                      <img
+                        src={p.thumbnail_url}
+                        alt={p.name}
+                        className="shrink-0"
+                        style={{ width: "44px", height: "44px", borderRadius: "10px", objectFit: "cover" }}
+                      />
+                    ) : (
+                      <div
+                        className="flex items-center justify-center shrink-0"
+                        style={{ width: "44px", height: "44px", background: "#EAF3DE", borderRadius: "10px" }}
+                      >
+                        <Icon size={20} color="#5B8C6A" strokeWidth={1.5} />
+                      </div>
+                    )}
                     <div className="flex-1 min-w-0">
                       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
                         <div style={{ fontSize: "15px", fontWeight: 500, color: "#1A2E1A" }}>{p.name}</div>
@@ -115,7 +125,7 @@ function Favoris() {
                         </span>
                       </div>
                       <div style={{ fontSize: "12px", fontWeight: 400, color: "#7A9A7A", marginTop: "4px" }}>
-                        {p.brand} · {p.country}
+                        {getBrandById(p.brand_id)?.name ?? ""} · {p.country}
                       </div>
                     </div>
                   </Link>
