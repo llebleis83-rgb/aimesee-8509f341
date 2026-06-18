@@ -470,15 +470,11 @@ function ProductSheet() {
                 <span style={{ flex: 1, fontSize: "14px", fontWeight: 500, color: C.dark }}>
                   {label}
                 </span>
-                <ChevronRight
-                  size={16}
-                  color={isOpen ? C.primary : C.border}
-                  strokeWidth={1.75}
-                  style={{
-                    transform: isOpen ? "rotate(90deg)" : "rotate(0deg)",
-                    transition: "transform 0.2s",
-                  }}
-                />
+                {isOpen ? (
+                  <ChevronUp size={16} color={C.primary} strokeWidth={1.75} />
+                ) : (
+                  <ChevronDown size={16} color={C.border} strokeWidth={1.75} />
+                )}
               </button>
               {isOpen && (
                 <div
@@ -584,19 +580,6 @@ function ProductSheet() {
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: "13px", fontWeight: 500, color: C.dark }}>{a.name}</div>
-              <div style={{ marginTop: "4px" }}>
-                <span
-                  style={{
-                    fontSize: "11px",
-                    color: C.primary,
-                    background: C.lightGreen,
-                    borderRadius: "20px",
-                    padding: "3px 10px",
-                  }}
-                >
-                  {activeFilterDef.tag}
-                </span>
-              </div>
               <div
                 style={{
                   fontSize: "11px",
