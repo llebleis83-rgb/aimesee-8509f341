@@ -138,7 +138,7 @@ function Scanner() {
       {/* Search */}
       <div className="shrink-0" style={{ margin: "24px 16px" }}>
         <button
-          onClick={() => navigate({ to: "/search" })}
+          onClick={() => navigate({ to: "/categories", search: { focus: "1" } })}
           className="flex items-center gap-2 w-full"
           style={{
             background: "#F4F7F4",

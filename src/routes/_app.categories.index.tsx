@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Utensils,
   CupSoda,
@@ -12,9 +13,15 @@ import {
   Leaf,
   Search,
   ChevronRight,
+  SmilePlus,
+  Cookie,
 } from "lucide-react";
+import { searchProductsByName } from "@/lib/mockProducts";
 
 export const Route = createFileRoute("/_app/categories/")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    focus: search.focus === "1" || search.focus === 1 ? "1" : undefined,
+  }),
   component: Categories,
 });
 
@@ -33,6 +40,15 @@ const COMING_SOON = [
   { icon: Gamepad2, label: "Jouets & Enfants", emoji: "🧸" },
   { icon: Leaf, label: "Bio & Écolo", emoji: "🌿" },
 ];
+
+const CATEGORY_ICON: Record<string, React.ElementType> = {
+  alimentation: Cookie,
+  boissons: CupSoda,
+  "hygiene-soins": Droplets,
+  cosmetiques: Sparkles,
+  "entretien-maison": Sofa,
+  "mode-textile": Shirt,
+};
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
@@ -150,11 +166,22 @@ function ComingSoonRow({ icon: Icon, label }: { icon: typeof Utensils; label: st
 }
 
 function Categories() {
+  const { focus } = Route.useSearch();
+  const [q, setQ] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (focus === "1") inputRef.current?.focus();
+  }, [focus]);
+
+  const results = useMemo(() => searchProductsByName(q), [q]);
+  const hasQuery = q.trim().length > 0;
+
   return (
     <div style={{ background: "#FFFFFF", paddingBottom: "24px" }}>
       <header style={{ padding: "32px 20px 28px" }}>
         <h1 style={{ fontSize: "28px", fontWeight: 500, color: "#1A2E1A", letterSpacing: "-0.4px" }}>
-          Catégories
+          Explorer
         </h1>
       </header>
 
@@ -172,8 +199,11 @@ function Categories() {
       >
         <Search size={18} color="#7A9A7A" strokeWidth={1.75} />
         <input
+          ref={inputRef}
           type="text"
-          placeholder="Rechercher une catégorie..."
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="Rechercher un produit ou une catégorie..."
           style={{
             flex: 1,
             background: "transparent",
@@ -187,16 +217,70 @@ function Categories() {
         />
       </div>
 
-      {AVAILABLE.map((c) => (
-        <AvailableRow key={c.label} icon={c.icon} label={c.label} slug={c.slug} />
-      ))}
+      {!hasQuery ? (
+        <>
+          {AVAILABLE.map((c) => (
+            <AvailableRow key={c.label} icon={c.icon} label={c.label} slug={c.slug} />
+          ))}
 
-      <div style={{ marginTop: "16px", marginBottom: "4px" }}>
-        <SectionLabel>Bientôt disponible</SectionLabel>
-      </div>
-      {COMING_SOON.map((c) => (
-        <ComingSoonRow key={c.label} icon={c.icon} label={c.label} />
-      ))}
+          <div style={{ marginTop: "16px", marginBottom: "4px" }}>
+            <SectionLabel>Bientôt disponible</SectionLabel>
+          </div>
+          {COMING_SOON.map((c) => (
+            <ComingSoonRow key={c.label} icon={c.icon} label={c.label} />
+          ))}
+        </>
+      ) : results.length === 0 ? (
+        <div
+          className="flex flex-col items-center justify-center"
+          style={{ padding: "64px 24px 0" }}
+        >
+          <SmilePlus size={48} color="#DDE8DD" strokeWidth={1.5} />
+          <div style={{ fontSize: "16px", fontWeight: 500, color: "#1A2E1A", marginTop: "16px", textAlign: "center" }}>
+            Aucun produit trouvé
+          </div>
+          <div style={{ fontSize: "13px", fontWeight: 400, color: "#7A9A7A", marginTop: "8px", textAlign: "center" }}>
+            Essaie un autre nom ou scanne le code-barres
+          </div>
+        </div>
+      ) : (
+        <div style={{ marginTop: "8px" }}>
+          {results.map((p) => {
+            const Icon = CATEGORY_ICON[p.category_slug] || Cookie;
+            return (
+              <Link
+                key={p.id}
+                to="/produit/$id"
+                params={{ id: p.id }}
+                className="flex items-center"
+                style={{
+                  width: "100%",
+                  height: "68px",
+                  gap: "14px",
+                  padding: "0 16px",
+                  borderBottom: "0.5px solid #F4F7F4",
+                  background: "#FFFFFF",
+                  textDecoration: "none",
+                }}
+              >
+                <div
+                  className="flex items-center justify-center shrink-0"
+                  style={{ width: "44px", height: "44px", background: "#EAF3DE", borderRadius: "10px" }}
+                >
+                  <Icon size={20} color="#5B8C6A" strokeWidth={1.5} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div style={{ fontSize: "15px", fontWeight: 500, color: "#1A2E1A" }}>{p.name}</div>
+                  <div style={{ fontSize: "12px", fontWeight: 400, color: "#7A9A7A", marginTop: "4px" }}>
+                    {p.brand} · {p.country}
+                  </div>
+                </div>
+                <ChevronRight size={18} color="#DDE8DD" strokeWidth={1.5} />
+              </Link>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
