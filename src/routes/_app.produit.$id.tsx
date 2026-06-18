@@ -587,20 +587,34 @@ function ProductSheet() {
               gap: "10px",
             }}
           >
-            <div
-              style={{
-                width: "36px",
-                height: "36px",
-                background: C.lightGreen,
-                borderRadius: "8px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
-              }}
-            >
-              <Leaf size={18} color={C.primary} strokeWidth={1.75} />
-            </div>
+            {a.thumbnail_url ? (
+              <img
+                src={a.thumbnail_url}
+                alt={a.name}
+                style={{
+                  width: "36px",
+                  height: "36px",
+                  borderRadius: "8px",
+                  objectFit: "cover",
+                  flexShrink: 0,
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  width: "36px",
+                  height: "36px",
+                  background: C.lightGreen,
+                  borderRadius: "8px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
+              >
+                <Leaf size={18} color={C.primary} strokeWidth={1.75} />
+              </div>
+            )}
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: "13px", fontWeight: 500, color: C.dark }}>{a.name}</div>
               <div
@@ -612,7 +626,7 @@ function ProductSheet() {
                   lineHeight: 1.5,
                 }}
               >
-                {a.brand} · {a.country}
+                {getBrandById(a.brand_id)?.name ?? ""} · {a.country}
               </div>
             </div>
           </Link>
