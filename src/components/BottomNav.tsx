@@ -1,9 +1,9 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { ScanLine, Grid2x2, Heart, History } from "lucide-react";
+import { ScanLine, Search, Heart, History } from "lucide-react";
 
 const tabs = [
   { to: "/", label: "Scanner", icon: ScanLine },
-  { to: "/categories", label: "Catégories", icon: Grid2x2 },
+  { to: "/categories", label: "Explorer", icon: Search },
   { to: "/favoris", label: "Favoris", icon: Heart },
   { to: "/historique", label: "Historique", icon: History },
 ] as const;
