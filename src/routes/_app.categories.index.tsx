@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Utensils,
   CupSoda,
@@ -52,8 +52,9 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 
 function AvailableRow({ icon: Icon, label, slug }: { icon: typeof Utensils; label: string; slug: string }) {
   return (
-    <a
-      href={`/categories/${slug}`}
+    <Link
+      to="/categories/$slug"
+      params={{ slug }}
       className="flex items-center"
       style={{
         width: "100%",
@@ -89,7 +90,7 @@ function AvailableRow({ icon: Icon, label, slug }: { icon: typeof Utensils; labe
         {label}
       </span>
       <ChevronRight size={16} color="#DDE8DD" strokeWidth={1.75} style={{ marginRight: "16px", flexShrink: 0 }} />
-    </a>
+    </Link>
   );
 }
 
