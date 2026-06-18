@@ -16,6 +16,7 @@ import { Route as AppFavorisRouteImport } from './routes/_app.favoris'
 import { Route as AppCompteRouteImport } from './routes/_app.compte'
 import { Route as AppCategoriesRouteImport } from './routes/_app.categories'
 import { Route as AppProduitIdRouteImport } from './routes/_app.produit.$id'
+import { Route as AppCategoriesSlugRouteImport } from './routes/_app.categories.$slug'
 
 const AppRoute = AppRouteImport.update({
   id: '/_app',
@@ -51,31 +52,39 @@ const AppProduitIdRoute = AppProduitIdRouteImport.update({
   path: '/produit/$id',
   getParentRoute: () => AppRoute,
 } as any)
+const AppCategoriesSlugRoute = AppCategoriesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => AppCategoriesRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
-  '/categories': typeof AppCategoriesRoute
+  '/categories': typeof AppCategoriesRouteWithChildren
   '/compte': typeof AppCompteRoute
   '/favoris': typeof AppFavorisRoute
   '/historique': typeof AppHistoriqueRoute
+  '/categories/$slug': typeof AppCategoriesSlugRoute
   '/produit/$id': typeof AppProduitIdRoute
 }
 export interface FileRoutesByTo {
-  '/categories': typeof AppCategoriesRoute
+  '/categories': typeof AppCategoriesRouteWithChildren
   '/compte': typeof AppCompteRoute
   '/favoris': typeof AppFavorisRoute
   '/historique': typeof AppHistoriqueRoute
   '/': typeof AppIndexRoute
+  '/categories/$slug': typeof AppCategoriesSlugRoute
   '/produit/$id': typeof AppProduitIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
-  '/_app/categories': typeof AppCategoriesRoute
+  '/_app/categories': typeof AppCategoriesRouteWithChildren
   '/_app/compte': typeof AppCompteRoute
   '/_app/favoris': typeof AppFavorisRoute
   '/_app/historique': typeof AppHistoriqueRoute
   '/_app/': typeof AppIndexRoute
+  '/_app/categories/$slug': typeof AppCategoriesSlugRoute
   '/_app/produit/$id': typeof AppProduitIdRoute
 }
 export interface FileRouteTypes {
@@ -86,6 +95,7 @@ export interface FileRouteTypes {
     | '/compte'
     | '/favoris'
     | '/historique'
+    | '/categories/$slug'
     | '/produit/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -94,6 +104,7 @@ export interface FileRouteTypes {
     | '/favoris'
     | '/historique'
     | '/'
+    | '/categories/$slug'
     | '/produit/$id'
   id:
     | '__root__'
@@ -103,6 +114,7 @@ export interface FileRouteTypes {
     | '/_app/favoris'
     | '/_app/historique'
     | '/_app/'
+    | '/_app/categories/$slug'
     | '/_app/produit/$id'
   fileRoutesById: FileRoutesById
 }
@@ -161,11 +173,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProduitIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/categories/$slug': {
+      id: '/_app/categories/$slug'
+      path: '/$slug'
+      fullPath: '/categories/$slug'
+      preLoaderRoute: typeof AppCategoriesSlugRouteImport
+      parentRoute: typeof AppCategoriesRoute
+    }
   }
 }
 
+interface AppCategoriesRouteChildren {
+  AppCategoriesSlugRoute: typeof AppCategoriesSlugRoute
+}
+
+const AppCategoriesRouteChildren: AppCategoriesRouteChildren = {
+  AppCategoriesSlugRoute: AppCategoriesSlugRoute,
+}
+
+const AppCategoriesRouteWithChildren = AppCategoriesRoute._addFileChildren(
+  AppCategoriesRouteChildren,
+)
+
 interface AppRouteChildren {
-  AppCategoriesRoute: typeof AppCategoriesRoute
+  AppCategoriesRoute: typeof AppCategoriesRouteWithChildren
   AppCompteRoute: typeof AppCompteRoute
   AppFavorisRoute: typeof AppFavorisRoute
   AppHistoriqueRoute: typeof AppHistoriqueRoute
@@ -174,7 +205,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
-  AppCategoriesRoute: AppCategoriesRoute,
+  AppCategoriesRoute: AppCategoriesRouteWithChildren,
   AppCompteRoute: AppCompteRoute,
   AppFavorisRoute: AppFavorisRoute,
   AppHistoriqueRoute: AppHistoriqueRoute,
