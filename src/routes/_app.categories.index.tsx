@@ -17,6 +17,7 @@ import {
   Cookie,
 } from "lucide-react";
 import { searchProductsByName } from "@/lib/mockProducts";
+import { getBrandById } from "@/lib/mockBrands";
 
 export const Route = createFileRoute("/_app/categories/")({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -263,16 +264,25 @@ function Categories() {
                   textDecoration: "none",
                 }}
               >
-                <div
-                  className="flex items-center justify-center shrink-0"
-                  style={{ width: "44px", height: "44px", background: "#EAF3DE", borderRadius: "10px" }}
-                >
-                  <Icon size={20} color="#5B8C6A" strokeWidth={1.5} />
-                </div>
+                {p.thumbnail_url ? (
+                  <img
+                    src={p.thumbnail_url}
+                    alt={p.name}
+                    className="shrink-0"
+                    style={{ width: "44px", height: "44px", borderRadius: "10px", objectFit: "cover" }}
+                  />
+                ) : (
+                  <div
+                    className="flex items-center justify-center shrink-0"
+                    style={{ width: "44px", height: "44px", background: "#EAF3DE", borderRadius: "10px" }}
+                  >
+                    <Icon size={20} color="#5B8C6A" strokeWidth={1.5} />
+                  </div>
+                )}
                 <div className="flex-1 min-w-0">
                   <div style={{ fontSize: "15px", fontWeight: 500, color: "#1A2E1A" }}>{p.name}</div>
                   <div style={{ fontSize: "12px", fontWeight: 400, color: "#7A9A7A", marginTop: "4px" }}>
-                    {p.brand} · {p.country}
+                    {getBrandById(p.brand_id)?.name ?? ""} · {p.country}
                   </div>
                 </div>
                 <ChevronRight size={18} color="#DDE8DD" strokeWidth={1.5} />

@@ -14,6 +14,7 @@ import {
   Utensils,
 } from "lucide-react";
 import { getProductsByCategory } from "@/lib/mockProducts";
+import { getBrandById } from "@/lib/mockBrands";
 import { CATEGORY_LABEL } from "@/lib/types";
 
 export const Route = createFileRoute("/_app/categories/$slug")({
@@ -52,7 +53,7 @@ function CategoryResult() {
     const q = query.trim().toLowerCase();
     if (!q) return allProducts;
     return allProducts.filter(
-      (p) => p.name.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q),
+      (p) => p.name.toLowerCase().includes(q) || (getBrandById(p.brand_id)?.name.toLowerCase().includes(q) ?? false),
     );
   }, [allProducts, query]);
 
@@ -215,17 +216,31 @@ function CategoryResult() {
                     textDecoration: "none",
                   }}
                 >
-                  <div
-                    className="flex items-center justify-center shrink-0"
-                    style={{
-                      width: "44px",
-                      height: "44px",
-                      background: "#EAF3DE",
-                      borderRadius: "8px",
-                    }}
-                  >
-                    <Icon size={20} color="#5B8C6A" strokeWidth={1.5} />
-                  </div>
+                  {p.thumbnail_url ? (
+                    <img
+                      src={p.thumbnail_url}
+                      alt={p.name}
+                      className="shrink-0"
+                      style={{
+                        width: "44px",
+                        height: "44px",
+                        borderRadius: "8px",
+                        objectFit: "cover",
+                      }}
+                    />
+                  ) : (
+                    <div
+                      className="flex items-center justify-center shrink-0"
+                      style={{
+                        width: "44px",
+                        height: "44px",
+                        background: "#EAF3DE",
+                        borderRadius: "8px",
+                      }}
+                    >
+                      <Icon size={20} color="#5B8C6A" strokeWidth={1.5} />
+                    </div>
+                  )}
                   <div className="flex-1 min-w-0">
                     <div
                       style={{
@@ -244,7 +259,7 @@ function CategoryResult() {
                         marginTop: "4px",
                       }}
                     >
-                      {p.brand} · {p.country}
+                      {getBrandById(p.brand_id)?.name ?? ""} · {p.country}
                     </div>
                   </div>
                   <ChevronRight size={16} color="#DDE8DD" strokeWidth={1.75} />
