@@ -1,36 +1,34 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Heart, Cookie, Droplets, Shirt } from "lucide-react";
-import { FAVORITES_MOCK } from "@/lib/aimesee-data";
+import { Heart, Cookie, Droplets, Shirt, CupSoda, Sparkles, Sofa, Utensils } from "lucide-react";
+import { getProductById } from "@/lib/mockProducts";
 import { favStore, useFavorites } from "@/lib/favorites-store";
+import { CATEGORY_LABEL } from "@/lib/types";
 
 export const Route = createFileRoute("/_app/favoris")({
   component: Favoris,
 });
 
 const CATEGORY_ICON: Record<string, React.ElementType> = {
-  Alimentation: Cookie,
-  Boissons: Droplets,
-  "Mode & Textile": Shirt,
+  alimentation: Cookie,
+  boissons: CupSoda,
+  "hygiene-soins": Droplets,
+  cosmetiques: Sparkles,
+  "entretien-maison": Sofa,
+  "mode-textile": Shirt,
 };
 
 function Favoris() {
   const navigate = useNavigate();
   const favorites = useFavorites();
-  const favProducts = FAVORITES_MOCK.filter((p) => favorites.has(p.id));
+  const favProducts = Array.from(favorites)
+    .map((id) => getProductById(id))
+    .filter((p): p is NonNullable<typeof p> => !!p);
   const isEmpty = favProducts.length === 0;
 
   return (
     <div className="flex flex-col" style={{ height: "calc(100vh - 64px)" }}>
-      {/* Header */}
       <header style={{ padding: "32px 20px 28px", flexShrink: 0 }}>
-        <h1
-          style={{
-            fontSize: "28px",
-            fontWeight: 500,
-            color: "#1A2E1A",
-            letterSpacing: "-0.4px",
-          }}
-        >
+        <h1 style={{ fontSize: "28px", fontWeight: 500, color: "#1A2E1A", letterSpacing: "-0.4px" }}>
           Favoris
         </h1>
         <p style={{ fontSize: "13px", color: "#7A9A7A", marginTop: "2px" }}>
@@ -38,43 +36,17 @@ function Favoris() {
         </p>
       </header>
 
-      {/* Scrollable content */}
       <div
         className="favoris-scroll flex-1"
-        style={{
-          overflowY: "auto",
-          scrollbarWidth: "thin",
-          scrollbarColor: "#DDE8DD transparent",
-        }}
+        style={{ overflowY: "auto", scrollbarWidth: "thin", scrollbarColor: "#DDE8DD transparent" }}
       >
         {isEmpty ? (
-          <div
-            className="flex flex-col items-center justify-center"
-            style={{ height: "100%", padding: "0 24px" }}
-          >
+          <div className="flex flex-col items-center justify-center" style={{ height: "100%", padding: "0 24px" }}>
             <Heart size={64} color="#DDE8DD" strokeWidth={1.5} />
-            <div
-              style={{
-                fontSize: "16px",
-                fontWeight: 500,
-                color: "#1A2E1A",
-                marginTop: "16px",
-                textAlign: "center",
-              }}
-            >
+            <div style={{ fontSize: "16px", fontWeight: 500, color: "#1A2E1A", marginTop: "16px", textAlign: "center" }}>
               Aucun favori pour l'instant
             </div>
-            <div
-              style={{
-                fontSize: "13px",
-                fontWeight: 400,
-                color: "#7A9A7A",
-                marginTop: "8px",
-                textAlign: "center",
-                maxWidth: "240px",
-                lineHeight: 1.6,
-              }}
-            >
+            <div style={{ fontSize: "13px", fontWeight: 400, color: "#7A9A7A", marginTop: "8px", textAlign: "center", maxWidth: "240px", lineHeight: 1.6 }}>
               Sauvegarde des produits en appuyant sur le cœur lors d'une recherche.
             </div>
             <button
@@ -98,7 +70,8 @@ function Favoris() {
         ) : (
           <div>
             {favProducts.map((p) => {
-              const Icon = CATEGORY_ICON[p.category] || Cookie;
+              const Icon = CATEGORY_ICON[p.category_slug] || Cookie;
+              const categoryLabel = CATEGORY_LABEL[p.category_slug] ?? p.category_slug;
               return (
                 <div
                   key={p.id}
@@ -118,31 +91,15 @@ function Favoris() {
                     className="flex items-center flex-1"
                     style={{ gap: "14px", minWidth: 0, textDecoration: "none" }}
                   >
-                    {/* Thumbnail */}
                     <div
                       className="flex items-center justify-center shrink-0"
-                      style={{
-                        width: "44px",
-                        height: "44px",
-                        background: "#EAF3DE",
-                        borderRadius: "10px",
-                      }}
+                      style={{ width: "44px", height: "44px", background: "#EAF3DE", borderRadius: "10px" }}
                     >
                       <Icon size={20} color="#5B8C6A" strokeWidth={1.5} />
                     </div>
-
-                    {/* Center content */}
                     <div className="flex-1 min-w-0">
                       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
-                        <div
-                          style={{
-                            fontSize: "15px",
-                            fontWeight: 500,
-                            color: "#1A2E1A",
-                          }}
-                        >
-                          {p.name}
-                        </div>
+                        <div style={{ fontSize: "15px", fontWeight: 500, color: "#1A2E1A" }}>{p.name}</div>
                         <span
                           style={{
                             fontSize: "10px",
@@ -154,23 +111,14 @@ function Favoris() {
                             flexShrink: 0,
                           }}
                         >
-                          {p.category}
+                          {categoryLabel}
                         </span>
                       </div>
-                      <div
-                        style={{
-                          fontSize: "12px",
-                          fontWeight: 400,
-                          color: "#7A9A7A",
-                          marginTop: "4px",
-                        }}
-                      >
+                      <div style={{ fontSize: "12px", fontWeight: 400, color: "#7A9A7A", marginTop: "4px" }}>
                         {p.brand} · {p.country}
                       </div>
                     </div>
                   </Link>
-
-                  {/* Heart button */}
                   <button
                     onClick={(e) => {
                       e.preventDefault();
@@ -179,25 +127,13 @@ function Favoris() {
                     }}
                     aria-label="Retirer des favoris"
                     className="flex items-center justify-center shrink-0"
-                    style={{
-                      width: "32px",
-                      height: "32px",
-                      border: "none",
-                      background: "transparent",
-                      cursor: "pointer",
-                    }}
+                    style={{ width: "32px", height: "32px", border: "none", background: "transparent", cursor: "pointer" }}
                   >
-                    <Heart
-                      size={22}
-                      color="#5B8C6A"
-                      fill="#5B8C6A"
-                      strokeWidth={1.5}
-                    />
+                    <Heart size={22} color="#5B8C6A" fill="#5B8C6A" strokeWidth={1.5} />
                   </button>
                 </div>
               );
             })}
-            {/* Bottom padding */}
             <div style={{ height: "24px" }} />
           </div>
         )}

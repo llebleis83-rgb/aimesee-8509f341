@@ -1,45 +1,60 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { History, Cookie, Droplets, Shirt, ChevronRight } from "lucide-react";
-import { HISTORY_MOCK } from "@/lib/aimesee-data";
+import { History, Cookie, Droplets, Shirt, ChevronRight, CupSoda, Sparkles, Sofa, Utensils } from "lucide-react";
 import { useState } from "react";
+import { getProductById } from "@/lib/mockProducts";
+import { historyStore, useHistory } from "@/lib/history-store";
+import { CATEGORY_LABEL } from "@/lib/types";
 
 export const Route = createFileRoute("/_app/historique")({
   component: Historique,
 });
 
 const CATEGORY_ICON: Record<string, React.ElementType> = {
-  Alimentation: Cookie,
-  Boissons: Droplets,
-  "Mode & Textile": Shirt,
+  alimentation: Cookie,
+  boissons: CupSoda,
+  "hygiene-soins": Droplets,
+  cosmetiques: Sparkles,
+  "entretien-maison": Sofa,
+  "mode-textile": Shirt,
 };
+
+function formatWhen(ts: number): string {
+  const d = new Date(ts);
+  const now = new Date();
+  const sameDay = d.toDateString() === now.toDateString();
+  const yesterday = new Date(now);
+  yesterday.setDate(now.getDate() - 1);
+  const isYesterday = d.toDateString() === yesterday.toDateString();
+  const hh = String(d.getHours()).padStart(2, "0");
+  const mm = String(d.getMinutes()).padStart(2, "0");
+  if (sameDay) return `aujourd'hui · ${hh}h${mm}`;
+  if (isYesterday) return `hier · ${hh}h${mm}`;
+  const months = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."];
+  return `${d.getDate()} ${months[d.getMonth()]} · ${hh}h${mm}`;
+}
 
 function Historique() {
   const navigate = useNavigate();
-  const [history, setHistory] = useState(HISTORY_MOCK);
+  const history = useHistory();
   const [showConfirm, setShowConfirm] = useState(false);
-  const isEmpty = history.length === 0;
+
+  const resolved = history
+    .map((h) => {
+      const product = getProductById(h.product_id);
+      return product ? { product, timestamp: h.timestamp } : null;
+    })
+    .filter((x): x is { product: NonNullable<ReturnType<typeof getProductById>>; timestamp: number } => !!x);
+
+  const isEmpty = resolved.length === 0;
 
   return (
     <div className="flex flex-col" style={{ height: "calc(100vh - 64px)" }}>
-      {/* Header */}
-      <header
-        className="flex items-center justify-between shrink-0"
-        style={{ padding: "32px 20px 28px" }}
-      >
+      <header className="flex items-center justify-between shrink-0" style={{ padding: "32px 20px 28px" }}>
         <div>
-          <h1
-            style={{
-              fontSize: "28px",
-              fontWeight: 500,
-              color: "#1A2E1A",
-              letterSpacing: "-0.4px",
-            }}
-          >
+          <h1 style={{ fontSize: "28px", fontWeight: 500, color: "#1A2E1A", letterSpacing: "-0.4px" }}>
             Historique
           </h1>
-          <p style={{ fontSize: "13px", color: "#7A9A7A", marginTop: "2px" }}>
-            Tes dernières recherches
-          </p>
+          <p style={{ fontSize: "13px", color: "#7A9A7A", marginTop: "2px" }}>Tes dernières recherches</p>
         </div>
         {!isEmpty && (
           <button
@@ -59,43 +74,17 @@ function Historique() {
         )}
       </header>
 
-      {/* Scrollable content */}
       <div
         className="hist-scroll flex-1"
-        style={{
-          overflowY: "auto",
-          scrollbarWidth: "thin",
-          scrollbarColor: "#DDE8DD transparent",
-        }}
+        style={{ overflowY: "auto", scrollbarWidth: "thin", scrollbarColor: "#DDE8DD transparent" }}
       >
         {isEmpty ? (
-          <div
-            className="flex flex-col items-center justify-center"
-            style={{ height: "100%", padding: "0 24px" }}
-          >
+          <div className="flex flex-col items-center justify-center" style={{ height: "100%", padding: "0 24px" }}>
             <History size={64} color="#DDE8DD" strokeWidth={1.5} />
-            <div
-              style={{
-                fontSize: "16px",
-                fontWeight: 500,
-                color: "#1A2E1A",
-                marginTop: "16px",
-                textAlign: "center",
-              }}
-            >
+            <div style={{ fontSize: "16px", fontWeight: 500, color: "#1A2E1A", marginTop: "16px", textAlign: "center" }}>
               Aucune recherche pour l'instant
             </div>
-            <div
-              style={{
-                fontSize: "13px",
-                fontWeight: 400,
-                color: "#7A9A7A",
-                marginTop: "8px",
-                textAlign: "center",
-                maxWidth: "240px",
-                lineHeight: 1.6,
-              }}
-            >
+            <div style={{ fontSize: "13px", fontWeight: 400, color: "#7A9A7A", marginTop: "8px", textAlign: "center", maxWidth: "240px", lineHeight: 1.6 }}>
               Tes produits consultés apparaîtront ici.
             </div>
             <button
@@ -118,87 +107,61 @@ function Historique() {
           </div>
         ) : (
           <div>
-            {history.map((h, i) => {
-              const Icon = CATEGORY_ICON[h.category] || Cookie;
+            {resolved.map((h, i) => {
+              const Icon = CATEGORY_ICON[h.product.category_slug] || Cookie;
+              const categoryLabel = CATEGORY_LABEL[h.product.category_slug] ?? h.product.category_slug;
               return (
                 <Link
-                  key={`${h.id}-${i}`}
+                  key={`${h.product.id}-${h.timestamp}-${i}`}
                   to="/produit/$id"
-                  params={{ id: h.id }}
+                  params={{ id: h.product.id }}
                   className="flex items-center"
-                    style={{
-                      width: "100%",
-                      height: "68px",
-                      gap: "14px",
-                      padding: "0 16px",
-                      borderBottom: "0.5px solid #F4F7F4",
-                      background: "#FFFFFF",
-                      textDecoration: "none",
-                    }}
+                  style={{
+                    width: "100%",
+                    height: "68px",
+                    gap: "14px",
+                    padding: "0 16px",
+                    borderBottom: "0.5px solid #F4F7F4",
+                    background: "#FFFFFF",
+                    textDecoration: "none",
+                  }}
+                >
+                  <div
+                    className="flex items-center justify-center shrink-0"
+                    style={{ width: "44px", height: "44px", background: "#EAF3DE", borderRadius: "10px" }}
                   >
-                    {/* Thumbnail */}
-                    <div
-                      className="flex items-center justify-center shrink-0"
-                      style={{
-                        width: "44px",
-                        height: "44px",
-                        background: "#EAF3DE",
-                        borderRadius: "10px",
-                      }}
-                    >
-                      <Icon size={20} color="#5B8C6A" strokeWidth={1.5} />
-                    </div>
-
-                    {/* Center content */}
-                    <div className="flex-1 min-w-0">
-                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
-                        <div
-                          style={{
-                            fontSize: "15px",
-                            fontWeight: 500,
-                            color: "#1A2E1A",
-                          }}
-                        >
-                          {h.name}
-                        </div>
-                        <span
-                          style={{
-                            fontSize: "10px",
-                            fontWeight: 400,
-                            color: "#5B8C6A",
-                            background: "#EAF3DE",
-                            borderRadius: "20px",
-                            padding: "2px 8px",
-                            flexShrink: 0,
-                          }}
-                        >
-                          {h.category}
-                        </span>
-                      </div>
-                      <div
+                    <Icon size={20} color="#5B8C6A" strokeWidth={1.5} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
+                      <div style={{ fontSize: "15px", fontWeight: 500, color: "#1A2E1A" }}>{h.product.name}</div>
+                      <span
                         style={{
-                          fontSize: "12px",
+                          fontSize: "10px",
                           fontWeight: 400,
-                          color: "#7A9A7A",
-                          marginTop: "4px",
+                          color: "#5B8C6A",
+                          background: "#EAF3DE",
+                          borderRadius: "20px",
+                          padding: "2px 8px",
+                          flexShrink: 0,
                         }}
                       >
-                        {h.when}
-                      </div>
+                        {categoryLabel}
+                      </span>
                     </div>
-
-                  {/* Chevron */}
+                    <div style={{ fontSize: "12px", fontWeight: 400, color: "#7A9A7A", marginTop: "4px" }}>
+                      {formatWhen(h.timestamp)}
+                    </div>
+                  </div>
                   <ChevronRight size={16} color="#DDE8DD" strokeWidth={1.75} />
                 </Link>
               );
             })}
-            {/* Bottom padding */}
             <div style={{ height: "24px" }} />
           </div>
         )}
       </div>
 
-      {/* Confirmation bottom sheet */}
       {showConfirm && (
         <>
           <div
@@ -236,7 +199,7 @@ function Historique() {
             <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "24px" }}>
               <button
                 onClick={() => {
-                  setHistory([]);
+                  historyStore.clear();
                   setShowConfirm(false);
                 }}
                 style={{

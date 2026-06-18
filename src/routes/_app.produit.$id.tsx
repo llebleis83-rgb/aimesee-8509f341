@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import {
   ArrowLeft,
   Heart,
@@ -10,11 +10,14 @@ import {
   Newspaper,
   ExternalLink,
   ChevronRight,
+  Loader2,
   type LucideIcon,
 } from "lucide-react";
-import { useState, type ReactNode } from "react";
-import { PRODUCTS } from "@/lib/aimesee-data";
+import { useEffect, useState, type ReactNode } from "react";
+import { getProductById } from "@/lib/mockProducts";
 import { favStore, useFavorites } from "@/lib/favorites-store";
+import { historyStore } from "@/lib/history-store";
+import { CATEGORY_LABEL, type ProductFact, type ShareholderNode } from "@/lib/types";
 
 export const Route = createFileRoute("/_app/produit/$id")({
   component: ProductSheet,
@@ -41,10 +44,6 @@ const SCROLLBAR_CSS = `
 .aim-scroll { scrollbar-width: thin; scrollbar-color: #DDE8DD transparent; }
 `;
 
-function K({ children }: { children: ReactNode }) {
-  return <span style={{ fontWeight: 500, color: C.dark }}>{children}</span>;
-}
-
 function SourceLine({ children }: { children: ReactNode }) {
   return (
     <div
@@ -64,38 +63,41 @@ function SourceLine({ children }: { children: ReactNode }) {
   );
 }
 
-function FactRow({ children, last }: { children: ReactNode; last?: boolean }) {
+function FactRow({ fact, last }: { fact: ProductFact; last?: boolean }) {
   return (
     <div
       style={{
-        display: "flex",
-        gap: "10px",
         padding: "8px 0",
         borderBottom: last ? "none" : `0.5px solid ${C.border}`,
       }}
     >
-      <div
-        style={{
-          width: "7px",
-          height: "7px",
-          borderRadius: "50%",
-          background: C.primary,
-          marginTop: "7px",
-          flexShrink: 0,
-        }}
-      />
-      <p
-        style={{
-          fontFamily: FONT,
-          fontSize: "13px",
-          fontWeight: 400,
-          color: C.body,
-          lineHeight: 1.7,
-          margin: 0,
-        }}
-      >
-        {children}
-      </p>
+      <div style={{ display: "flex", gap: "10px" }}>
+        <div
+          style={{
+            width: "7px",
+            height: "7px",
+            borderRadius: "50%",
+            background: C.primary,
+            marginTop: "7px",
+            flexShrink: 0,
+          }}
+        />
+        <p
+          style={{
+            fontFamily: FONT,
+            fontSize: "13px",
+            fontWeight: 400,
+            color: C.body,
+            lineHeight: 1.7,
+            margin: 0,
+          }}
+        >
+          {fact.text}
+        </p>
+      </div>
+      <SourceLine>
+        {fact.source_name} · {fact.source_year}
+      </SourceLine>
     </div>
   );
 }
@@ -159,16 +161,32 @@ function TreeRow({
   );
 }
 
-type SectionDef = { id: string; label: string; Icon: LucideIcon; content: ReactNode };
+function flattenTree(node: ShareholderNode): ShareholderNode[] {
+  const out: ShareholderNode[] = [];
+  const walk = (n: ShareholderNode) => {
+    n.children?.forEach((c) => {
+      out.push(c);
+      walk(c);
+    });
+  };
+  walk(node);
+  return out;
+}
 
-const SECTIONS: SectionDef[] = [
-  {
-    id: "actionnariat",
-    label: "Actionnariat",
-    Icon: Building2,
-    content: (
-      <>
-        <TreeRow bgGreen left="Nutella" right="Marque" />
+function nodeRight(n: ShareholderNode): { right: string; rightStrong?: boolean } {
+  if (n.percentage != null) return { right: `${n.percentage}%`, rightStrong: true };
+  const parts: string[] = [n.type];
+  if (n.country) parts.push(n.country);
+  return { right: parts.join(" · ") };
+}
+
+function ActionnariatBlock({ root }: { root: ShareholderNode }) {
+  const descendants = flattenTree(root);
+  const sourceNode = [root, ...descendants].find((n) => n.source_name);
+  return (
+    <>
+      <TreeRow bgGreen left={root.name} right={root.type} />
+      {descendants.length > 0 && (
         <div style={{ position: "relative" }}>
           <div
             style={{
@@ -180,164 +198,145 @@ const SECTIONS: SectionDef[] = [
               background: C.border,
             }}
           />
-          <TreeRow indent left="Ferrero SpA" right="Société mère · Italie" />
-          <TreeRow indent left="Ferrero International SA" right="Holding · Luxembourg" />
-          <TreeRow
-            indent
-            left="Famille Ferrero"
-            leftSub="Giovanni Ferrero, PDG"
-            right="100%"
-            rightStrong
-          />
+          {descendants.map((d, i) => {
+            const { right, rightStrong } = nodeRight(d);
+            return <TreeRow key={`${d.name}-${i}`} indent left={d.name} right={right} rightStrong={rightStrong} />;
+          })}
         </div>
-        <SourceLine>OpenCorporates · 2024</SourceLine>
-      </>
-    ),
-  },
-  {
-    id: "politique",
-    label: "Politique & Lobbying",
-    Icon: Landmark,
-    content: (
-      <>
-        <FactRow>
-          <K>Ferrero Group</K> est inscrit au registre de transparence de l'UE. Budget de lobbying
-          déclaré : entre <K>500 000€ et 1M€</K> en 2023.
-        </FactRow>
-        <FactRow>
-          <K>Giovanni Ferrero</K> a participé au financement du parti <K>Forza Italia</K> à hauteur
-          de <K>100 000€</K> en 2021, selon le registre italien des dons politiques.
-        </FactRow>
-        <FactRow last>
-          Ferrero est membre de <K>FoodDrinkEurope</K>, principal lobby agroalimentaire auprès de la{" "}
-          <K>Commission européenne</K>.
-        </FactRow>
-        <SourceLine>Registre de transparence UE · 2023 — Registre italien · 2021</SourceLine>
-      </>
-    ),
-  },
-  {
-    id: "ecologie",
-    label: "Écologie",
-    Icon: Leaf,
-    content: (
-      <>
-        <FactRow last>
-          Contient <K>57% d'huile de palme</K>. La production est liée à la déforestation en
-          Indonésie et Malaisie — <K>2,3M d'hectares</K> de forêts perdus entre 2000 et 2022.
-        </FactRow>
-        <SourceLine>WWF · Rapport forêts 2023</SourceLine>
-      </>
-    ),
-  },
-  {
-    id: "fabrication",
-    label: "Fabrication",
-    Icon: MapPin,
-    content: (
-      <>
-        <FactRow last>
-          Produit principalement en <K>Italie (Cuneo, Piémont)</K> et en <K>Allemagne</K>. Les
-          noisettes proviennent à <K>70% de Turquie</K>. Aucun site de production en France.
-        </FactRow>
-        <SourceLine>Open Food Facts · 2024</SourceLine>
-      </>
-    ),
-  },
-  {
-    id: "travail",
-    label: "Conditions de travail",
-    Icon: Users,
-    content: (
-      <>
-        <FactRow last>
-          Les plantations fournisseurs font l'objet d'un suivi par l'<K>OIT</K> depuis 2019 pour des
-          conditions insuffisantes sur <K>3 sites en Indonésie</K>.
-        </FactRow>
-        <SourceLine>OIT · Rapport Indonésie 2022</SourceLine>
-      </>
-    ),
-  },
-  {
-    id: "scandales",
-    label: "Scandales",
-    Icon: Newspaper,
-    content: (
-      <>
-        <FactRow last>
-          <K>Avril 2022</K> : rappel de plusieurs lots <K>Kinder</K> suite à une contamination à la{" "}
-          <K>salmonelle</K> dans une usine belge. <K>150 cas</K> signalés en Europe.
-        </FactRow>
-        <SourceLine>DGCCRF · Avril 2022</SourceLine>
-      </>
-    ),
-  },
-];
+      )}
+      {sourceNode?.source_name && (
+        <SourceLine>
+          {sourceNode.source_name}
+          {sourceNode.source_year ? ` · ${sourceNode.source_year}` : ""}
+        </SourceLine>
+      )}
+    </>
+  );
+}
 
-const FILTERS = [
-  { id: "ecologique", label: "Écologique" },
-  { id: "france", label: "Made in France" },
-  { id: "equitable", label: "Équitable" },
-  { id: "independant", label: "Indépendant" },
+const FILTERS: { id: string; label: string; key: "is_ecological" | "is_made_in_france" | "is_fair_trade" | "is_independent"; tag: string }[] = [
+  { id: "ecologique", label: "Écologique", key: "is_ecological", tag: "Écologique" },
+  { id: "france", label: "Made in France", key: "is_made_in_france", tag: "Made in France" },
+  { id: "equitable", label: "Équitable", key: "is_fair_trade", tag: "Équitable" },
+  { id: "independant", label: "Indépendant", key: "is_independent", tag: "Indépendant" },
 ];
-
-const ALTS: Record<string, { name: string; tag: string; note: string }[]> = {
-  ecologique: [
-    {
-      name: "Nocciolata Bio",
-      tag: "Sans huile de palme",
-      note: "Certifié bio, huile de tournesol, cacao équitable.",
-    },
-    {
-      name: "Ethiquable Noisette",
-      tag: "Bio certifié",
-      note: "Ingrédients biologiques, emballage recyclable.",
-    },
-  ],
-  france: [
-    {
-      name: "Jean Hervé",
-      tag: "Fabriqué en France",
-      note: "PME bretonne, fabrication 100% française.",
-    },
-    {
-      name: "Kaoka Noisette",
-      tag: "Origine Drôme",
-      note: "Cacao Fairtrade, fabrication dans la Drôme.",
-    },
-  ],
-  equitable: [
-    {
-      name: "Kaoka Noisette",
-      tag: "Fairtrade certifié",
-      note: "Cacao acheté directement auprès de coopératives.",
-    },
-  ],
-  independant: [
-    {
-      name: "Jean Hervé",
-      tag: "PME indépendante",
-      note: "Aucun fonds d'investissement au capital.",
-    },
-    {
-      name: "Nocciolata",
-      tag: "Groupe familial",
-      note: "Rigoni di Asiago, entreprise familiale italienne.",
-    },
-  ],
-};
 
 function ProductSheet() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
-  const product = PRODUCTS[id] ?? PRODUCTS.nutella;
   const favorites = useFavorites();
-  const isFav = favorites.has(product.id);
-  const [open, setOpen] = useState<Record<string, boolean>>({ actionnariat: true });
   const [activeFilter, setActiveFilter] = useState<string>("ecologique");
-  const alternatives = ALTS[activeFilter] ?? [];
+  const [open, setOpen] = useState<Record<string, boolean>>({ actionnariat: true });
+  const [loading, setLoading] = useState(true);
+  const product = getProductById(id);
 
+  useEffect(() => {
+    setLoading(true);
+    const t = setTimeout(() => {
+      if (!product) {
+        navigate({ to: "/not-found" });
+        return;
+      }
+      historyStore.record(product.id);
+      setLoading(false);
+    }, 150);
+    return () => clearTimeout(t);
+  }, [id, product, navigate]);
+
+  if (loading || !product) {
+    return (
+      <div
+        className="flex items-center justify-center"
+        style={{
+          height: "calc(100vh - 64px)",
+          background: "white",
+          fontFamily: FONT,
+        }}
+      >
+        <Loader2 size={32} color={C.primary} strokeWidth={1.75} className="animate-spin" />
+      </div>
+    );
+  }
+
+  const isFav = favorites.has(product.id);
   const toggle = (sid: string) => setOpen((o) => ({ ...o, [sid]: !o[sid] }));
+
+  const sections: { id: string; label: string; Icon: LucideIcon; content: ReactNode }[] = [
+    {
+      id: "actionnariat",
+      label: "Actionnariat",
+      Icon: Building2,
+      content: <ActionnariatBlock root={product.sections.actionnariat} />,
+    },
+    {
+      id: "politique",
+      label: "Politique & Lobbying",
+      Icon: Landmark,
+      content: (
+        <>
+          {product.sections.politique.facts.map((f, i, arr) => (
+            <FactRow key={i} fact={f} last={i === arr.length - 1} />
+          ))}
+        </>
+      ),
+    },
+    {
+      id: "ecologie",
+      label: "Écologie",
+      Icon: Leaf,
+      content: (
+        <>
+          {product.sections.ecologie.facts.map((f, i, arr) => (
+            <FactRow key={i} fact={f} last={i === arr.length - 1} />
+          ))}
+        </>
+      ),
+    },
+    {
+      id: "fabrication",
+      label: "Fabrication",
+      Icon: MapPin,
+      content: (
+        <>
+          {product.sections.fabrication.facts.map((f, i, arr) => (
+            <FactRow key={i} fact={f} last={i === arr.length - 1} />
+          ))}
+        </>
+      ),
+    },
+    {
+      id: "travail",
+      label: "Conditions de travail",
+      Icon: Users,
+      content: (
+        <>
+          {product.sections.conditions_travail.facts.map((f, i, arr) => (
+            <FactRow key={i} fact={f} last={i === arr.length - 1} />
+          ))}
+        </>
+      ),
+    },
+    {
+      id: "scandales",
+      label: "Scandales",
+      Icon: Newspaper,
+      content: (
+        <>
+          {product.sections.scandales.facts.map((f, i, arr) => (
+            <FactRow key={i} fact={f} last={i === arr.length - 1} />
+          ))}
+        </>
+      ),
+    },
+  ];
+
+  const activeFilterDef = FILTERS.find((f) => f.id === activeFilter)!;
+  const alternatives = product.similar_product_ids
+    .map((sid) => getProductById(sid))
+    .filter((p): p is NonNullable<typeof p> => !!p)
+    .filter((p) => p[activeFilterDef.key]);
+
+  const categoryLabel = CATEGORY_LABEL[product.category_slug] ?? product.category_slug;
 
   return (
     <div
@@ -401,7 +400,7 @@ function ProductSheet() {
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontSize: "16px", fontWeight: 500, color: C.dark }}>{product.name}</div>
             <div style={{ fontSize: "11px", fontWeight: 400, color: C.muted }}>
-              {product.brand} · {product.country} · Pâte à tartiner
+              {product.brand} · {product.country} · {categoryLabel}
             </div>
           </div>
           <button
@@ -432,7 +431,7 @@ function ProductSheet() {
 
       {/* Scrollable area */}
       <div className="aim-scroll" style={{ flex: 1, overflowY: "auto" }}>
-        {SECTIONS.map(({ id: sid, label, Icon, content }) => {
+        {sections.map(({ id: sid, label, Icon, content }) => {
           const isOpen = !!open[sid];
           return (
             <div key={sid}>
@@ -552,10 +551,13 @@ function ProductSheet() {
           })}
         </div>
 
-        {alternatives.map((a, i) => (
-          <div
-            key={`${a.name}-${i}`}
+        {alternatives.map((a) => (
+          <Link
+            key={a.id}
+            to="/produit/$id"
+            params={{ id: a.id }}
             style={{
+              textDecoration: "none",
               border: `0.5px solid ${C.border}`,
               borderRadius: "14px",
               padding: "12px",
@@ -591,7 +593,7 @@ function ProductSheet() {
                     padding: "3px 10px",
                   }}
                 >
-                  {a.tag}
+                  {activeFilterDef.tag}
                 </span>
               </div>
               <div
@@ -603,10 +605,10 @@ function ProductSheet() {
                   lineHeight: 1.5,
                 }}
               >
-                {a.note}
+                {a.brand} · {a.country}
               </div>
             </div>
-          </div>
+          </Link>
         ))}
 
         <div style={{ height: "24px" }} />
