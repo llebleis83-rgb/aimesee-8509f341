@@ -361,7 +361,7 @@ function ProductSheet() {
         }}
       >
         <button
-          onClick={() => navigate({ to: "/" })}
+          onClick={() => window.history.back()}
           style={{
             display: "flex",
             alignItems: "center",
