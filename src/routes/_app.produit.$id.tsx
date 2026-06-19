@@ -265,6 +265,9 @@ function ProductSheet() {
   const [activeFilter, setActiveFilter] = useState<string>("ecologique");
   const [open, setOpen] = useState<Record<string, boolean>>({ actionnariat: true });
   const [loading, setLoading] = useState(true);
+  const [heroVisible, setHeroVisible] = useState(true);
+  const heroRef = useRef<HTMLDivElement | null>(null);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
   const product = getProductById(id);
 
   useEffect(() => {
