@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { Search, User, Flashlight } from "lucide-react";
 import { getProductByBarcode } from "@/lib/mockProducts";
 
@@ -8,6 +9,18 @@ export const Route = createFileRoute("/_app/")({
 
 function Scanner() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    try {
+      if (localStorage.getItem("aimesee_onboarded") !== "true") {
+        navigate({ to: "/onboarding" });
+      }
+    } catch {
+      /* noop */
+    }
+  }, [navigate]);
+
+
 
   // Simulated barcode-scan entry point — kept available for any future hardware integration.
   const handleBarcode = (barcode: string) => {
