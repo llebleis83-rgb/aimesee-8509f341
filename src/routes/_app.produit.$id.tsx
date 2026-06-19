@@ -14,6 +14,7 @@ import {
   ChevronUp,
   Clock,
   Loader2,
+  Package,
   type LucideIcon,
 } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
@@ -363,10 +364,14 @@ function ProductSheet() {
       {/* Sticky header */}
       <div
         style={{
-          background: C.bg,
+          background: "white",
           borderBottom: `0.5px solid ${C.border}`,
-          padding: "10px 14px 14px",
+          padding: "10px 14px",
           flexShrink: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          height: "54px",
         }}
       >
         <button
@@ -379,12 +384,10 @@ function ProductSheet() {
             fontSize: "15px",
             fontWeight: 500,
             color: C.primary,
-            marginBottom: "10px",
             background: "transparent",
             border: "none",
             padding: "10px 8px",
             marginLeft: "-8px",
-            height: "44px",
             cursor: "pointer",
           }}
         >
@@ -392,69 +395,76 @@ function ProductSheet() {
           Retour
         </button>
 
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          {product.thumbnail_url ? (
-            <img
-              src={product.thumbnail_url}
-              alt={product.name}
-              style={{
-                width: "42px",
-                height: "42px",
-                borderRadius: "8px",
-                objectFit: "cover",
-                flexShrink: 0,
-              }}
-            />
-          ) : (
-            <div
-              style={{
-                width: "42px",
-                height: "42px",
-                background: C.border,
-                borderRadius: "10px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
-              }}
-            >
-              <Building2 size={20} color={C.primary} strokeWidth={1.75} />
-            </div>
-          )}
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: "16px", fontWeight: 500, color: C.dark }}>{product.name}</div>
-            <div style={{ fontSize: "11px", fontWeight: 400, color: C.muted }}>
-              {brand?.name ?? ""} · {product.country} · {categoryLabel}
-            </div>
-          </div>
-          <button
-            onClick={() => favStore.toggle(product.id)}
-            aria-label="favori"
+        <div style={{ flex: 1, textAlign: "center", padding: "0 8px", overflow: "hidden" }}>
+          <span
             style={{
-              width: "34px",
-              height: "34px",
-              borderRadius: "50%",
-              background: "white",
-              border: `0.5px solid ${C.border}`,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              flexShrink: 0,
+              fontSize: "16px",
+              fontWeight: 500,
+              color: C.dark,
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              display: "block",
             }}
           >
-            <Heart
-              size={16}
-              color={isFav ? C.primary : C.faint}
-              fill={isFav ? C.primary : "none"}
-              strokeWidth={1.75}
-            />
-          </button>
+            {product.name}
+          </span>
         </div>
+
+        <button
+          onClick={() => favStore.toggle(product.id)}
+          aria-label="favori"
+          style={{
+            width: "34px",
+            height: "34px",
+            borderRadius: "50%",
+            background: "white",
+            border: `0.5px solid ${C.border}`,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
+            flexShrink: 0,
+          }}
+        >
+          <Heart
+            size={16}
+            color={isFav ? C.primary : C.faint}
+            fill={isFav ? C.primary : "none"}
+            strokeWidth={1.75}
+          />
+        </button>
       </div>
 
       {/* Scrollable area */}
       <div className="aim-scroll" style={{ flex: 1, overflowY: "auto" }}>
+        {/* Hero image */}
+        {product.thumbnail_url ? (
+          <img
+            src={product.thumbnail_url}
+            alt={product.name}
+            style={{
+              width: "100%",
+              height: "220px",
+              objectFit: "cover",
+              display: "block",
+              background: C.bg,
+            }}
+          />
+        ) : (
+          <div
+            style={{
+              width: "100%",
+              height: "220px",
+              background: C.bg,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Package size={48} color={C.faint} strokeWidth={1.75} />
+          </div>
+        )}
         {sections.map(({ id: sid, label, Icon, content }) => {
           const isOpen = !!open[sid];
           return (
