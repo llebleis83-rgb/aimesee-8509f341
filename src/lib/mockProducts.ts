@@ -476,3 +476,7 @@ export function searchProductsByName(query: string): Product[] {
 export function getProductsByCategory(slug: string): Product[] {
   return mockProducts.filter((p) => p.category_slug === slug);
 }
+
+export function getProductsByBrandId(brandId: string): Product[] {
+  return mockProducts.filter((p) => p.brand_id === brandId);
+}

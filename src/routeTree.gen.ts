@@ -18,6 +18,7 @@ import { Route as AppCompteRouteImport } from './routes/_app.compte'
 import { Route as AppCategoriesRouteImport } from './routes/_app.categories'
 import { Route as AppCategoriesIndexRouteImport } from './routes/_app.categories.index'
 import { Route as AppProduitIdRouteImport } from './routes/_app.produit.$id'
+import { Route as AppMarqueBrandIdRouteImport } from './routes/_app.marque.$brandId'
 import { Route as AppCategoriesSlugRouteImport } from './routes/_app.categories.$slug'
 
 const NotFoundRoute = NotFoundRouteImport.update({
@@ -64,6 +65,11 @@ const AppProduitIdRoute = AppProduitIdRouteImport.update({
   path: '/produit/$id',
   getParentRoute: () => AppRoute,
 } as any)
+const AppMarqueBrandIdRoute = AppMarqueBrandIdRouteImport.update({
+  id: '/marque/$brandId',
+  path: '/marque/$brandId',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppCategoriesSlugRoute = AppCategoriesSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -78,6 +84,7 @@ export interface FileRoutesByFullPath {
   '/favoris': typeof AppFavorisRoute
   '/historique': typeof AppHistoriqueRoute
   '/categories/$slug': typeof AppCategoriesSlugRoute
+  '/marque/$brandId': typeof AppMarqueBrandIdRoute
   '/produit/$id': typeof AppProduitIdRoute
   '/categories/': typeof AppCategoriesIndexRoute
 }
@@ -88,6 +95,7 @@ export interface FileRoutesByTo {
   '/historique': typeof AppHistoriqueRoute
   '/': typeof AppIndexRoute
   '/categories/$slug': typeof AppCategoriesSlugRoute
+  '/marque/$brandId': typeof AppMarqueBrandIdRoute
   '/produit/$id': typeof AppProduitIdRoute
   '/categories': typeof AppCategoriesIndexRoute
 }
@@ -101,6 +109,7 @@ export interface FileRoutesById {
   '/_app/historique': typeof AppHistoriqueRoute
   '/_app/': typeof AppIndexRoute
   '/_app/categories/$slug': typeof AppCategoriesSlugRoute
+  '/_app/marque/$brandId': typeof AppMarqueBrandIdRoute
   '/_app/produit/$id': typeof AppProduitIdRoute
   '/_app/categories/': typeof AppCategoriesIndexRoute
 }
@@ -114,6 +123,7 @@ export interface FileRouteTypes {
     | '/favoris'
     | '/historique'
     | '/categories/$slug'
+    | '/marque/$brandId'
     | '/produit/$id'
     | '/categories/'
   fileRoutesByTo: FileRoutesByTo
@@ -124,6 +134,7 @@ export interface FileRouteTypes {
     | '/historique'
     | '/'
     | '/categories/$slug'
+    | '/marque/$brandId'
     | '/produit/$id'
     | '/categories'
   id:
@@ -136,6 +147,7 @@ export interface FileRouteTypes {
     | '/_app/historique'
     | '/_app/'
     | '/_app/categories/$slug'
+    | '/_app/marque/$brandId'
     | '/_app/produit/$id'
     | '/_app/categories/'
   fileRoutesById: FileRoutesById
@@ -210,6 +222,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProduitIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/marque/$brandId': {
+      id: '/_app/marque/$brandId'
+      path: '/marque/$brandId'
+      fullPath: '/marque/$brandId'
+      preLoaderRoute: typeof AppMarqueBrandIdRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/categories/$slug': {
       id: '/_app/categories/$slug'
       path: '/$slug'
@@ -240,6 +259,7 @@ interface AppRouteChildren {
   AppFavorisRoute: typeof AppFavorisRoute
   AppHistoriqueRoute: typeof AppHistoriqueRoute
   AppIndexRoute: typeof AppIndexRoute
+  AppMarqueBrandIdRoute: typeof AppMarqueBrandIdRoute
   AppProduitIdRoute: typeof AppProduitIdRoute
 }
 
@@ -249,6 +269,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppFavorisRoute: AppFavorisRoute,
   AppHistoriqueRoute: AppHistoriqueRoute,
   AppIndexRoute: AppIndexRoute,
+  AppMarqueBrandIdRoute: AppMarqueBrandIdRoute,
   AppProduitIdRoute: AppProduitIdRoute,
 }
 

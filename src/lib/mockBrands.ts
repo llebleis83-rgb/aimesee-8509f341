@@ -533,3 +533,9 @@ export const brandsById: Record<string, Brand> = Object.fromEntries(
 export function getBrandById(id: string): Brand | undefined {
   return brandsById[id];
 }
+
+export function searchBrandsByName(query: string): Brand[] {
+  const q = query.trim().toLowerCase();
+  if (!q) return [];
+  return mockBrands.filter((b) => b.name.toLowerCase().includes(q));
+}
