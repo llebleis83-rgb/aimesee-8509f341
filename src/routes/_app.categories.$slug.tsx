@@ -16,6 +16,7 @@ import {
 import { getProductsByCategory } from "@/lib/mockProducts";
 import { getBrandById } from "@/lib/mockBrands";
 import { CATEGORY_LABEL } from "@/lib/types";
+import { ProductThumb } from "@/components/ProductThumb";
 
 export const Route = createFileRoute("/_app/categories/$slug")({
   component: CategoryResult,
