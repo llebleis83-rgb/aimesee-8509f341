@@ -6,8 +6,6 @@ import {
   Landmark,
   Leaf,
   MapPin,
-  Users,
-  Newspaper,
   ExternalLink,
   ChevronRight,
   ChevronDown,
