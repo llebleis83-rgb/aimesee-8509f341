@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Eye, ScanLine, BarChart3, Check, Shield, Building2, Leaf, Users, Landmark, AlertTriangle, ScanSearch, Search } from "lucide-react";
+import { Eye, ScanLine, BarChart3, Check, Shield, Building2, Leaf, Users, Landmark, AlertTriangle, ScanSearch, Search, Heart, History, Bell } from "lucide-react";
 
 export const Route = createFileRoute("/onboarding")({
   component: Onboarding,
@@ -358,6 +358,21 @@ function Onboarding() {
         >
           Tes favoris, ton historique, tes choix, sauvegardés.
         </div>
+      </div>
+      <div className="flex flex-col w-full" style={{ marginTop: "32px", marginBottom: "32px", gap: "10px" }}>
+        {[
+          { icon: <Heart size={18} color="#5B8C6A" strokeWidth={1.75} />, label: "Favoris", desc: "Retrouve tes produits préférés à tout moment" },
+          { icon: <History size={18} color="#5B8C6A" strokeWidth={1.75} />, label: "Historique", desc: "Accède à tous les produits que tu as consultés" },
+          { icon: <Bell size={18} color="#5B8C6A" strokeWidth={1.75} />, label: "Actualités", desc: "Sois alerté des nouvelles infos sur tes marques" },
+        ].map((pill) => (
+          <div key={pill.label} className="flex items-center" style={{ background: "#F4F7F4", borderRadius: "12px", padding: "14px 16px", gap: "12px" }}>
+            {pill.icon}
+            <div className="flex flex-col">
+              <span style={{ fontSize: "14px", fontWeight: 500, color: "#1A2E1A" }}>{pill.label}</span>
+              <span style={{ fontSize: "12px", fontWeight: 400, color: "#7A9A7A" }}>{pill.desc}</span>
+            </div>
+          </div>
+        ))}
       </div>
       <div style={{ flex: 2 }} />
       <Dots active={2} />
