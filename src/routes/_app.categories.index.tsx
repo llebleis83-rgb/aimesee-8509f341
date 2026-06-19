@@ -17,9 +17,8 @@ import {
   Cookie,
   Building2,
 } from "lucide-react";
-import { searchProductsByName } from "@/lib/mockProducts";
+import { searchProductsByName, mockProducts } from "@/lib/mockProducts";
 import { getBrandById, searchBrandsByName } from "@/lib/mockBrands";
-import { mockProducts } from "@/lib/mockProducts";
 
 export const Route = createFileRoute("/_app/categories/")({
   validateSearch: (search: Record<string, unknown>) => ({
