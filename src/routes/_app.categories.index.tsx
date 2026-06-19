@@ -240,7 +240,7 @@ function Categories() {
             <ComingSoonRow key={c.label} icon={c.icon} label={c.label} />
           ))}
         </>
-      ) : results.length === 0 ? (
+      ) : noResults ? (
         <div
           className="flex flex-col items-center justify-center"
           style={{ padding: "64px 24px 0" }}
@@ -255,51 +255,106 @@ function Categories() {
         </div>
       ) : (
         <div style={{ marginTop: "8px" }}>
-          {results.map((p) => {
-            const Icon = CATEGORY_ICON[p.category_slug] || Cookie;
-            return (
-              <Link
-                key={p.id}
-                to="/produit/$id"
-                params={{ id: p.id }}
-                className="flex items-center"
-                style={{
-                  width: "100%",
-                  height: "68px",
-                  gap: "14px",
-                  padding: "0 16px",
-                  borderBottom: "0.5px solid #F4F7F4",
-                  background: "#FFFFFF",
-                  textDecoration: "none",
-                }}
-              >
-                {p.thumbnail_url ? (
-                  <img
-                    src={p.thumbnail_url}
-                    alt={p.name}
-                    className="shrink-0"
-                    style={{ width: "44px", height: "44px", borderRadius: "10px", objectFit: "cover" }}
-                  />
-                ) : (
-                  <div
-                    className="flex items-center justify-center shrink-0"
-                    style={{ width: "44px", height: "44px", background: "#EAF3DE", borderRadius: "10px" }}
-                  >
-                    <Icon size={20} color="#5B8C6A" strokeWidth={1.5} />
-                  </div>
-                )}
-                <div className="flex-1 min-w-0">
-                  <div style={{ fontSize: "15px", fontWeight: 500, color: "#1A2E1A" }}>{p.name}</div>
-                  <div style={{ fontSize: "12px", fontWeight: 400, color: "#7A9A7A", marginTop: "4px" }}>
-                    {getBrandById(p.brand_id)?.name ?? ""} · {p.country}
-                  </div>
+          {results.length > 0 && (
+            <>
+              {showProductsLabel && (
+                <div style={{ marginTop: "8px", marginBottom: "4px" }}>
+                  <SectionLabel>Produits</SectionLabel>
                 </div>
-                <ChevronRight size={18} color="#DDE8DD" strokeWidth={1.5} />
-              </Link>
-            );
-          })}
+              )}
+              {results.map((p) => {
+                const Icon = CATEGORY_ICON[p.category_slug] || Cookie;
+                return (
+                  <Link
+                    key={p.id}
+                    to="/produit/$id"
+                    params={{ id: p.id }}
+                    className="flex items-center"
+                    style={{
+                      width: "100%",
+                      height: "68px",
+                      gap: "14px",
+                      padding: "0 16px",
+                      borderBottom: "0.5px solid #F4F7F4",
+                      background: "#FFFFFF",
+                      textDecoration: "none",
+                    }}
+                  >
+                    {p.thumbnail_url ? (
+                      <img
+                        src={p.thumbnail_url}
+                        alt={p.name}
+                        className="shrink-0"
+                        style={{ width: "44px", height: "44px", borderRadius: "10px", objectFit: "cover" }}
+                      />
+                    ) : (
+                      <div
+                        className="flex items-center justify-center shrink-0"
+                        style={{ width: "44px", height: "44px", background: "#EAF3DE", borderRadius: "10px" }}
+                      >
+                        <Icon size={20} color="#5B8C6A" strokeWidth={1.5} />
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <div style={{ fontSize: "15px", fontWeight: 500, color: "#1A2E1A" }}>{p.name}</div>
+                      <div style={{ fontSize: "12px", fontWeight: 400, color: "#7A9A7A", marginTop: "4px" }}>
+                        {getBrandById(p.brand_id)?.name ?? ""} · {p.country}
+                      </div>
+                    </div>
+                    <ChevronRight size={18} color="#DDE8DD" strokeWidth={1.5} />
+                  </Link>
+                );
+              })}
+            </>
+          )}
+
+          {brandResults.length > 0 && (
+            <>
+              <div style={{ marginTop: "16px", marginBottom: "4px" }}>
+                <SectionLabel>Marques</SectionLabel>
+              </div>
+              {brandResults.map((b) => {
+                const count = productCountByBrand[b.id] ?? 0;
+                return (
+                  <Link
+                    key={b.id}
+                    to="/marque/$brandId"
+                    params={{ brandId: b.id }}
+                    className="flex items-center"
+                    style={{
+                      width: "100%",
+                      height: "68px",
+                      gap: "14px",
+                      padding: "0 16px",
+                      borderBottom: "0.5px solid #F4F7F4",
+                      background: "#FFFFFF",
+                      textDecoration: "none",
+                    }}
+                  >
+                    <div
+                      className="flex items-center justify-center shrink-0"
+                      style={{ width: "44px", height: "44px", background: "#EAF3DE", borderRadius: "10px" }}
+                    >
+                      <Building2 size={20} color="#5B8C6A" strokeWidth={1.5} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div style={{ fontSize: "15px", fontWeight: 500, color: "#1A2E1A" }}>{b.name}</div>
+                      <div style={{ fontSize: "12px", fontWeight: 400, color: "#7A9A7A", marginTop: "4px" }}>
+                        {b.country}
+                      </div>
+                    </div>
+                    <span style={{ fontSize: "12px", fontWeight: 400, color: "#AAC0AA", marginRight: "8px" }}>
+                      {count} produit{count > 1 ? "s" : ""}
+                    </span>
+                    <ChevronRight size={18} color="#DDE8DD" strokeWidth={1.5} />
+                  </Link>
+                );
+              })}
+            </>
+          )}
         </div>
       )}
     </div>
   );
 }
+
