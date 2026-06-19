@@ -183,12 +183,32 @@ function Onboarding() {
     const rows: Array<{
       icon: React.ReactNode;
       label: string;
-      desc: string;
+      desc: React.ReactNode;
     }> = [
       {
         icon: <ScanLine size={22} color="#5B8C6A" strokeWidth={1.75} />,
         label: "Scanner",
-        desc: "Pointe ta caméra sur un code-barres ou recherche directement via l'onglet Explorer",
+        desc: (
+          <>
+            Pointe ta caméra sur un code-barres ou recherche directement{" "}
+            <span
+              className="inline-flex items-center"
+              style={{
+                background: "#F4F7F4",
+                borderRadius: "8px",
+                padding: "2px 6px",
+                gap: "4px",
+                fontSize: "11px",
+                fontWeight: 500,
+                color: "#3A503A",
+                verticalAlign: "middle",
+              }}
+            >
+              <Search size={11} color="#5B8C6A" strokeWidth={1.75} />
+              Explorer
+            </span>
+          </>
+        ),
       },
       {
         icon: <BarChart3 size={22} color="#5B8C6A" strokeWidth={1.75} />,
@@ -203,22 +223,6 @@ function Onboarding() {
     ];
     return (
       <Shell>
-        <button
-          onClick={() => setStep(0)}
-          className="self-start"
-          style={{
-            fontSize: "14px",
-            fontWeight: 400,
-            color: "#7A9A7A",
-            background: "transparent",
-            border: "none",
-            padding: 0,
-            cursor: "pointer",
-            marginBottom: "24px",
-          }}
-        >
-          ← Retour
-        </button>
         <div
           className="flex flex-col items-center"
           style={{ flex: 1, justifyContent: "center" }}
@@ -293,7 +297,42 @@ function Onboarding() {
           </div>
         </div>
         <Dots active={1} />
-        <PrimaryButton label="Suivant" onClick={() => setStep(2)} />
+        <div className="flex w-full" style={{ gap: "12px", marginTop: "8px" }}>
+          <button
+            onClick={() => setStep(0)}
+            style={{
+              flex: 1,
+              height: "52px",
+              background: "#F4F7F4",
+              borderRadius: "14px",
+              fontFamily: FONT,
+              fontSize: "14px",
+              fontWeight: 500,
+              color: "#3A503A",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            ← Retour
+          </button>
+          <button
+            onClick={() => setStep(2)}
+            style={{
+              flex: 2,
+              height: "52px",
+              background: "#5B8C6A",
+              borderRadius: "14px",
+              fontFamily: FONT,
+              fontSize: "14px",
+              fontWeight: 500,
+              color: "#FFFFFF",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            Suivant
+          </button>
+        </div>
       </Shell>
     );
   }
