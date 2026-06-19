@@ -240,7 +240,6 @@ function BrandPage() {
             padding: "10px 14px",
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
             height: "54px",
           }}
         >
@@ -264,22 +263,6 @@ function BrandPage() {
             <ArrowLeft size={16} strokeWidth={1.75} />
             Retour
           </button>
-          <div style={{ flex: 1, textAlign: "center", padding: "0 8px", overflow: "hidden" }}>
-            <span
-              style={{
-                fontSize: "15px",
-                fontWeight: 500,
-                color: C.dark,
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                display: "block",
-              }}
-            >
-              {brand.name}
-            </span>
-          </div>
-          <div style={{ width: "60px", flexShrink: 0 }} />
         </div>
 
         {/* Hero */}
