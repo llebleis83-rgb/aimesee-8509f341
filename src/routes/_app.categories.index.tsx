@@ -177,7 +177,15 @@ function Categories() {
   }, [focus]);
 
   const results = useMemo(() => searchProductsByName(q), [q]);
+  const brandResults = useMemo(() => searchBrandsByName(q), [q]);
+  const productCountByBrand = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const p of mockProducts) counts[p.brand_id] = (counts[p.brand_id] ?? 0) + 1;
+    return counts;
+  }, []);
   const hasQuery = q.trim().length > 0;
+  const noResults = results.length === 0 && brandResults.length === 0;
+  const showProductsLabel = brandResults.length > 0 && results.length > 0;
 
   return (
     <div style={{ background: "#FFFFFF", paddingBottom: "24px" }}>
