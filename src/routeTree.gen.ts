@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ProduitNonTrouveRouteImport } from './routes/produit-non-trouve'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as NotFoundRouteImport } from './routes/not-found'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as AppIndexRouteImport } from './routes/_app.index'
@@ -26,6 +27,11 @@ import { Route as AppCategoriesSlugRouteImport } from './routes/_app.categories.
 const ProduitNonTrouveRoute = ProduitNonTrouveRouteImport.update({
   id: '/produit-non-trouve',
   path: '/produit-non-trouve',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NotFoundRoute = NotFoundRouteImport.update({
@@ -91,6 +97,7 @@ const AppCategoriesSlugRoute = AppCategoriesSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/not-found': typeof NotFoundRoute
+  '/onboarding': typeof OnboardingRoute
   '/produit-non-trouve': typeof ProduitNonTrouveRoute
   '/categories': typeof AppCategoriesRouteWithChildren
   '/compte': typeof AppCompteRoute
@@ -104,6 +111,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/not-found': typeof NotFoundRoute
+  '/onboarding': typeof OnboardingRoute
   '/produit-non-trouve': typeof ProduitNonTrouveRoute
   '/compte': typeof AppCompteRoute
   '/favoris': typeof AppFavorisRoute
@@ -119,6 +127,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
   '/not-found': typeof NotFoundRoute
+  '/onboarding': typeof OnboardingRoute
   '/produit-non-trouve': typeof ProduitNonTrouveRoute
   '/_app/categories': typeof AppCategoriesRouteWithChildren
   '/_app/compte': typeof AppCompteRoute
@@ -136,6 +145,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/not-found'
+    | '/onboarding'
     | '/produit-non-trouve'
     | '/categories'
     | '/compte'
@@ -149,6 +159,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/not-found'
+    | '/onboarding'
     | '/produit-non-trouve'
     | '/compte'
     | '/favoris'
@@ -163,6 +174,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_app'
     | '/not-found'
+    | '/onboarding'
     | '/produit-non-trouve'
     | '/_app/categories'
     | '/_app/compte'
@@ -179,6 +191,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   NotFoundRoute: typeof NotFoundRoute
+  OnboardingRoute: typeof OnboardingRoute
   ProduitNonTrouveRoute: typeof ProduitNonTrouveRoute
   BrandBrandIdRoute: typeof BrandBrandIdRoute
 }
@@ -190,6 +203,13 @@ declare module '@tanstack/react-router' {
       path: '/produit-non-trouve'
       fullPath: '/produit-non-trouve'
       preLoaderRoute: typeof ProduitNonTrouveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/not-found': {
@@ -318,6 +338,7 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   NotFoundRoute: NotFoundRoute,
+  OnboardingRoute: OnboardingRoute,
   ProduitNonTrouveRoute: ProduitNonTrouveRoute,
   BrandBrandIdRoute: BrandBrandIdRoute,
 }
