@@ -17,6 +17,8 @@ export interface ProductFact {
 
 export interface ProductSection {
   facts: ProductFact[];
+  matieres_premieres?: { facts: ProductFact[] };
+  conditions_travail?: { facts: ProductFact[] };
 }
 
 export interface Brand {
@@ -27,8 +29,8 @@ export interface Brand {
   sections: {
     actionnariat: ShareholderNode;
     politique: ProductSection;
-    conditions_travail: ProductSection;
-    scandales: ProductSection;
+    ecologie: ProductSection;
+    fabrication: ProductSection;
   };
 }
 
