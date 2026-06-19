@@ -1,21 +1,21 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import {
   ArrowLeft,
   Search,
+  ChevronRight,
   PackageSearch,
-  Cookie,
   Droplets,
   Shirt,
   CupSoda,
   Sparkles,
   Sofa,
   Utensils,
+  Building2,
 } from "lucide-react";
 import { getProductsByCategory } from "@/lib/mockProducts";
 import { getBrandById } from "@/lib/mockBrands";
-import { CATEGORY_LABEL } from "@/lib/types";
-import { ProductThumb } from "@/components/ProductThumb";
+import { CATEGORY_LABEL, type Brand, type Product } from "@/lib/types";
 
 export const Route = createFileRoute("/_app/categories/$slug")({
   component: CategoryResult,
