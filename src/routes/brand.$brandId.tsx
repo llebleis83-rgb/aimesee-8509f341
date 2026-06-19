@@ -188,7 +188,6 @@ function ActionnariatBlock({ root }: { root: ShareholderNode }) {
 
 function BrandPage() {
   const { brandId } = Route.useParams();
-  const navigate = useNavigate();
   const brand = getBrandById(brandId);
   const products = getProductsByBrandId(brandId);
   const [actionnariatOpen, setActionnariatOpen] = useState(true);
