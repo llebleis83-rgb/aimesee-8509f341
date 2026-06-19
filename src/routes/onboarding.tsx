@@ -142,8 +142,7 @@ function Onboarding() {
               lineHeight: 1.5,
             }}
           >
-            aimesee te montre les faits sourcés sur les produits que tu scannes
-            — actionnaires, écologie, scandales.
+            aimesee te montre les faits sourcés sur les produits que tu scannes et les marques que tu consommes : actionnariat, écologie, conditions de travail, dons politiques, scandales.
           </div>
         </div>
         <Dots active={0} />
