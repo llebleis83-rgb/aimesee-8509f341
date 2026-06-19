@@ -1,9 +1,10 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Heart, Cookie, Droplets, Shirt, CupSoda, Sparkles, Sofa, Utensils } from "lucide-react";
+import { Heart, Cookie, Droplets, Shirt, CupSoda, Sparkles, Sofa } from "lucide-react";
 import { getProductById } from "@/lib/mockProducts";
 import { getBrandById } from "@/lib/mockBrands";
 import { favStore, useFavorites } from "@/lib/favorites-store";
 import { CATEGORY_LABEL } from "@/lib/types";
+import { ProductThumb } from "@/components/ProductThumb";
 
 export const Route = createFileRoute("/_app/favoris")({
   component: Favoris,
