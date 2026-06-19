@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { searchProductsByName, mockProducts } from "@/lib/mockProducts";
 import { getBrandById, searchBrandsByName } from "@/lib/mockBrands";
+import { ProductThumb } from "@/components/ProductThumb";
 
 export const Route = createFileRoute("/_app/categories/")({
   validateSearch: (search: Record<string, unknown>) => ({
