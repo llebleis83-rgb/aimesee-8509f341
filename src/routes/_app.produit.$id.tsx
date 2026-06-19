@@ -91,6 +91,24 @@ function EmptyState() {
   );
 }
 
+function SubLabel({ children }: { children: ReactNode }) {
+  return (
+    <div
+      style={{
+        fontFamily: FONT,
+        fontSize: "12px",
+        fontWeight: 400,
+        color: C.faint,
+        textTransform: "uppercase",
+        letterSpacing: "0.05em",
+        margin: "18px 0 10px",
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
 function FactsList({ facts }: { facts: ProductFact[] }) {
   if (facts.length === 0) return <EmptyState />;
   return (
