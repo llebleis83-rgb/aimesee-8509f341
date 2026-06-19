@@ -400,7 +400,7 @@ function ProductSheet() {
             fontFamily: FONT,
             fontSize: "15px",
             fontWeight: 500,
-            color: C.primary,
+            color: C.muted,
             background: "transparent",
             border: "none",
             padding: "10px 8px",
@@ -413,61 +413,136 @@ function ProductSheet() {
         </button>
 
         <div style={{ flex: 1, textAlign: "center", padding: "0 8px", overflow: "hidden" }}>
-          <span
-            style={{
-              fontSize: "16px",
-              fontWeight: 500,
-              color: C.dark,
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              display: "block",
-            }}
-          >
-            {product.name}
-          </span>
+          {!heroVisible && (
+            <span
+              style={{
+                fontSize: "15px",
+                fontWeight: 500,
+                color: C.dark,
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                display: "block",
+              }}
+            >
+              {product.name}
+            </span>
+          )}
         </div>
 
-        <button
-          onClick={() => favStore.toggle(product.id)}
-          aria-label="favori"
-          style={{
-            width: "34px",
-            height: "34px",
-            borderRadius: "50%",
-            background: "white",
-            border: `0.5px solid ${C.border}`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
-            flexShrink: 0,
-          }}
-        >
-          <Heart
-            size={16}
-            color={isFav ? C.primary : C.faint}
-            fill={isFav ? C.primary : "none"}
-            strokeWidth={1.75}
-          />
-        </button>
+        {!heroVisible ? (
+          <button
+            onClick={() => favStore.toggle(product.id)}
+            aria-label="favori"
+            style={{
+              width: "34px",
+              height: "34px",
+              borderRadius: "50%",
+              background: "white",
+              border: `0.5px solid ${C.border}`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              flexShrink: 0,
+            }}
+          >
+            <Heart
+              size={16}
+              color={isFav ? C.primary : C.faint}
+              fill={isFav ? C.primary : "none"}
+              strokeWidth={1.75}
+            />
+          </button>
+        ) : (
+          <div style={{ width: "34px", height: "34px", flexShrink: 0 }} />
+        )}
       </div>
 
       {/* Scrollable area */}
-      <div className="aim-scroll" style={{ flex: 1, overflowY: "auto" }}>
-        {/* Hero image */}
-        <ProductThumb
-          src={product.thumbnail_url}
-          alt={product.name}
-          Icon={Package}
-          width="100%"
-          height={220}
-          radius={0}
-          imgBg={C.bg}
-          fallbackBg={C.bg}
-          iconColor={C.faint}
-          iconSize={48}
-        />
+      <div ref={scrollRef} className="aim-scroll" style={{ flex: 1, overflowY: "auto" }}>
+        {/* Hero section */}
+        <div
+          ref={heroRef}
+          style={{
+            height: "140px",
+            padding: "16px",
+            background: "white",
+            borderBottom: `0.5px solid ${C.border}`,
+            display: "flex",
+            alignItems: "center",
+            gap: "0",
+          }}
+        >
+          <ProductThumb
+            src={product.thumbnail_url}
+            alt={product.name}
+            Icon={Package}
+            width={110}
+            height={110}
+            radius={12}
+            imgBg={C.bg}
+            fallbackBg={C.lightGreen}
+            iconColor={C.primary}
+            iconSize={36}
+            objectFit="contain"
+          />
+          <div
+            style={{
+              flex: 1,
+              minWidth: 0,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              gap: "4px",
+              paddingLeft: "14px",
+            }}
+          >
+            <div
+              style={{
+                fontSize: "18px",
+                fontWeight: 500,
+                color: C.dark,
+                lineHeight: 1.25,
+                overflow: "hidden",
+                display: "-webkit-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+              }}
+            >
+              {product.name}
+            </div>
+            <div style={{ fontSize: "13px", fontWeight: 400, color: C.muted }}>
+              {brand?.name ?? ""}
+            </div>
+            <div style={{ fontSize: "12px", fontWeight: 400, color: C.faint }}>
+              {product.country} · {categoryLabel}
+            </div>
+            <button
+              onClick={() => favStore.toggle(product.id)}
+              aria-label="favori"
+              style={{
+                background: "transparent",
+                border: "none",
+                padding: 0,
+                marginTop: "2px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                width: "20px",
+                height: "20px",
+              }}
+            >
+              <Heart
+                size={20}
+                color={isFav ? C.primary : C.border}
+                fill={isFav ? C.primary : "none"}
+                strokeWidth={1.75}
+              />
+            </button>
+          </div>
+        </div>
+
         {sections.map(({ id: sid, label, Icon, content }) => {
           const isOpen = !!open[sid];
           return (
