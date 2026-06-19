@@ -6,18 +6,22 @@ import {
   ChevronDown,
   ChevronUp,
   ChevronRight,
+  Clock,
   ExternalLink,
   Landmark,
+  Leaf,
+  MapPin,
   Cookie,
   Droplets,
   Shirt,
   CupSoda,
   Sparkles,
   Sofa,
+  type LucideIcon,
 } from "lucide-react";
 import { getBrandById } from "@/lib/mockBrands";
 import { getProductsByBrandId } from "@/lib/mockProducts";
-import { CATEGORY_LABEL, type ShareholderNode } from "@/lib/types";
+import { CATEGORY_LABEL, type ProductFact, type ShareholderNode } from "@/lib/types";
 import { ProductThumb } from "@/components/ProductThumb";
 
 export const Route = createFileRoute("/brand/$brandId")({
@@ -62,6 +66,93 @@ function SourceLine({ children }: { children: ReactNode }) {
     >
       <ExternalLink size={10} strokeWidth={1.75} />
       <span>{children}</span>
+    </div>
+  );
+}
+
+function EmptyState() {
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: "6px",
+        padding: "16px 0",
+      }}
+    >
+      <Clock size={20} color={C.faint} strokeWidth={1.75} />
+      <span style={{ fontFamily: FONT, fontSize: "13px", fontWeight: 400, color: C.faint }}>
+        Données en cours de collecte
+      </span>
+      <span style={{ fontFamily: FONT, fontSize: "12px", fontWeight: 400, color: C.faint }}>
+        Cette section sera disponible prochainement.
+      </span>
+    </div>
+  );
+}
+
+function FactRow({ fact, last }: { fact: ProductFact; last?: boolean }) {
+  return (
+    <div style={{ marginBottom: last ? 0 : "20px" }}>
+      <div style={{ display: "flex", gap: "10px" }}>
+        <div
+          style={{
+            width: "5px",
+            height: "5px",
+            borderRadius: "50%",
+            background: C.border,
+            marginTop: "7px",
+            flexShrink: 0,
+          }}
+        />
+        <p
+          style={{
+            fontFamily: FONT,
+            fontSize: "13px",
+            fontWeight: 400,
+            color: "#3A503A",
+            lineHeight: 1.7,
+            margin: 0,
+          }}
+        >
+          {fact.text}
+        </p>
+      </div>
+      <div style={{ marginTop: "6px" }}>
+        <SourceLine>
+          {fact.source_name} · {fact.source_year}
+        </SourceLine>
+      </div>
+    </div>
+  );
+}
+
+function FactsList({ facts }: { facts: ProductFact[] }) {
+  if (facts.length === 0) return <EmptyState />;
+  return (
+    <>
+      {facts.map((f, i, arr) => (
+        <FactRow key={i} fact={f} last={i === arr.length - 1} />
+      ))}
+    </>
+  );
+}
+
+function SubLabel({ children }: { children: ReactNode }) {
+  return (
+    <div
+      style={{
+        fontFamily: FONT,
+        fontSize: "12px",
+        fontWeight: 400,
+        color: C.faint,
+        textTransform: "uppercase",
+        letterSpacing: "0.05em",
+        margin: "18px 0 10px",
+      }}
+    >
+      {children}
     </div>
   );
 }
@@ -190,7 +281,7 @@ function BrandPage() {
   const { brandId } = Route.useParams();
   const brand = getBrandById(brandId);
   const products = getProductsByBrandId(brandId);
-  const [actionnariatOpen, setActionnariatOpen] = useState(true);
+  const [open, setOpen] = useState<Record<string, boolean>>({ actionnariat: true });
 
   if (!brand) {
     return (
@@ -209,6 +300,56 @@ function BrandPage() {
       </div>
     );
   }
+
+  const toggle = (sid: string) => setOpen((o) => ({ ...o, [sid]: !o[sid] }));
+
+  const sections: { id: string; label: string; Icon: LucideIcon; content: ReactNode }[] = [
+    {
+      id: "actionnariat",
+      label: "Actionnariat",
+      Icon: Landmark,
+      content: brand.sections.actionnariat.children?.length ? (
+        <ActionnariatBlock root={brand.sections.actionnariat} />
+      ) : (
+        <EmptyState />
+      ),
+    },
+    {
+      id: "politique",
+      label: "Politique & Lobbying",
+      Icon: Landmark,
+      content: <FactsList facts={brand.sections.politique.facts} />,
+    },
+    {
+      id: "ecologie",
+      label: "Écologie",
+      Icon: Leaf,
+      content: (
+        <>
+          <FactsList facts={brand.sections.ecologie.facts} />
+          <SubLabel>Matières premières</SubLabel>
+          <FactsList facts={brand.sections.ecologie.matieres_premieres?.facts ?? []} />
+        </>
+      ),
+    },
+    {
+      id: "fabrication",
+      label: "Fabrication",
+      Icon: MapPin,
+      content: (
+        <>
+          <FactsList facts={brand.sections.fabrication.facts} />
+          {brand.sections.fabrication.conditions_travail &&
+            brand.sections.fabrication.conditions_travail.facts.length > 0 && (
+              <>
+                <SubLabel>Conditions de travail</SubLabel>
+                <FactsList facts={brand.sections.fabrication.conditions_travail.facts} />
+              </>
+            )}
+        </>
+      ),
+    },
+  ];
 
   return (
     <div
@@ -306,64 +447,68 @@ function BrandPage() {
           </div>
         </div>
 
-        {/* Actionnariat section */}
-        <div>
-          <button
-            onClick={() => setActionnariatOpen((v) => !v)}
-            style={{
-              width: "100%",
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              padding: "14px 16px",
-              background: actionnariatOpen ? C.bg : "white",
-              borderTop: `0.5px solid ${C.border}`,
-              borderBottom: actionnariatOpen ? "none" : `0.5px solid ${C.border}`,
-              border: "none",
-              borderBottomWidth: actionnariatOpen ? 0 : 0,
-              cursor: "pointer",
-              fontFamily: FONT,
-              textAlign: "left",
-            }}
-          >
-            <div
-              style={{
-                width: "28px",
-                height: "28px",
-                borderRadius: "8px",
-                background: C.lightGreen,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
-              }}
-            >
-              <Landmark size={16} color={C.primary} strokeWidth={1.75} />
+        {/* Accordion sections */}
+        {sections.map(({ id: sid, label, Icon, content }) => {
+          const isOpen = !!open[sid];
+          return (
+            <div key={sid}>
+              <button
+                onClick={() => toggle(sid)}
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                  padding: "14px 16px",
+                  background: isOpen ? C.bg : "white",
+                  borderTop: `0.5px solid ${C.border}`,
+                  borderBottom: isOpen ? "none" : `0.5px solid ${C.border}`,
+                  border: "none",
+                  cursor: "pointer",
+                  fontFamily: FONT,
+                  textAlign: "left",
+                }}
+              >
+                <div
+                  style={{
+                    width: "28px",
+                    height: "28px",
+                    borderRadius: "8px",
+                    background: C.lightGreen,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                  }}
+                >
+                  <Icon size={16} color={C.primary} strokeWidth={1.75} />
+                </div>
+                <span style={{ flex: 1, fontSize: "14px", fontWeight: 500, color: C.dark }}>
+                  {label}
+                </span>
+                {isOpen ? (
+                  <ChevronUp size={16} color={C.muted} strokeWidth={1.75} />
+                ) : (
+                  <ChevronDown size={16} color={C.muted} strokeWidth={1.75} />
+                )}
+              </button>
+              {isOpen && (
+                <div
+                  style={{
+                    background: C.bg,
+                    padding: "8px 16px 16px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "8px",
+                    borderBottom: `0.5px solid ${C.border}`,
+                  }}
+                >
+                  {content}
+                </div>
+              )}
             </div>
-            <span style={{ flex: 1, fontSize: "14px", fontWeight: 500, color: C.dark }}>
-              Actionnariat
-            </span>
-            {actionnariatOpen ? (
-              <ChevronUp size={16} color={C.muted} strokeWidth={1.75} />
-            ) : (
-              <ChevronDown size={16} color={C.muted} strokeWidth={1.75} />
-            )}
-          </button>
-          {actionnariatOpen && (
-            <div
-              style={{
-                background: C.bg,
-                padding: "8px 16px 16px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "8px",
-                borderBottom: `0.5px solid ${C.border}`,
-              }}
-            >
-              <ActionnariatBlock root={brand.sections.actionnariat} />
-            </div>
-          )}
-        </div>
+          );
+        })}
 
         {/* Products section */}
         <div

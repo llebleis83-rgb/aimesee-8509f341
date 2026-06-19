@@ -6,8 +6,6 @@ import {
   Landmark,
   Leaf,
   MapPin,
-  Users,
-  Newspaper,
   ExternalLink,
   ChevronRight,
   ChevronDown,
@@ -89,6 +87,24 @@ function EmptyState() {
       <span style={{ fontFamily: FONT, fontSize: "12px", fontWeight: 400, color: C.faint }}>
         Cette section sera disponible prochainement.
       </span>
+    </div>
+  );
+}
+
+function SubLabel({ children }: { children: ReactNode }) {
+  return (
+    <div
+      style={{
+        fontFamily: FONT,
+        fontSize: "12px",
+        fontWeight: 400,
+        color: C.faint,
+        textTransform: "uppercase",
+        letterSpacing: "0.05em",
+        margin: "18px 0 10px",
+      }}
+    >
+      {children}
     </div>
   );
 }
@@ -336,25 +352,34 @@ function ProductSheet() {
       id: "ecologie",
       label: "Écologie",
       Icon: Leaf,
-      content: <FactsList facts={product.sections.ecologie.facts} />,
+      content: (
+        <>
+          <FactsList facts={product.sections.ecologie.facts} />
+          <SubLabel>Matières premières</SubLabel>
+          <FactsList facts={product.sections.ecologie.matieres_premieres?.facts ?? []} />
+        </>
+      ),
     },
     {
       id: "fabrication",
       label: "Fabrication",
       Icon: MapPin,
-      content: <FactsList facts={product.sections.fabrication.facts} />,
-    },
-    {
-      id: "travail",
-      label: "Conditions de travail",
-      Icon: Users,
-      content: <FactsList facts={brand?.sections.conditions_travail.facts ?? []} />,
-    },
-    {
-      id: "scandales",
-      label: "Scandales",
-      Icon: Newspaper,
-      content: <FactsList facts={brand?.sections.scandales.facts ?? []} />,
+      content: (() => {
+        const ct =
+          product.sections.fabrication.conditions_travail ??
+          brand?.sections.fabrication.conditions_travail;
+        return (
+          <>
+            <FactsList facts={product.sections.fabrication.facts} />
+            {ct && ct.facts.length > 0 && (
+              <>
+                <SubLabel>Conditions de travail</SubLabel>
+                <FactsList facts={ct.facts} />
+              </>
+            )}
+          </>
+        );
+      })(),
     },
   ];
 
