@@ -1,9 +1,10 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { History, Cookie, Droplets, Shirt, ChevronRight, CupSoda, Sparkles, Sofa, Utensils } from "lucide-react";
+import { History, Cookie, Droplets, Shirt, ChevronRight, CupSoda, Sparkles, Sofa } from "lucide-react";
 import { useState } from "react";
 import { getProductById } from "@/lib/mockProducts";
 import { historyStore, useHistory } from "@/lib/history-store";
 import { CATEGORY_LABEL } from "@/lib/types";
+import { ProductThumb } from "@/components/ProductThumb";
 
 export const Route = createFileRoute("/_app/historique")({
   component: Historique,
