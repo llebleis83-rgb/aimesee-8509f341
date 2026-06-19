@@ -3,7 +3,6 @@ import { useState, useMemo } from "react";
 import {
   ArrowLeft,
   Search,
-  ChevronRight,
   PackageSearch,
   Cookie,
   Droplets,
@@ -16,6 +15,7 @@ import {
 import { getProductsByCategory } from "@/lib/mockProducts";
 import { getBrandById } from "@/lib/mockBrands";
 import { CATEGORY_LABEL } from "@/lib/types";
+import { ProductThumb } from "@/components/ProductThumb";
 
 export const Route = createFileRoute("/_app/categories/$slug")({
   component: CategoryResult,
@@ -197,7 +197,14 @@ function CategoryResult() {
             </button>
           </div>
         ) : (
-          <div>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2, 1fr)",
+              gap: "10px",
+              padding: "16px 16px 24px",
+            }}
+          >
             {filtered.map((p) => {
               const Icon = ROW_ICON[p.category_slug] || Cookie;
               return (
@@ -205,69 +212,59 @@ function CategoryResult() {
                   key={p.id}
                   to="/produit/$id"
                   params={{ id: p.id }}
-                  className="flex items-center"
                   style={{
-                    width: "100%",
-                    height: "68px",
-                    gap: "14px",
-                    padding: "0 16px",
-                    borderBottom: "0.5px solid #F4F7F4",
                     background: "#FFFFFF",
+                    border: "1px solid #DDE8DD",
+                    borderRadius: "14px",
+                    padding: "12px",
                     textDecoration: "none",
+                    display: "flex",
+                    flexDirection: "column",
                   }}
                 >
-                  {p.thumbnail_url ? (
-                    <img
-                      src={p.thumbnail_url}
-                      alt={p.name}
-                      className="shrink-0"
-                      style={{
-                        width: "44px",
-                        height: "44px",
-                        borderRadius: "8px",
-                        objectFit: "cover",
-                      }}
-                    />
-                  ) : (
-                    <div
-                      className="flex items-center justify-center shrink-0"
-                      style={{
-                        width: "44px",
-                        height: "44px",
-                        background: "#EAF3DE",
-                        borderRadius: "8px",
-                      }}
-                    >
-                      <Icon size={20} color="#5B8C6A" strokeWidth={1.5} />
-                    </div>
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <div
-                      style={{
-                        fontSize: "15px",
-                        fontWeight: 500,
-                        color: "#1A2E1A",
-                      }}
-                    >
-                      {p.name}
-                    </div>
-                    <div
-                      style={{
-                        fontSize: "12px",
-                        fontWeight: 400,
-                        color: "#7A9A7A",
-                        marginTop: "4px",
-                      }}
-                    >
-                      {getBrandById(p.brand_id)?.name ?? ""} · {p.country}
-                    </div>
+                  <ProductThumb
+                    src={p.thumbnail_url}
+                    alt={p.name}
+                    Icon={Icon}
+                    width="100%"
+                    height={120}
+                    radius={8}
+                    objectFit="contain"
+                    imgBg="#F4F7F4"
+                    fallbackBg="#EAF3DE"
+                    iconColor="#5B8C6A"
+                    iconSize={32}
+                  />
+                  <div
+                    style={{
+                      fontSize: "13px",
+                      fontWeight: 500,
+                      color: "#1A2E1A",
+                      marginTop: "8px",
+                      display: "-webkit-box",
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                      lineHeight: 1.3,
+                    }}
+                  >
+                    {p.name}
                   </div>
-                  <ChevronRight size={16} color="#DDE8DD" strokeWidth={1.75} />
+                  <div
+                    style={{
+                      fontSize: "11px",
+                      fontWeight: 400,
+                      color: "#7A9A7A",
+                      marginTop: "4px",
+                    }}
+                  >
+                    {getBrandById(p.brand_id)?.name ?? ""} · {p.country}
+                  </div>
                 </Link>
               );
             })}
-            <div style={{ height: "24px" }} />
           </div>
+
         )}
       </div>
 

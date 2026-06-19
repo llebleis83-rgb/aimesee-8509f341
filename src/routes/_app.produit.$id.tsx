@@ -23,6 +23,7 @@ import { getBrandById } from "@/lib/mockBrands";
 import { favStore, useFavorites } from "@/lib/favorites-store";
 import { historyStore } from "@/lib/history-store";
 import { CATEGORY_LABEL, type ProductFact, type ShareholderNode } from "@/lib/types";
+import { ProductThumb } from "@/components/ProductThumb";
 
 export const Route = createFileRoute("/_app/produit/$id")({
   component: ProductSheet,
@@ -439,32 +440,18 @@ function ProductSheet() {
       {/* Scrollable area */}
       <div className="aim-scroll" style={{ flex: 1, overflowY: "auto" }}>
         {/* Hero image */}
-        {product.thumbnail_url ? (
-          <img
-            src={product.thumbnail_url}
-            alt={product.name}
-            style={{
-              width: "100%",
-              height: "220px",
-              objectFit: "cover",
-              display: "block",
-              background: C.bg,
-            }}
-          />
-        ) : (
-          <div
-            style={{
-              width: "100%",
-              height: "220px",
-              background: C.bg,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Package size={48} color={C.faint} strokeWidth={1.75} />
-          </div>
-        )}
+        <ProductThumb
+          src={product.thumbnail_url}
+          alt={product.name}
+          Icon={Package}
+          width="100%"
+          height={220}
+          radius={0}
+          imgBg={C.bg}
+          fallbackBg={C.bg}
+          iconColor={C.faint}
+          iconSize={48}
+        />
         {sections.map(({ id: sid, label, Icon, content }) => {
           const isOpen = !!open[sid];
           return (
@@ -597,34 +584,17 @@ function ProductSheet() {
               gap: "10px",
             }}
           >
-            {a.thumbnail_url ? (
-              <img
-                src={a.thumbnail_url}
-                alt={a.name}
-                style={{
-                  width: "36px",
-                  height: "36px",
-                  borderRadius: "8px",
-                  objectFit: "cover",
-                  flexShrink: 0,
-                }}
-              />
-            ) : (
-              <div
-                style={{
-                  width: "36px",
-                  height: "36px",
-                  background: C.lightGreen,
-                  borderRadius: "8px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexShrink: 0,
-                }}
-              >
-                <Leaf size={18} color={C.primary} strokeWidth={1.75} />
-              </div>
-            )}
+            <ProductThumb
+              src={a.thumbnail_url}
+              alt={a.name}
+              Icon={Leaf}
+              width={36}
+              height={36}
+              radius={8}
+              fallbackBg={C.lightGreen}
+              iconColor={C.primary}
+              iconSize={18}
+            />
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: "13px", fontWeight: 500, color: C.dark }}>{a.name}</div>
               <div
