@@ -438,6 +438,33 @@ function ProductSheet() {
 
       {/* Scrollable area */}
       <div className="aim-scroll" style={{ flex: 1, overflowY: "auto" }}>
+        {/* Hero image */}
+        {product.thumbnail_url ? (
+          <img
+            src={product.thumbnail_url}
+            alt={product.name}
+            style={{
+              width: "100%",
+              height: "220px",
+              objectFit: "cover",
+              display: "block",
+              background: C.bg,
+            }}
+          />
+        ) : (
+          <div
+            style={{
+              width: "100%",
+              height: "220px",
+              background: C.bg,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Package size={48} color={C.faint} strokeWidth={1.75} />
+          </div>
+        )}
         {sections.map(({ id: sid, label, Icon, content }) => {
           const isOpen = !!open[sid];
           return (
