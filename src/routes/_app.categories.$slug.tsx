@@ -3,7 +3,6 @@ import { useState, useMemo } from "react";
 import {
   ArrowLeft,
   Search,
-  ChevronRight,
   PackageSearch,
   Cookie,
   Droplets,
