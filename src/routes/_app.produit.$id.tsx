@@ -23,6 +23,7 @@ import { getBrandById } from "@/lib/mockBrands";
 import { favStore, useFavorites } from "@/lib/favorites-store";
 import { historyStore } from "@/lib/history-store";
 import { CATEGORY_LABEL, type ProductFact, type ShareholderNode } from "@/lib/types";
+import { ProductThumb } from "@/components/ProductThumb";
 
 export const Route = createFileRoute("/_app/produit/$id")({
   component: ProductSheet,
