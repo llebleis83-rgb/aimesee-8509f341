@@ -1,21 +1,21 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import {
   ArrowLeft,
   Search,
+  ChevronRight,
   PackageSearch,
-  Cookie,
   Droplets,
   Shirt,
   CupSoda,
   Sparkles,
   Sofa,
   Utensils,
+  Building2,
 } from "lucide-react";
 import { getProductsByCategory } from "@/lib/mockProducts";
 import { getBrandById } from "@/lib/mockBrands";
-import { CATEGORY_LABEL } from "@/lib/types";
-import { ProductThumb } from "@/components/ProductThumb";
+import { CATEGORY_LABEL, type Brand, type Product } from "@/lib/types";
 
 export const Route = createFileRoute("/_app/categories/$slug")({
   component: CategoryResult,
@@ -30,14 +30,7 @@ const CATEGORY_ICON: Record<string, React.ElementType> = {
   "Mode & Textile": Shirt,
 };
 
-const ROW_ICON: Record<string, React.ElementType> = {
-  alimentation: Cookie,
-  boissons: Droplets,
-  "hygiene-soins": Droplets,
-  cosmetiques: Sparkles,
-  "entretien-maison": Sofa,
-  "mode-textile": Shirt,
-};
+type BrandGroup = { brand: Brand | undefined; brandId: string; products: Product[] };
 
 function CategoryResult() {
   const { slug } = Route.useParams();
@@ -49,13 +42,28 @@ function CategoryResult() {
 
   const allProducts = useMemo(() => getProductsByCategory(slug), [slug]);
 
-  const filtered = useMemo(() => {
+  const allBrandGroups = useMemo<BrandGroup[]>(() => {
+    const map = new Map<string, Product[]>();
+    for (const p of allProducts) {
+      const arr = map.get(p.brand_id);
+      if (arr) arr.push(p);
+      else map.set(p.brand_id, [p]);
+    }
+    return Array.from(map.entries()).map(([brandId, products]) => ({
+      brandId,
+      brand: getBrandById(brandId),
+      products,
+    }));
+  }, [allProducts]);
+
+  const filtered = useMemo<BrandGroup[]>(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return allProducts;
-    return allProducts.filter(
-      (p) => p.name.toLowerCase().includes(q) || (getBrandById(p.brand_id)?.name.toLowerCase().includes(q) ?? false),
-    );
-  }, [allProducts, query]);
+    if (!q) return allBrandGroups;
+    return allBrandGroups.filter((g) => {
+      if (g.brand?.name.toLowerCase().includes(q)) return true;
+      return g.products.some((p) => p.name.toLowerCase().includes(q));
+    });
+  }, [allBrandGroups, query]);
 
   const isEmpty = filtered.length === 0;
 
@@ -102,7 +110,7 @@ function CategoryResult() {
           {categoryName}
         </h1>
         <p style={{ fontSize: "13px", fontWeight: 400, color: "#7A9A7A", marginTop: "2px" }}>
-          {allProducts.length} produit{allProducts.length > 1 ? "s" : ""}
+          {allBrandGroups.length} marque{allBrandGroups.length > 1 ? "s" : ""}
         </p>
 
         {/* Search bar */}
@@ -197,74 +205,78 @@ function CategoryResult() {
             </button>
           </div>
         ) : (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(2, 1fr)",
-              gap: "10px",
-              padding: "16px 16px 24px",
-            }}
-          >
-            {filtered.map((p) => {
-              const Icon = ROW_ICON[p.category_slug] || Cookie;
+          <div>
+            {filtered.map((g) => {
+              const brandName = g.brand?.name ?? g.brandId;
+              const country = g.brand?.country ?? "";
+              const count = g.products.length;
+              const handleClick = () => {
+                if (count === 1) {
+                  navigate({ to: "/produit/$id", params: { id: g.products[0].id } });
+                } else {
+                  navigate({ to: "/brand/$brandId", params: { brandId: g.brandId } });
+                }
+              };
               return (
-                <Link
-                  key={p.id}
-                  to="/produit/$id"
-                  params={{ id: p.id }}
+                <button
+                  key={g.brandId}
+                  onClick={handleClick}
+                  className="flex items-center"
                   style={{
+                    width: "100%",
+                    height: "68px",
+                    gap: "14px",
+                    padding: "0 16px",
+                    borderBottom: "0.5px solid #F4F7F4",
                     background: "#FFFFFF",
-                    border: "1px solid #DDE8DD",
-                    borderRadius: "14px",
-                    padding: "12px",
-                    textDecoration: "none",
-                    display: "flex",
-                    flexDirection: "column",
+                    border: "none",
+                    cursor: "pointer",
+                    textAlign: "left",
+                    fontFamily: "'DM Sans', sans-serif",
                   }}
                 >
-                  <ProductThumb
-                    src={p.thumbnail_url}
-                    alt={p.name}
-                    Icon={Icon}
-                    width="100%"
-                    height={120}
-                    radius={8}
-                    objectFit="contain"
-                    imgBg="#F4F7F4"
-                    fallbackBg="#EAF3DE"
-                    iconColor="#5B8C6A"
-                    iconSize={32}
-                  />
                   <div
+                    className="flex items-center justify-center shrink-0"
                     style={{
-                      fontSize: "13px",
-                      fontWeight: 500,
-                      color: "#1A2E1A",
-                      marginTop: "8px",
-                      display: "-webkit-box",
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: "vertical",
-                      overflow: "hidden",
-                      lineHeight: 1.3,
+                      width: "44px",
+                      height: "44px",
+                      background: "#EAF3DE",
+                      borderRadius: "10px",
                     }}
                   >
-                    {p.name}
+                    <Building2 size={20} color="#5B8C6A" strokeWidth={1.75} />
                   </div>
-                  <div
+                  <div className="flex-1 min-w-0">
+                    <div style={{ fontSize: "15px", fontWeight: 500, color: "#1A2E1A" }}>
+                      {brandName}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "12px",
+                        fontWeight: 400,
+                        color: "#7A9A7A",
+                        marginTop: "4px",
+                      }}
+                    >
+                      {country}
+                    </div>
+                  </div>
+                  <span
                     style={{
-                      fontSize: "11px",
+                      fontSize: "12px",
                       fontWeight: 400,
-                      color: "#7A9A7A",
-                      marginTop: "4px",
+                      color: "#AAC0AA",
+                      flexShrink: 0,
                     }}
                   >
-                    {getBrandById(p.brand_id)?.name ?? ""} · {p.country}
-                  </div>
-                </Link>
+                    {count} produit{count > 1 ? "s" : ""}
+                  </span>
+                  <ChevronRight size={16} color="#DDE8DD" strokeWidth={1.75} />
+                </button>
               );
             })}
+            <div style={{ height: "24px" }} />
           </div>
-
         )}
       </div>
 
