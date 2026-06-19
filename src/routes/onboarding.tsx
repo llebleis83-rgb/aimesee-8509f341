@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Eye, ScanLine, BarChart3, Check, User, Building2, Leaf, Users, Landmark, AlertTriangle, ScanSearch, Search } from "lucide-react";
+import { Eye, ScanLine, BarChart3, Check, Shield, Building2, Leaf, Users, Landmark, AlertTriangle, ScanSearch, Search } from "lucide-react";
 
 export const Route = createFileRoute("/onboarding")({
   component: Onboarding,
@@ -188,37 +188,17 @@ function Onboarding() {
       {
         icon: <ScanLine size={22} color="#5B8C6A" strokeWidth={1.75} />,
         label: "Scanner",
-        desc: (
-          <>
-            Pointe ta caméra sur un code-barres ou recherche directement{" "}
-            <span
-              className="inline-flex items-center"
-              style={{
-                background: "#F4F7F4",
-                borderRadius: "8px",
-                padding: "2px 6px",
-                gap: "4px",
-                fontSize: "11px",
-                fontWeight: 500,
-                color: "#3A503A",
-                verticalAlign: "middle",
-              }}
-            >
-              <Search size={11} color="#5B8C6A" strokeWidth={1.75} />
-              Explorer
-            </span>
-          </>
-        ),
+        desc: "Scanne un code barres ou cherche dans Explorer",
       },
       {
         icon: <BarChart3 size={22} color="#5B8C6A" strokeWidth={1.75} />,
         label: "S'informer",
-        desc: "Accède aux faits sourcés et aux actualités sur les produits et les marques",
+        desc: "Faits sourcés et actualités vérifiées",
       },
       {
         icon: <Check size={22} color="#5B8C6A" strokeWidth={1.75} />,
         label: "Mieux consommer",
-        desc: "Fais des choix éclairés en accord avec tes valeurs",
+        desc: "Fais des choix qui te ressemblent",
       },
     ];
     return (
@@ -247,7 +227,7 @@ function Onboarding() {
               marginTop: "24px",
             }}
           >
-            Comment ça marche
+            Ce que tu vas découvrir
           </div>
           <div
             className="flex flex-col w-full"
@@ -339,9 +319,9 @@ function Onboarding() {
 
   return (
     <Shell>
+      <div style={{ flex: 1 }} />
       <div
-        className="flex flex-col items-center justify-center"
-        style={{ flex: 1 }}
+        className="flex flex-col items-center"
       >
         <div
           className="flex items-center justify-center"
@@ -352,7 +332,7 @@ function Onboarding() {
             borderRadius: "24px",
           }}
         >
-          <User size={40} color="#5B8C6A" strokeWidth={1.75} />
+          <Shield size={40} color="#5B8C6A" strokeWidth={1.75} />
         </div>
         <div
           style={{
@@ -376,50 +356,50 @@ function Onboarding() {
             lineHeight: 1.5,
           }}
         >
-          Crée un compte pour sauvegarder tes favoris et retrouver ton
-          historique.
-        </div>
-        <div
-          className="flex flex-col w-full"
-          style={{ marginTop: "40px", gap: "12px" }}
-        >
-          <PrimaryButton label="Créer un compte" onClick={finish} />
-          <button
-            onClick={finish}
-            style={{
-              width: "100%",
-              height: "52px",
-              background: "#F4F7F4",
-              borderRadius: "14px",
-              fontFamily: FONT,
-              fontSize: "14px",
-              fontWeight: 500,
-              color: "#3A503A",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            Se connecter
-          </button>
-          <button
-            onClick={finish}
-            style={{
-              background: "transparent",
-              border: "none",
-              fontFamily: FONT,
-              fontSize: "13px",
-              fontWeight: 400,
-              color: "#7A9A7A",
-              textAlign: "center",
-              padding: "12px",
-              cursor: "pointer",
-            }}
-          >
-            Continuer sans compte
-          </button>
+          Tes favoris, ton historique, tes choix, sauvegardés.
         </div>
       </div>
+      <div style={{ flex: 2 }} />
       <Dots active={2} />
+      <div
+        className="flex flex-col w-full"
+        style={{ gap: "12px" }}
+      >
+        <PrimaryButton label="Créer un compte" onClick={finish} />
+        <button
+          onClick={finish}
+          style={{
+            width: "100%",
+            height: "52px",
+            background: "#F4F7F4",
+            borderRadius: "14px",
+            fontFamily: FONT,
+            fontSize: "14px",
+            fontWeight: 500,
+            color: "#3A503A",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          Se connecter
+        </button>
+        <button
+          onClick={finish}
+          style={{
+            background: "transparent",
+            border: "none",
+            fontFamily: FONT,
+            fontSize: "13px",
+            fontWeight: 400,
+            color: "#7A9A7A",
+            textAlign: "center",
+            padding: "12px",
+            cursor: "pointer",
+          }}
+        >
+          Continuer sans compte
+        </button>
+      </div>
     </Shell>
   );
 }
