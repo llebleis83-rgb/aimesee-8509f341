@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { getProductsByBrandId } from "@/lib/mockProducts";
 import { getBrandById } from "@/lib/mockBrands";
+import { ProductThumb } from "@/components/ProductThumb";
 
 export const Route = createFileRoute("/_app/marque/$brandId")({
   component: BrandResult,
