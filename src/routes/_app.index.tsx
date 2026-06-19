@@ -13,7 +13,7 @@ function Scanner() {
   const handleBarcode = (barcode: string) => {
     const p = getProductByBarcode(barcode);
     if (p) navigate({ to: "/produit/$id", params: { id: p.id } });
-    else navigate({ to: "/not-found" });
+    else navigate({ to: "/produit-non-trouve" });
   };
   // Expose for non-UI callers without changing layout.
   if (typeof window !== "undefined") {
