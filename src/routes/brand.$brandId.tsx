@@ -281,7 +281,7 @@ function BrandPage() {
   const { brandId } = Route.useParams();
   const brand = getBrandById(brandId);
   const products = getProductsByBrandId(brandId);
-  const [actionnariatOpen, setActionnariatOpen] = useState(true);
+  const [open, setOpen] = useState<Record<string, boolean>>({ actionnariat: true });
 
   if (!brand) {
     return (
@@ -300,6 +300,56 @@ function BrandPage() {
       </div>
     );
   }
+
+  const toggle = (sid: string) => setOpen((o) => ({ ...o, [sid]: !o[sid] }));
+
+  const sections: { id: string; label: string; Icon: LucideIcon; content: ReactNode }[] = [
+    {
+      id: "actionnariat",
+      label: "Actionnariat",
+      Icon: Landmark,
+      content: brand.sections.actionnariat.children?.length ? (
+        <ActionnariatBlock root={brand.sections.actionnariat} />
+      ) : (
+        <EmptyState />
+      ),
+    },
+    {
+      id: "politique",
+      label: "Politique & Lobbying",
+      Icon: Landmark,
+      content: <FactsList facts={brand.sections.politique.facts} />,
+    },
+    {
+      id: "ecologie",
+      label: "Écologie",
+      Icon: Leaf,
+      content: (
+        <>
+          <FactsList facts={brand.sections.ecologie.facts} />
+          <SubLabel>Matières premières</SubLabel>
+          <FactsList facts={brand.sections.ecologie.matieres_premieres?.facts ?? []} />
+        </>
+      ),
+    },
+    {
+      id: "fabrication",
+      label: "Fabrication",
+      Icon: MapPin,
+      content: (
+        <>
+          <FactsList facts={brand.sections.fabrication.facts} />
+          {brand.sections.fabrication.conditions_travail &&
+            brand.sections.fabrication.conditions_travail.facts.length > 0 && (
+              <>
+                <SubLabel>Conditions de travail</SubLabel>
+                <FactsList facts={brand.sections.fabrication.conditions_travail.facts} />
+              </>
+            )}
+        </>
+      ),
+    },
+  ];
 
   return (
     <div
@@ -397,64 +447,68 @@ function BrandPage() {
           </div>
         </div>
 
-        {/* Actionnariat section */}
-        <div>
-          <button
-            onClick={() => setActionnariatOpen((v) => !v)}
-            style={{
-              width: "100%",
-              display: "flex",
-              alignItems: "center",
-              gap: "12px",
-              padding: "14px 16px",
-              background: actionnariatOpen ? C.bg : "white",
-              borderTop: `0.5px solid ${C.border}`,
-              borderBottom: actionnariatOpen ? "none" : `0.5px solid ${C.border}`,
-              border: "none",
-              borderBottomWidth: actionnariatOpen ? 0 : 0,
-              cursor: "pointer",
-              fontFamily: FONT,
-              textAlign: "left",
-            }}
-          >
-            <div
-              style={{
-                width: "28px",
-                height: "28px",
-                borderRadius: "8px",
-                background: C.lightGreen,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
-              }}
-            >
-              <Landmark size={16} color={C.primary} strokeWidth={1.75} />
+        {/* Accordion sections */}
+        {sections.map(({ id: sid, label, Icon, content }) => {
+          const isOpen = !!open[sid];
+          return (
+            <div key={sid}>
+              <button
+                onClick={() => toggle(sid)}
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "12px",
+                  padding: "14px 16px",
+                  background: isOpen ? C.bg : "white",
+                  borderTop: `0.5px solid ${C.border}`,
+                  borderBottom: isOpen ? "none" : `0.5px solid ${C.border}`,
+                  border: "none",
+                  cursor: "pointer",
+                  fontFamily: FONT,
+                  textAlign: "left",
+                }}
+              >
+                <div
+                  style={{
+                    width: "28px",
+                    height: "28px",
+                    borderRadius: "8px",
+                    background: C.lightGreen,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                  }}
+                >
+                  <Icon size={16} color={C.primary} strokeWidth={1.75} />
+                </div>
+                <span style={{ flex: 1, fontSize: "14px", fontWeight: 500, color: C.dark }}>
+                  {label}
+                </span>
+                {isOpen ? (
+                  <ChevronUp size={16} color={C.muted} strokeWidth={1.75} />
+                ) : (
+                  <ChevronDown size={16} color={C.muted} strokeWidth={1.75} />
+                )}
+              </button>
+              {isOpen && (
+                <div
+                  style={{
+                    background: C.bg,
+                    padding: "8px 16px 16px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "8px",
+                    borderBottom: `0.5px solid ${C.border}`,
+                  }}
+                >
+                  {content}
+                </div>
+              )}
             </div>
-            <span style={{ flex: 1, fontSize: "14px", fontWeight: 500, color: C.dark }}>
-              Actionnariat
-            </span>
-            {actionnariatOpen ? (
-              <ChevronUp size={16} color={C.muted} strokeWidth={1.75} />
-            ) : (
-              <ChevronDown size={16} color={C.muted} strokeWidth={1.75} />
-            )}
-          </button>
-          {actionnariatOpen && (
-            <div
-              style={{
-                background: C.bg,
-                padding: "8px 16px 16px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "8px",
-                borderBottom: `0.5px solid ${C.border}`,
-              }}
-            >
-              <ActionnariatBlock root={brand.sections.actionnariat} />
-            </div>
-          )}
-        </div>
+          );
+        })}
 
         {/* Products section */}
         <div
