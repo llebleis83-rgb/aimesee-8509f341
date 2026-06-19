@@ -110,7 +110,7 @@ function CategoryResult() {
           {categoryName}
         </h1>
         <p style={{ fontSize: "13px", fontWeight: 400, color: "#7A9A7A", marginTop: "2px" }}>
-          {allProducts.length} produit{allProducts.length > 1 ? "s" : ""}
+          {allBrandGroups.length} marque{allBrandGroups.length > 1 ? "s" : ""}
         </p>
 
         {/* Search bar */}
