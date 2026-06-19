@@ -246,7 +246,7 @@ function BrandPage() {
           }}
         >
           <button
-            onClick={() => navigate({ to: ".." as never })}
+            onClick={() => window.history.back()}
             style={{
               display: "flex",
               alignItems: "center",
