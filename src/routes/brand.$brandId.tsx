@@ -70,6 +70,93 @@ function SourceLine({ children }: { children: ReactNode }) {
   );
 }
 
+function EmptyState() {
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: "6px",
+        padding: "16px 0",
+      }}
+    >
+      <Clock size={20} color={C.faint} strokeWidth={1.75} />
+      <span style={{ fontFamily: FONT, fontSize: "13px", fontWeight: 400, color: C.faint }}>
+        Données en cours de collecte
+      </span>
+      <span style={{ fontFamily: FONT, fontSize: "12px", fontWeight: 400, color: C.faint }}>
+        Cette section sera disponible prochainement.
+      </span>
+    </div>
+  );
+}
+
+function FactRow({ fact, last }: { fact: ProductFact; last?: boolean }) {
+  return (
+    <div style={{ marginBottom: last ? 0 : "20px" }}>
+      <div style={{ display: "flex", gap: "10px" }}>
+        <div
+          style={{
+            width: "5px",
+            height: "5px",
+            borderRadius: "50%",
+            background: C.border,
+            marginTop: "7px",
+            flexShrink: 0,
+          }}
+        />
+        <p
+          style={{
+            fontFamily: FONT,
+            fontSize: "13px",
+            fontWeight: 400,
+            color: "#3A503A",
+            lineHeight: 1.7,
+            margin: 0,
+          }}
+        >
+          {fact.text}
+        </p>
+      </div>
+      <div style={{ marginTop: "6px" }}>
+        <SourceLine>
+          {fact.source_name} · {fact.source_year}
+        </SourceLine>
+      </div>
+    </div>
+  );
+}
+
+function FactsList({ facts }: { facts: ProductFact[] }) {
+  if (facts.length === 0) return <EmptyState />;
+  return (
+    <>
+      {facts.map((f, i, arr) => (
+        <FactRow key={i} fact={f} last={i === arr.length - 1} />
+      ))}
+    </>
+  );
+}
+
+function SubLabel({ children }: { children: ReactNode }) {
+  return (
+    <div
+      style={{
+        fontFamily: FONT,
+        fontSize: "12px",
+        fontWeight: 400,
+        color: C.faint,
+        textTransform: "uppercase",
+        letterSpacing: "0.05em",
+        margin: "18px 0 10px",
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
 function TreeRow({
   indent,
   bgGreen,
