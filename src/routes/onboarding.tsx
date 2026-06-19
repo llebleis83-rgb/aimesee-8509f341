@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Eye, ScanLine, BarChart3, Check, User } from "lucide-react";
+import { Eye, ScanLine, BarChart3, Check, User, Building2, Leaf, Users, Landmark, AlertTriangle } from "lucide-react";
 
 export const Route = createFileRoute("/onboarding")({
   component: Onboarding,
@@ -133,7 +133,7 @@ function Onboarding() {
           </div>
           <div
             style={{
-              fontSize: "14px",
+              fontSize: "13px",
               fontWeight: 400,
               color: "#7A9A7A",
               textAlign: "center",
@@ -142,7 +142,35 @@ function Onboarding() {
               lineHeight: 1.5,
             }}
           >
-            aimesee te montre les faits sourcés sur les produits que tu scannes et les marques que tu consommes : actionnariat, écologie, conditions de travail, dons politiques, scandales.
+            aimesee te montre les faits sourcés sur les produits et les marques :
+          </div>
+          <div
+            className="flex flex-wrap justify-center"
+            style={{ marginTop: "12px", gap: "8px", maxWidth: "300px" }}
+          >
+            {[
+              { icon: <Building2 size={14} color="#5B8C6A" strokeWidth={1.75} />, label: "Actionnariat" },
+              { icon: <Leaf size={14} color="#5B8C6A" strokeWidth={1.75} />, label: "Écologie" },
+              { icon: <Users size={14} color="#5B8C6A" strokeWidth={1.75} />, label: "Conditions de travail" },
+              { icon: <Landmark size={14} color="#5B8C6A" strokeWidth={1.75} />, label: "Dons politiques" },
+              { icon: <AlertTriangle size={14} color="#5B8C6A" strokeWidth={1.75} />, label: "Scandales" },
+            ].map((chip) => (
+              <div
+                key={chip.label}
+                className="flex items-center"
+                style={{
+                  background: "#EAF3DE",
+                  borderRadius: "20px",
+                  padding: "6px 12px",
+                  gap: "6px",
+                }}
+              >
+                {chip.icon}
+                <span style={{ fontSize: "13px", fontWeight: 500, color: "#3A503A" }}>
+                  {chip.label}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
         <Dots active={0} />
