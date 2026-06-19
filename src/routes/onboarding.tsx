@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Eye, ScanLine, BarChart3, Check, User, Building2, Leaf, Users, Landmark, AlertTriangle } from "lucide-react";
+import { Eye, ScanLine, BarChart3, Check, User, Building2, Leaf, Users, Landmark, AlertTriangle, ScanSearch } from "lucide-react";
 
 export const Route = createFileRoute("/onboarding")({
   component: Onboarding,
@@ -188,37 +188,65 @@ function Onboarding() {
       {
         icon: <ScanLine size={22} color="#5B8C6A" strokeWidth={1.75} />,
         label: "Scanner",
-        desc: "Pointe ta caméra sur n'importe quel code-barres",
+        desc: "Pointe ta caméra sur un code-barres ou recherche directement via l'onglet Explorer",
       },
       {
         icon: <BarChart3 size={22} color="#5B8C6A" strokeWidth={1.75} />,
-        label: "Découvrir",
-        desc: "Accède aux faits sourcés et datés sur le produit",
+        label: "S'informer",
+        desc: "Accède aux faits sourcés et aux actualités sur les produits et les marques",
       },
       {
         icon: <Check size={22} color="#5B8C6A" strokeWidth={1.75} />,
-        label: "Décider",
-        desc: "Tire tes propres conclusions. Aucun jugement.",
+        label: "Mieux consommer",
+        desc: "Fais des choix éclairés en accord avec tes valeurs",
       },
     ];
     return (
       <Shell>
+        <button
+          onClick={() => setStep(0)}
+          className="self-start"
+          style={{
+            fontSize: "14px",
+            fontWeight: 400,
+            color: "#7A9A7A",
+            background: "transparent",
+            border: "none",
+            padding: 0,
+            cursor: "pointer",
+            marginBottom: "24px",
+          }}
+        >
+          ← Retour
+        </button>
         <div
-          className="flex flex-col"
+          className="flex flex-col items-center"
           style={{ flex: 1, justifyContent: "center" }}
         >
+          <div
+            className="flex items-center justify-center"
+            style={{
+              width: "88px",
+              height: "88px",
+              background: "#EAF3DE",
+              borderRadius: "24px",
+            }}
+          >
+            <ScanSearch size={40} color="#5B8C6A" strokeWidth={1.75} />
+          </div>
           <div
             style={{
               fontSize: "22px",
               fontWeight: 500,
               color: "#1A2E1A",
               textAlign: "center",
+              marginTop: "24px",
             }}
           >
             Comment ça marche
           </div>
           <div
-            className="flex flex-col"
+            className="flex flex-col w-full"
             style={{ marginTop: "32px", gap: "16px" }}
           >
             {rows.map((r) => (
