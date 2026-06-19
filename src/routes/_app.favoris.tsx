@@ -93,21 +93,14 @@ function Favoris() {
                     className="flex items-center flex-1"
                     style={{ gap: "14px", minWidth: 0, textDecoration: "none" }}
                   >
-                    {p.thumbnail_url ? (
-                      <img
-                        src={p.thumbnail_url}
-                        alt={p.name}
-                        className="shrink-0"
-                        style={{ width: "44px", height: "44px", borderRadius: "10px", objectFit: "cover" }}
-                      />
-                    ) : (
-                      <div
-                        className="flex items-center justify-center shrink-0"
-                        style={{ width: "44px", height: "44px", background: "#EAF3DE", borderRadius: "10px" }}
-                      >
-                        <Icon size={20} color="#5B8C6A" strokeWidth={1.5} />
-                      </div>
-                    )}
+                    <ProductThumb
+                      src={p.thumbnail_url}
+                      alt={p.name}
+                      Icon={Icon}
+                      width={44}
+                      height={44}
+                      radius={10}
+                    />
                     <div className="flex-1 min-w-0">
                       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
                         <div style={{ fontSize: "15px", fontWeight: 500, color: "#1A2E1A" }}>{p.name}</div>
