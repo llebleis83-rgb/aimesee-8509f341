@@ -283,6 +283,19 @@ function ProductSheet() {
     return () => clearTimeout(t);
   }, [id, product, navigate]);
 
+  useEffect(() => {
+    if (loading) return;
+    const target = heroRef.current;
+    const root = scrollRef.current;
+    if (!target || !root) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setHeroVisible(entry.isIntersecting),
+      { root, threshold: 0.01 },
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [loading]);
+
   if (loading || !product) {
     return (
       <div
