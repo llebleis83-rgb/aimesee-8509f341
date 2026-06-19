@@ -211,11 +211,7 @@ function CategoryResult() {
               const country = g.brand?.country ?? "";
               const count = g.products.length;
               const handleClick = () => {
-                if (count === 1) {
-                  navigate({ to: "/produit/$id", params: { id: g.products[0].id } });
-                } else {
-                  navigate({ to: "/brand/$brandId", params: { brandId: g.brandId } });
-                }
+                navigate({ to: "/brand/$brandId", params: { brandId: g.brandId } });
               };
               return (
                 <button
