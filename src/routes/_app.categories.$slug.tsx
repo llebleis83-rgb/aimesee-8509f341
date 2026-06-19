@@ -30,14 +30,7 @@ const CATEGORY_ICON: Record<string, React.ElementType> = {
   "Mode & Textile": Shirt,
 };
 
-const ROW_ICON: Record<string, React.ElementType> = {
-  alimentation: Cookie,
-  boissons: Droplets,
-  "hygiene-soins": Droplets,
-  cosmetiques: Sparkles,
-  "entretien-maison": Sofa,
-  "mode-textile": Shirt,
-};
+type BrandGroup = { brand: Brand | undefined; brandId: string; products: Product[] };
 
 function CategoryResult() {
   const { slug } = Route.useParams();
@@ -49,13 +42,28 @@ function CategoryResult() {
 
   const allProducts = useMemo(() => getProductsByCategory(slug), [slug]);
 
-  const filtered = useMemo(() => {
+  const allBrandGroups = useMemo<BrandGroup[]>(() => {
+    const map = new Map<string, Product[]>();
+    for (const p of allProducts) {
+      const arr = map.get(p.brand_id);
+      if (arr) arr.push(p);
+      else map.set(p.brand_id, [p]);
+    }
+    return Array.from(map.entries()).map(([brandId, products]) => ({
+      brandId,
+      brand: getBrandById(brandId),
+      products,
+    }));
+  }, [allProducts]);
+
+  const filtered = useMemo<BrandGroup[]>(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return allProducts;
-    return allProducts.filter(
-      (p) => p.name.toLowerCase().includes(q) || (getBrandById(p.brand_id)?.name.toLowerCase().includes(q) ?? false),
-    );
-  }, [allProducts, query]);
+    if (!q) return allBrandGroups;
+    return allBrandGroups.filter((g) => {
+      if (g.brand?.name.toLowerCase().includes(q)) return true;
+      return g.products.some((p) => p.name.toLowerCase().includes(q));
+    });
+  }, [allBrandGroups, query]);
 
   const isEmpty = filtered.length === 0;
 
