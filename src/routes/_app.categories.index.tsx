@@ -214,7 +214,7 @@ function Categories() {
           type="text"
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Rechercher un produit ou une catégorie..."
+          placeholder="Rechercher un produit ou une marque..."
           style={{
             flex: 1,
             background: "transparent",
