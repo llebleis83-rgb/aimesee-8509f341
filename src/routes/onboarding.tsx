@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Eye, ScanLine, BarChart3, Check, User, Building2, Leaf, Users, Landmark, AlertTriangle, ScanSearch } from "lucide-react";
+import { Eye, ScanLine, BarChart3, Check, User, Building2, Leaf, Users, Landmark, AlertTriangle, ScanSearch, Search } from "lucide-react";
 
 export const Route = createFileRoute("/onboarding")({
   component: Onboarding,
