@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Eye, ScanLine, BarChart3, Check, Shield, Building2, Leaf, Users, Landmark, AlertTriangle, ScanSearch, Search, Heart, History, Bell } from "lucide-react";
+import { Eye, ScanLine, BarChart3, Check, Shield, Building2, Leaf, Landmark, Hammer, ScanSearch, Search, Heart, History, Bell } from "lucide-react";
 
 export const Route = createFileRoute("/onboarding")({
   component: Onboarding,
@@ -150,10 +150,9 @@ function Onboarding() {
           >
             {[
               { icon: <Building2 size={14} color="#5B8C6A" strokeWidth={1.75} />, label: "Actionnariat" },
+              { icon: <Landmark size={14} color="#5B8C6A" strokeWidth={1.75} />, label: "Politique & Lobbying" },
               { icon: <Leaf size={14} color="#5B8C6A" strokeWidth={1.75} />, label: "Écologie" },
-              { icon: <Users size={14} color="#5B8C6A" strokeWidth={1.75} />, label: "Conditions de travail" },
-              { icon: <Landmark size={14} color="#5B8C6A" strokeWidth={1.75} />, label: "Dons politiques" },
-              { icon: <AlertTriangle size={14} color="#5B8C6A" strokeWidth={1.75} />, label: "Scandales" },
+              { icon: <Hammer size={14} color="#5B8C6A" strokeWidth={1.75} />, label: "Fabrication" },
             ].map((chip) => (
               <div
                 key={chip.label}
