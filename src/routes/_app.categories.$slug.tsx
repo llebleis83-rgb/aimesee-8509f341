@@ -12,7 +12,7 @@ import {
   Sofa,
   Utensils,
   Building2,
-  Cup,
+  GlassWater,
 } from "lucide-react";
 import { getProductsByCategory } from "@/lib/mockProducts";
 import { getBrandById } from "@/lib/mockBrands";
