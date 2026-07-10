@@ -281,7 +281,7 @@ function BrandPage() {
   const { brandId } = Route.useParams();
   const brand = getBrandById(brandId);
   const products = getProductsByBrandId(brandId);
-  const [open, setOpen] = useState<Record<string, boolean>>({ actionnariat: true });
+  
 
   if (!brand) {
     return (
@@ -301,55 +301,17 @@ function BrandPage() {
     );
   }
 
-  const toggle = (sid: string) => setOpen((o) => ({ ...o, [sid]: !o[sid] }));
-
-  const sections: { id: string; label: string; Icon: LucideIcon; content: ReactNode }[] = [
-    {
-      id: "actionnariat",
-      label: "Actionnariat",
-      Icon: Landmark,
-      content: brand.sections.actionnariat.children?.length ? (
-        <ActionnariatBlock root={brand.sections.actionnariat} />
-      ) : (
-        <EmptyState />
-      ),
-    },
-    {
-      id: "politique",
-      label: "Politique & Lobbying",
-      Icon: Landmark,
-      content: <FactsList facts={brand.sections.politique.facts} />,
-    },
-    {
-      id: "ecologie",
-      label: "Écologie",
-      Icon: Leaf,
-      content: (
-        <>
-          <FactsList facts={brand.sections.ecologie.facts} />
-          <SubLabel>Matières premières</SubLabel>
-          <FactsList facts={brand.sections.ecologie.matieres_premieres?.facts ?? []} />
-        </>
-      ),
-    },
-    {
-      id: "fabrication",
-      label: "Fabrication",
-      Icon: MapPin,
-      content: (
-        <>
-          <FactsList facts={brand.sections.fabrication.facts} />
-          {brand.sections.fabrication.conditions_travail &&
-            brand.sections.fabrication.conditions_travail.facts.length > 0 && (
-              <>
-                <SubLabel>Conditions de travail</SubLabel>
-                <FactsList facts={brand.sections.fabrication.conditions_travail.facts} />
-              </>
-            )}
-        </>
-      ),
-    },
+  const stats = [
+    { value: "27,6Md€", label: "Chiffre d'affaires 2023" },
+    { value: "99 000", label: "Employés dans le monde" },
+    { value: "120", label: "Pays de présence" },
   ];
+  const shareholders = [
+    { name: "BlackRock", detail: "États-Unis", percentage: "8,2%", faint: false },
+    { name: "Artisan Partners", detail: "États-Unis", percentage: "5,1%", faint: false },
+    { name: "Flottant public", detail: "Bourse de Paris", percentage: "86,7%", faint: true },
+  ];
+
 
   return (
     <div
