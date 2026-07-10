@@ -409,68 +409,163 @@ function BrandPage() {
           </div>
         </div>
 
-        {/* Accordion sections */}
-        {sections.map(({ id: sid, label, Icon, content }) => {
-          const isOpen = !!open[sid];
-          return (
-            <div key={sid}>
-              <button
-                onClick={() => toggle(sid)}
+        {/* Key stats */}
+        <div
+          style={{
+            display: "flex",
+            gap: "8px",
+            padding: "14px",
+            borderTop: `0.5px solid ${C.border}`,
+            borderBottom: `0.5px solid ${C.border}`,
+          }}
+        >
+          {stats.map((s) => (
+            <div
+              key={s.label}
+              style={{
+                flex: 1,
+                background: C.bg,
+                border: `0.5px solid ${C.border}`,
+                borderRadius: "12px",
+                padding: "10px 8px",
+                textAlign: "center",
+              }}
+            >
+              <div style={{ fontSize: "15px", fontWeight: 500, color: C.dark }}>{s.value}</div>
+              <div
                 style={{
-                  width: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "12px",
-                  padding: "14px 16px",
-                  background: isOpen ? C.bg : "white",
-                  borderTop: `0.5px solid ${C.border}`,
-                  borderBottom: isOpen ? "none" : `0.5px solid ${C.border}`,
-                  border: "none",
-                  cursor: "pointer",
-                  fontFamily: FONT,
-                  textAlign: "left",
+                  fontSize: "9px",
+                  fontWeight: 400,
+                  color: C.muted,
+                  marginTop: "3px",
+                  lineHeight: 1.4,
                 }}
+              >
+                {s.label}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Ownership tree */}
+        <div
+          style={{
+            fontSize: "10px",
+            fontWeight: 500,
+            color: C.faint,
+            textTransform: "uppercase",
+            letterSpacing: "0.05em",
+            padding: "14px 14px 10px",
+          }}
+        >
+          Structure actionnariale
+        </div>
+        <div style={{ padding: "0 14px 4px" }}>
+          {/* Root */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              background: C.lightGreen,
+              border: `0.5px solid ${C.primary}`,
+              borderRadius: "10px",
+              padding: "8px 12px",
+            }}
+          >
+            <div
+              style={{
+                width: "28px",
+                height: "28px",
+                borderRadius: "7px",
+                background: C.primary,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+              }}
+            >
+              <Building2 size={13} color="#FFFFFF" strokeWidth={2} />
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: "12px", fontWeight: 500, color: C.dark }}>
+                {brand.name} SA
+              </div>
+              <div style={{ fontSize: "10px", color: C.muted }}>Siège social · Paris, France</div>
+            </div>
+            <div style={{ fontSize: "12px", fontWeight: 500, color: C.primary }}>CAC 40</div>
+          </div>
+
+          {/* Vertical trunk */}
+          <div style={{ width: "2px", height: "18px", background: C.border, margin: "0 auto" }} />
+
+          {/* Horizontal spanning line */}
+          <div
+            style={{
+              height: "1px",
+              background: C.border,
+              marginLeft: `${100 / (shareholders.length * 2)}%`,
+              marginRight: `${100 / (shareholders.length * 2)}%`,
+            }}
+          />
+
+          {/* Children */}
+          <div style={{ display: "flex", gap: "8px" }}>
+            {shareholders.map((s) => (
+              <div
+                key={s.name}
+                style={{ flex: 1, display: "flex", flexDirection: "column" }}
               >
                 <div
                   style={{
-                    width: "28px",
-                    height: "28px",
-                    borderRadius: "8px",
-                    background: C.lightGreen,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexShrink: 0,
+                    width: "2px",
+                    height: "14px",
+                    background: C.border,
+                    margin: "0 auto",
                   }}
-                >
-                  <Icon size={16} color={C.primary} strokeWidth={1.75} />
-                </div>
-                <span style={{ flex: 1, fontSize: "14px", fontWeight: 500, color: C.dark }}>
-                  {label}
-                </span>
-                {isOpen ? (
-                  <ChevronUp size={16} color={C.muted} strokeWidth={1.75} />
-                ) : (
-                  <ChevronDown size={16} color={C.muted} strokeWidth={1.75} />
-                )}
-              </button>
-              {isOpen && (
+                />
                 <div
                   style={{
-                    background: C.bg,
-                    padding: "8px 16px 16px",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "8px",
-                    borderBottom: `0.5px solid ${C.border}`,
+                    background: s.faint ? C.bg : "#FFFFFF",
+                    border: `0.5px solid ${s.faint ? C.border : C.primary}`,
+                    borderRadius: "10px",
+                    padding: "7px 10px",
                   }}
                 >
-                  {content}
+                  <div style={{ fontSize: "11px", fontWeight: 500, color: C.dark }}>{s.name}</div>
+                  <div style={{ fontSize: "9px", color: C.muted, marginTop: "2px" }}>
+                    {s.detail}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "11px",
+                      fontWeight: 500,
+                      color: C.primary,
+                      marginTop: "3px",
+                    }}
+                  >
+                    {s.percentage}
+                  </div>
                 </div>
-              )}
-            </div>
-          );
-        })}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "4px",
+            fontFamily: FONT,
+            fontSize: "10px",
+            color: C.faint,
+            padding: "10px 14px 16px",
+          }}
+        >
+          <ExternalLink size={10} strokeWidth={1.75} />
+          <span>SEC Filings · Euronext · 2024</span>
+        </div>
+
 
         {/* Products section */}
         <div
