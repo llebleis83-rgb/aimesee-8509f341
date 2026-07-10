@@ -12,10 +12,12 @@ import {
   Sofa,
   Utensils,
   Building2,
+  Cup,
 } from "lucide-react";
 import { getProductsByCategory } from "@/lib/mockProducts";
 import { getBrandById } from "@/lib/mockBrands";
 import { CATEGORY_LABEL, type Brand, type Product } from "@/lib/types";
+import type { ElementType } from "react";
 
 export const Route = createFileRoute("/_app/categories/$slug")({
   component: CategoryResult,
@@ -24,13 +26,36 @@ export const Route = createFileRoute("/_app/categories/$slug")({
 const CATEGORY_ICON: Record<string, React.ElementType> = {
   Alimentation: Utensils,
   Boissons: CupSoda,
+  "Nourriture & Boissons": Utensils,
   "Hygiène & Soins": Droplets,
   Cosmétiques: Sparkles,
   "Entretien maison": Sofa,
   "Mode & Textile": Shirt,
 };
 
-type BrandGroup = { brand: Brand | undefined; brandId: string; products: Product[] };
+type BrandGroup = {
+  brand: Brand | undefined;
+  brandId: string;
+  products: Product[];
+  subtitle?: string;
+  Icon?: ElementType;
+};
+
+// Curated brand list for the "Nourriture & Boissons" category screen.
+const NOURRITURE_BOISSONS_BRANDS: {
+  id: string;
+  name: string;
+  subtitle: string;
+  Icon: ElementType;
+}[] = [
+  { id: "danone", name: "Danone", subtitle: "Danone SA · France", Icon: Building2 },
+  { id: "ferrero", name: "Ferrero", subtitle: "Ferrero SpA · Italie", Icon: Building2 },
+  { id: "nestle", name: "Nestlé", subtitle: "Nestlé SA · Suisse", Icon: Building2 },
+  { id: "coca-cola-company", name: "Coca-Cola", subtitle: "The Coca-Cola Co. · USA", Icon: Cup },
+  { id: "unilever", name: "Unilever", subtitle: "Unilever PLC · Royaume-Uni", Icon: Building2 },
+  { id: "pepsico", name: "Pepsico", subtitle: "PepsiCo Inc. · USA", Icon: Cup },
+  { id: "lactalis", name: "Lactalis", subtitle: "Lactalis · France", Icon: Building2 },
+];
 
 function CategoryResult() {
   const { slug } = Route.useParams();
@@ -39,10 +64,20 @@ function CategoryResult() {
 
   const categoryName = CATEGORY_LABEL[slug] || slug;
   const FallbackIcon = CATEGORY_ICON[categoryName] || PackageSearch;
+  const isNourritureBoissons = slug === "nourriture-boissons";
 
   const allProducts = useMemo(() => getProductsByCategory(slug), [slug]);
 
   const allBrandGroups = useMemo<BrandGroup[]>(() => {
+    if (isNourritureBoissons) {
+      return NOURRITURE_BOISSONS_BRANDS.map((b) => ({
+        brandId: b.id,
+        brand: getBrandById(b.id),
+        products: [],
+        subtitle: b.subtitle,
+        Icon: b.Icon,
+      }));
+    }
     const map = new Map<string, Product[]>();
     for (const p of allProducts) {
       const arr = map.get(p.brand_id);
@@ -54,16 +89,18 @@ function CategoryResult() {
       brand: getBrandById(brandId),
       products,
     }));
-  }, [allProducts]);
+  }, [allProducts, isNourritureBoissons]);
 
   const filtered = useMemo<BrandGroup[]>(() => {
     const q = query.trim().toLowerCase();
     if (!q) return allBrandGroups;
     return allBrandGroups.filter((g) => {
-      if (g.brand?.name.toLowerCase().includes(q)) return true;
+      const name = g.brand?.name ?? "";
+      if (name.toLowerCase().includes(q)) return true;
       return g.products.some((p) => p.name.toLowerCase().includes(q));
     });
   }, [allBrandGroups, query]);
+
 
   const isEmpty = filtered.length === 0;
 
