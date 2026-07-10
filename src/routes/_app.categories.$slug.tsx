@@ -51,9 +51,9 @@ const NOURRITURE_BOISSONS_BRANDS: {
   { id: "danone", name: "Danone", subtitle: "Danone SA · France", Icon: Building2 },
   { id: "ferrero", name: "Ferrero", subtitle: "Ferrero SpA · Italie", Icon: Building2 },
   { id: "nestle", name: "Nestlé", subtitle: "Nestlé SA · Suisse", Icon: Building2 },
-  { id: "coca-cola-company", name: "Coca-Cola", subtitle: "The Coca-Cola Co. · USA", Icon: Cup },
+  { id: "coca-cola-company", name: "Coca-Cola", subtitle: "The Coca-Cola Co. · USA", Icon: GlassWater },
   { id: "unilever", name: "Unilever", subtitle: "Unilever PLC · Royaume-Uni", Icon: Building2 },
-  { id: "pepsico", name: "Pepsico", subtitle: "PepsiCo Inc. · USA", Icon: Cup },
+  { id: "pepsico", name: "Pepsico", subtitle: "PepsiCo Inc. · USA", Icon: GlassWater },
   { id: "lactalis", name: "Lactalis", subtitle: "Lactalis · France", Icon: Building2 },
 ];
 
