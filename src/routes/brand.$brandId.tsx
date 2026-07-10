@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { type ReactNode } from "react";
+import { type ReactNode, type ElementType } from "react";
 import {
   ArrowLeft,
   Building2,
@@ -8,11 +8,15 @@ import {
   ExternalLink,
   Cookie,
   Droplets,
+  Droplet,
+  Milk,
+  Baby,
   Shirt,
   CupSoda,
   Sparkles,
   Sofa,
 } from "lucide-react";
+
 import { getBrandById } from "@/lib/mockBrands";
 import { getProductsByBrandId } from "@/lib/mockProducts";
 import { CATEGORY_LABEL, type ProductFact, type ShareholderNode } from "@/lib/types";
@@ -35,7 +39,7 @@ const C = {
 
 const FONT = "'DM Sans', system-ui, sans-serif";
 
-const ROW_ICON: Record<string, React.ElementType> = {
+const ROW_ICON: Record<string, ElementType> = {
   alimentation: Cookie,
   boissons: CupSoda,
   "hygiene-soins": Droplets,
@@ -43,6 +47,16 @@ const ROW_ICON: Record<string, React.ElementType> = {
   "entretien-maison": Sofa,
   "mode-textile": Shirt,
 };
+
+// Per-product icon overrides (subsidiary-style icons).
+const PRODUCT_ICON: Record<string, ElementType> = {
+  evian: Droplet,
+  volvic: Droplet,
+  activia: Milk,
+  bledina: Baby,
+  aptamil: Baby,
+};
+
 
 function SourceLine({ children }: { children: ReactNode }) {
   return (
@@ -409,7 +423,7 @@ function BrandPage() {
           style={{
             display: "flex",
             gap: "8px",
-            padding: "14px",
+            padding: "18px 14px",
             borderTop: `0.5px solid ${C.border}`,
             borderBottom: `0.5px solid ${C.border}`,
           }}
@@ -426,14 +440,16 @@ function BrandPage() {
                 textAlign: "center",
               }}
             >
-              <div style={{ fontSize: "15px", fontWeight: 500, color: C.dark }}>{s.value}</div>
+              <div style={{ fontSize: "17px", fontWeight: 500, color: C.dark }}>{s.value}</div>
               <div
                 style={{
-                  fontSize: "9px",
+                  fontSize: "10px",
                   fontWeight: 400,
                   color: C.muted,
-                  marginTop: "3px",
-                  lineHeight: 1.4,
+                  marginTop: "4px",
+                  lineHeight: 1.5,
+                  overflow: "visible",
+                  whiteSpace: "normal",
                 }}
               >
                 {s.label}
@@ -450,7 +466,7 @@ function BrandPage() {
             color: C.faint,
             textTransform: "uppercase",
             letterSpacing: "0.05em",
-            padding: "14px 14px 10px",
+            padding: "18px 14px 12px",
           }}
         >
           Structure actionnariale
@@ -461,11 +477,11 @@ function BrandPage() {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "8px",
+              gap: "10px",
               background: C.lightGreen,
               border: `0.5px solid ${C.primary}`,
               borderRadius: "10px",
-              padding: "8px 12px",
+              padding: "10px 12px",
             }}
           >
             <div
@@ -483,12 +499,26 @@ function BrandPage() {
               <Building2 size={13} color="#FFFFFF" strokeWidth={2} />
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: "12px", fontWeight: 500, color: C.dark }}>
+              <div style={{ fontSize: "14px", fontWeight: 500, color: C.dark }}>
                 {brand.name} SA
               </div>
-              <div style={{ fontSize: "10px", color: C.muted }}>Siège social · Paris, France</div>
+              <div style={{ fontSize: "11px", color: C.muted, marginTop: "2px" }}>
+                Siège social · Paris, France
+              </div>
             </div>
-            <div style={{ fontSize: "12px", fontWeight: 500, color: C.primary }}>CAC 40</div>
+            <div
+              style={{
+                fontSize: "10px",
+                fontWeight: 500,
+                color: "#FFFFFF",
+                background: C.primary,
+                borderRadius: "20px",
+                padding: "3px 10px",
+                flexShrink: 0,
+              }}
+            >
+              CAC 40
+            </div>
           </div>
 
           {/* Vertical trunk */}
@@ -507,10 +537,7 @@ function BrandPage() {
           {/* Children */}
           <div style={{ display: "flex", gap: "8px" }}>
             {shareholders.map((s) => (
-              <div
-                key={s.name}
-                style={{ flex: 1, display: "flex", flexDirection: "column" }}
-              >
+              <div key={s.name} style={{ flex: 1, display: "flex", flexDirection: "column" }}>
                 <div
                   style={{
                     width: "2px",
@@ -524,19 +551,19 @@ function BrandPage() {
                     background: s.faint ? C.bg : "#FFFFFF",
                     border: `0.5px solid ${s.faint ? C.border : C.primary}`,
                     borderRadius: "10px",
-                    padding: "7px 10px",
+                    padding: "8px 10px",
                   }}
                 >
-                  <div style={{ fontSize: "11px", fontWeight: 500, color: C.dark }}>{s.name}</div>
-                  <div style={{ fontSize: "9px", color: C.muted, marginTop: "2px" }}>
+                  <div style={{ fontSize: "13px", fontWeight: 500, color: C.dark }}>{s.name}</div>
+                  <div style={{ fontSize: "11px", color: C.muted, marginTop: "2px" }}>
                     {s.detail}
                   </div>
                   <div
                     style={{
-                      fontSize: "11px",
+                      fontSize: "13px",
                       fontWeight: 500,
                       color: C.primary,
-                      marginTop: "3px",
+                      marginTop: "4px",
                     }}
                   >
                     {s.percentage}
@@ -554,7 +581,7 @@ function BrandPage() {
             fontFamily: FONT,
             fontSize: "10px",
             color: C.faint,
-            padding: "10px 14px 16px",
+            padding: "12px 14px 20px",
           }}
         >
           <ExternalLink size={10} strokeWidth={1.75} />
@@ -562,21 +589,45 @@ function BrandPage() {
         </div>
 
 
+
+        {/* Visual separator */}
+        <div
+          style={{
+            height: "8px",
+            background: C.bg,
+            borderTop: `0.5px solid ${C.border}`,
+            borderBottom: `0.5px solid ${C.border}`,
+            marginTop: "16px",
+          }}
+        />
+
         {/* Products section */}
         <div
           style={{
             fontSize: "11px",
-            fontWeight: 400,
+            fontWeight: 500,
             color: C.faint,
             letterSpacing: "0.5px",
-            padding: "16px 16px 8px",
+            textTransform: "uppercase",
+            padding: "18px 14px 8px",
+            marginBottom: "8px",
           }}
         >
-          PRODUITS DE CETTE MARQUE
+          Produits de cette marque
+        </div>
+        <div
+          style={{
+            fontSize: "12px",
+            fontWeight: 400,
+            color: C.muted,
+            padding: "0 14px 10px",
+          }}
+        >
+          Toutes les marques appartenant à {brand.name}
         </div>
         <div>
           {products.map((p) => {
-            const Icon = ROW_ICON[p.category_slug] || Cookie;
+            const Icon = PRODUCT_ICON[p.id] ?? ROW_ICON[p.category_slug] ?? Cookie;
             const categoryLabel = CATEGORY_LABEL[p.category_slug] ?? p.category_slug;
             return (
               <Link
@@ -602,18 +653,32 @@ function BrandPage() {
                   height={44}
                   radius={10}
                 />
-                <div className="flex-1 min-w-0">
-                  <div style={{ fontSize: "15px", fontWeight: 500, color: C.dark }}>{p.name}</div>
+                <div className="flex-1 min-w-0 flex items-center" style={{ gap: "8px" }}>
                   <div
                     style={{
-                      fontSize: "12px",
-                      fontWeight: 400,
-                      color: C.muted,
-                      marginTop: "4px",
+                      fontSize: "15px",
+                      fontWeight: 500,
+                      color: C.dark,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {p.name}
+                  </div>
+                  <span
+                    style={{
+                      fontSize: "10px",
+                      color: C.primary,
+                      background: C.lightGreen,
+                      borderRadius: "20px",
+                      padding: "2px 8px",
+                      flexShrink: 0,
+                      fontWeight: 500,
                     }}
                   >
                     {categoryLabel}
-                  </div>
+                  </span>
                 </div>
                 <ChevronRight size={16} color={C.border} strokeWidth={1.75} />
               </Link>
@@ -621,6 +686,7 @@ function BrandPage() {
           })}
           <div style={{ height: "32px" }} />
         </div>
+
       </div>
     </div>
   );

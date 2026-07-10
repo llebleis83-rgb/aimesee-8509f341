@@ -55,6 +55,58 @@ export const mockProducts: Product[] = [
     },
   },
   {
+    id: "activia",
+    name: "Activia",
+    brand_id: "danone",
+    country: "International",
+    category_slug: "alimentation",
+    is_ecological: false,
+    is_made_in_france: false,
+    is_fair_trade: false,
+    is_independent: false,
+    similar_product_ids: [],
+    sections: { ecologie: { facts: [] }, fabrication: { facts: [] } },
+  },
+  {
+    id: "bledina",
+    name: "Blédina",
+    brand_id: "danone",
+    country: "France",
+    category_slug: "alimentation",
+    is_ecological: false,
+    is_made_in_france: true,
+    is_fair_trade: false,
+    is_independent: false,
+    similar_product_ids: [],
+    sections: { ecologie: { facts: [] }, fabrication: { facts: [] } },
+  },
+  {
+    id: "volvic",
+    name: "Volvic",
+    brand_id: "danone",
+    country: "France",
+    category_slug: "boissons",
+    is_ecological: false,
+    is_made_in_france: true,
+    is_fair_trade: false,
+    is_independent: false,
+    similar_product_ids: [],
+    sections: { ecologie: { facts: [] }, fabrication: { facts: [] } },
+  },
+  {
+    id: "aptamil",
+    name: "Aptamil",
+    brand_id: "danone",
+    country: "International",
+    category_slug: "alimentation",
+    is_ecological: false,
+    is_made_in_france: false,
+    is_fair_trade: false,
+    is_independent: false,
+    similar_product_ids: [],
+    sections: { ecologie: { facts: [] }, fabrication: { facts: [] } },
+  },
+  {
     id: "nike-airmax",
     name: "Nike Air Max",
     brand_id: "nike",
@@ -474,8 +526,14 @@ export function searchProductsByName(query: string): Product[] {
 }
 
 export function getProductsByCategory(slug: string): Product[] {
+  if (slug === "nourriture-boissons") {
+    return mockProducts.filter(
+      (p) => p.category_slug === "alimentation" || p.category_slug === "boissons",
+    );
+  }
   return mockProducts.filter((p) => p.category_slug === slug);
 }
+
 
 export function getProductsByBrandId(brandId: string): Product[] {
   return mockProducts.filter((p) => p.brand_id === brandId);

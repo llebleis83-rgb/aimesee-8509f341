@@ -12,10 +12,12 @@ import {
   Sofa,
   Utensils,
   Building2,
+  GlassWater,
 } from "lucide-react";
 import { getProductsByCategory } from "@/lib/mockProducts";
 import { getBrandById } from "@/lib/mockBrands";
 import { CATEGORY_LABEL, type Brand, type Product } from "@/lib/types";
+import type { ElementType } from "react";
 
 export const Route = createFileRoute("/_app/categories/$slug")({
   component: CategoryResult,
@@ -24,13 +26,36 @@ export const Route = createFileRoute("/_app/categories/$slug")({
 const CATEGORY_ICON: Record<string, React.ElementType> = {
   Alimentation: Utensils,
   Boissons: CupSoda,
+  "Nourriture & Boissons": Utensils,
   "Hygiène & Soins": Droplets,
   Cosmétiques: Sparkles,
   "Entretien maison": Sofa,
   "Mode & Textile": Shirt,
 };
 
-type BrandGroup = { brand: Brand | undefined; brandId: string; products: Product[] };
+type BrandGroup = {
+  brand: Brand | undefined;
+  brandId: string;
+  products: Product[];
+  subtitle?: string;
+  Icon?: ElementType;
+};
+
+// Curated brand list for the "Nourriture & Boissons" category screen.
+const NOURRITURE_BOISSONS_BRANDS: {
+  id: string;
+  name: string;
+  subtitle: string;
+  Icon: ElementType;
+}[] = [
+  { id: "danone", name: "Danone", subtitle: "Danone SA · France", Icon: Building2 },
+  { id: "ferrero", name: "Ferrero", subtitle: "Ferrero SpA · Italie", Icon: Building2 },
+  { id: "nestle", name: "Nestlé", subtitle: "Nestlé SA · Suisse", Icon: Building2 },
+  { id: "coca-cola-company", name: "Coca-Cola", subtitle: "The Coca-Cola Co. · USA", Icon: GlassWater },
+  { id: "unilever", name: "Unilever", subtitle: "Unilever PLC · Royaume-Uni", Icon: Building2 },
+  { id: "pepsico", name: "Pepsico", subtitle: "PepsiCo Inc. · USA", Icon: GlassWater },
+  { id: "lactalis", name: "Lactalis", subtitle: "Lactalis · France", Icon: Building2 },
+];
 
 function CategoryResult() {
   const { slug } = Route.useParams();
@@ -39,10 +64,20 @@ function CategoryResult() {
 
   const categoryName = CATEGORY_LABEL[slug] || slug;
   const FallbackIcon = CATEGORY_ICON[categoryName] || PackageSearch;
+  const isNourritureBoissons = slug === "nourriture-boissons";
 
   const allProducts = useMemo(() => getProductsByCategory(slug), [slug]);
 
   const allBrandGroups = useMemo<BrandGroup[]>(() => {
+    if (isNourritureBoissons) {
+      return NOURRITURE_BOISSONS_BRANDS.map((b) => ({
+        brandId: b.id,
+        brand: getBrandById(b.id),
+        products: [],
+        subtitle: b.subtitle,
+        Icon: b.Icon,
+      }));
+    }
     const map = new Map<string, Product[]>();
     for (const p of allProducts) {
       const arr = map.get(p.brand_id);
@@ -54,16 +89,18 @@ function CategoryResult() {
       brand: getBrandById(brandId),
       products,
     }));
-  }, [allProducts]);
+  }, [allProducts, isNourritureBoissons]);
 
   const filtered = useMemo<BrandGroup[]>(() => {
     const q = query.trim().toLowerCase();
     if (!q) return allBrandGroups;
     return allBrandGroups.filter((g) => {
-      if (g.brand?.name.toLowerCase().includes(q)) return true;
+      const name = g.brand?.name ?? "";
+      if (name.toLowerCase().includes(q)) return true;
       return g.products.some((p) => p.name.toLowerCase().includes(q));
     });
   }, [allBrandGroups, query]);
+
 
   const isEmpty = filtered.length === 0;
 
@@ -86,9 +123,9 @@ function CategoryResult() {
           style={{
             background: "transparent",
             border: "none",
-            color: "#7A9A7A",
-            fontSize: "14px",
-            fontWeight: 400,
+            color: "#5B8C6A",
+            fontSize: "13px",
+            fontWeight: 500,
             padding: "10px 0",
             cursor: "pointer",
             gap: "4px",
@@ -100,7 +137,7 @@ function CategoryResult() {
         </button>
         <h1
           style={{
-            fontSize: "22px",
+            fontSize: "18px",
             fontWeight: 500,
             color: "#1A2E1A",
             letterSpacing: "-0.3px",
@@ -109,8 +146,9 @@ function CategoryResult() {
         >
           {categoryName}
         </h1>
-        <p style={{ fontSize: "13px", fontWeight: 400, color: "#7A9A7A", marginTop: "2px" }}>
-          {allBrandGroups.length} marque{allBrandGroups.length > 1 ? "s" : ""}
+        <p style={{ fontSize: "12px", fontWeight: 400, color: "#7A9A7A", marginTop: "2px" }}>
+          {allBrandGroups.length} marque{allBrandGroups.length > 1 ? "s" : ""} référencée
+          {allBrandGroups.length > 1 ? "s" : ""}
         </p>
 
         {/* Search bar */}
@@ -131,7 +169,7 @@ function CategoryResult() {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder={`Rechercher dans ${categoryName}...`}
+            placeholder="Rechercher une marque..."
             style={{
               flex: 1,
               background: "transparent",
@@ -144,6 +182,7 @@ function CategoryResult() {
             }}
           />
         </div>
+
       </header>
 
       {/* Scrollable list */}
@@ -208,7 +247,8 @@ function CategoryResult() {
           <div>
             {filtered.map((g) => {
               const brandName = g.brand?.name ?? g.brandId;
-              const country = g.brand?.country ?? "";
+              const subtitle = g.subtitle ?? g.brand?.country ?? "";
+              const RowIcon = g.Icon ?? Building2;
               const count = g.products.length;
               const handleClick = () => {
                 navigate({ to: "/brand/$brandId", params: { brandId: g.brandId } });
@@ -221,7 +261,7 @@ function CategoryResult() {
                   style={{
                     width: "100%",
                     height: "68px",
-                    gap: "14px",
+                    gap: "12px",
                     padding: "0 16px",
                     borderBottom: "0.5px solid #F4F7F4",
                     background: "#FFFFFF",
@@ -240,7 +280,7 @@ function CategoryResult() {
                       borderRadius: "10px",
                     }}
                   >
-                    <Building2 size={20} color="#5B8C6A" strokeWidth={1.75} />
+                    <RowIcon size={20} color="#5B8C6A" strokeWidth={1.75} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div style={{ fontSize: "15px", fontWeight: 500, color: "#1A2E1A" }}>
@@ -254,23 +294,26 @@ function CategoryResult() {
                         marginTop: "4px",
                       }}
                     >
-                      {country}
+                      {subtitle}
                     </div>
                   </div>
-                  <span
-                    style={{
-                      fontSize: "12px",
-                      fontWeight: 400,
-                      color: "#AAC0AA",
-                      flexShrink: 0,
-                    }}
-                  >
-                    {count} produit{count > 1 ? "s" : ""}
-                  </span>
+                  {!isNourritureBoissons && count > 0 && (
+                    <span
+                      style={{
+                        fontSize: "12px",
+                        fontWeight: 400,
+                        color: "#AAC0AA",
+                        flexShrink: 0,
+                      }}
+                    >
+                      {count} produit{count > 1 ? "s" : ""}
+                    </span>
+                  )}
                   <ChevronRight size={16} color="#DDE8DD" strokeWidth={1.75} />
                 </button>
               );
             })}
+
             <div style={{ height: "24px" }} />
           </div>
         )}

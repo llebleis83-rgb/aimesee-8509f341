@@ -16,6 +16,7 @@ import {
   SmilePlus,
   Cookie,
   Building2,
+  Soup,
 } from "lucide-react";
 import { searchProductsByName, mockProducts } from "@/lib/mockProducts";
 import { getBrandById, searchBrandsByName } from "@/lib/mockBrands";
@@ -29,8 +30,7 @@ export const Route = createFileRoute("/_app/categories/")({
 });
 
 const AVAILABLE = [
-  { icon: Utensils, label: "Alimentation", slug: "alimentation", emoji: "🍔" },
-  { icon: CupSoda, label: "Boissons", slug: "boissons", emoji: "🥤" },
+  { icon: Soup, label: "Nourriture & Boissons", slug: "nourriture-boissons", emoji: "🥣" },
   { icon: Droplets, label: "Hygiène & Soins", slug: "hygiene-soins", emoji: "🧴" },
   { icon: Sparkles, label: "Cosmétiques", slug: "cosmetiques", emoji: "💄" },
   { icon: Sofa, label: "Entretien maison", slug: "entretien-maison", emoji: "🏠" },
