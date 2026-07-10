@@ -603,7 +603,7 @@ function BrandPage() {
             background: C.bg,
             borderTop: `0.5px solid ${C.border}`,
             borderBottom: `0.5px solid ${C.border}`,
-            marginTop: "16px",
+            marginTop: "8px",
           }}
         />
 
@@ -612,7 +612,7 @@ function BrandPage() {
           style={{
             fontSize: "11px",
             fontWeight: 500,
-            color: C.faint,
+            color: C.primary,
             letterSpacing: "0.5px",
             textTransform: "uppercase",
             padding: "18px 14px 8px",
@@ -643,11 +643,12 @@ function BrandPage() {
                 className="flex items-center"
                 style={{
                   width: "100%",
-                  height: "68px",
+                  height: "72px",
                   gap: "14px",
                   padding: "0 16px",
+                  borderLeft: `3px solid ${C.primary}`,
                   borderBottom: `0.5px solid ${C.bg}`,
-                  background: "white",
+                  background: "#FAFCFA",
                   textDecoration: "none",
                 }}
               >
@@ -662,7 +663,7 @@ function BrandPage() {
                 <div className="flex-1 min-w-0 flex items-center" style={{ gap: "8px" }}>
                   <div
                     style={{
-                      fontSize: "15px",
+                      fontSize: "16px",
                       fontWeight: 500,
                       color: C.dark,
                       whiteSpace: "nowrap",
@@ -681,6 +682,7 @@ function BrandPage() {
                       padding: "2px 8px",
                       flexShrink: 0,
                       fontWeight: 500,
+                      marginLeft: "auto",
                     }}
                   >
                     {categoryLabel}
@@ -691,6 +693,7 @@ function BrandPage() {
             );
           })}
           <div style={{ height: "32px" }} />
+
         </div>
 
       </div>
