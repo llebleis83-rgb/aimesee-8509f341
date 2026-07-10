@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { type ReactNode, type ElementType } from "react";
 import {
   ArrowLeft,
@@ -288,8 +288,14 @@ function ActionnariatBlock({ root }: { root: ShareholderNode }) {
 
 function BrandPage() {
   const { brandId } = Route.useParams();
+  const router = useRouter();
   const brand = getBrandById(brandId);
   const products = getProductsByBrandId(brandId);
+  const handleBack = () => {
+    if (router.history.canGoBack()) router.history.back();
+    else router.navigate({ to: "/categories" });
+  };
+
   
 
   if (!brand) {
@@ -356,7 +362,7 @@ function BrandPage() {
           }}
         >
           <button
-            onClick={() => window.history.back()}
+            onClick={() => handleBack()}
             style={{
               display: "flex",
               alignItems: "center",
