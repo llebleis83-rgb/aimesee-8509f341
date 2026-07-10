@@ -61,8 +61,10 @@ export interface HistoryEntry {
 export const CATEGORY_LABEL: Record<string, string> = {
   alimentation: "Alimentation",
   boissons: "Boissons",
+  "nourriture-boissons": "Nourriture & Boissons",
   "hygiene-soins": "Hygiène & Soins",
   cosmetiques: "Cosmétiques",
   "entretien-maison": "Entretien maison",
   "mode-textile": "Mode & Textile",
 };
+

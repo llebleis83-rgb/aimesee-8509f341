@@ -474,8 +474,14 @@ export function searchProductsByName(query: string): Product[] {
 }
 
 export function getProductsByCategory(slug: string): Product[] {
+  if (slug === "nourriture-boissons") {
+    return mockProducts.filter(
+      (p) => p.category_slug === "alimentation" || p.category_slug === "boissons",
+    );
+  }
   return mockProducts.filter((p) => p.category_slug === slug);
 }
+
 
 export function getProductsByBrandId(brandId: string): Product[] {
   return mockProducts.filter((p) => p.brand_id === brandId);
