@@ -1,28 +1,23 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import {
   ArrowLeft,
   Building2,
-  ChevronDown,
-  ChevronUp,
   ChevronRight,
   Clock,
   ExternalLink,
-  Landmark,
-  Leaf,
-  MapPin,
   Cookie,
   Droplets,
   Shirt,
   CupSoda,
   Sparkles,
   Sofa,
-  type LucideIcon,
 } from "lucide-react";
 import { getBrandById } from "@/lib/mockBrands";
 import { getProductsByBrandId } from "@/lib/mockProducts";
 import { CATEGORY_LABEL, type ProductFact, type ShareholderNode } from "@/lib/types";
 import { ProductThumb } from "@/components/ProductThumb";
+
 
 export const Route = createFileRoute("/brand/$brandId")({
   component: BrandPage,
