@@ -362,7 +362,7 @@ function BrandPage() {
           }}
         >
           <button
-            onClick={() => window.history.back()}
+            onClick={() => handleBack()}
             style={{
               display: "flex",
               alignItems: "center",
