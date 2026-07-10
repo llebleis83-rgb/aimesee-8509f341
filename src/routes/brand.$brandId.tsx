@@ -39,7 +39,7 @@ const C = {
 
 const FONT = "'DM Sans', system-ui, sans-serif";
 
-const ROW_ICON: Record<string, React.ElementType> = {
+const ROW_ICON: Record<string, ElementType> = {
   alimentation: Cookie,
   boissons: CupSoda,
   "hygiene-soins": Droplets,
@@ -47,6 +47,16 @@ const ROW_ICON: Record<string, React.ElementType> = {
   "entretien-maison": Sofa,
   "mode-textile": Shirt,
 };
+
+// Per-product icon overrides (subsidiary-style icons).
+const PRODUCT_ICON: Record<string, ElementType> = {
+  evian: Droplet,
+  volvic: Droplet,
+  activia: Milk,
+  bledina: Baby,
+  aptamil: Baby,
+};
+
 
 function SourceLine({ children }: { children: ReactNode }) {
   return (
