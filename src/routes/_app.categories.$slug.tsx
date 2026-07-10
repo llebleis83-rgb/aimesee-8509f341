@@ -123,9 +123,9 @@ function CategoryResult() {
           style={{
             background: "transparent",
             border: "none",
-            color: "#7A9A7A",
-            fontSize: "14px",
-            fontWeight: 400,
+            color: "#5B8C6A",
+            fontSize: "13px",
+            fontWeight: 500,
             padding: "10px 0",
             cursor: "pointer",
             gap: "4px",
@@ -137,7 +137,7 @@ function CategoryResult() {
         </button>
         <h1
           style={{
-            fontSize: "22px",
+            fontSize: "18px",
             fontWeight: 500,
             color: "#1A2E1A",
             letterSpacing: "-0.3px",
@@ -146,8 +146,9 @@ function CategoryResult() {
         >
           {categoryName}
         </h1>
-        <p style={{ fontSize: "13px", fontWeight: 400, color: "#7A9A7A", marginTop: "2px" }}>
-          {allBrandGroups.length} marque{allBrandGroups.length > 1 ? "s" : ""}
+        <p style={{ fontSize: "12px", fontWeight: 400, color: "#7A9A7A", marginTop: "2px" }}>
+          {allBrandGroups.length} marque{allBrandGroups.length > 1 ? "s" : ""} référencée
+          {allBrandGroups.length > 1 ? "s" : ""}
         </p>
 
         {/* Search bar */}
@@ -168,7 +169,7 @@ function CategoryResult() {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder={`Rechercher dans ${categoryName}...`}
+            placeholder="Rechercher une marque..."
             style={{
               flex: 1,
               background: "transparent",
@@ -181,6 +182,7 @@ function CategoryResult() {
             }}
           />
         </div>
+
       </header>
 
       {/* Scrollable list */}
@@ -245,7 +247,8 @@ function CategoryResult() {
           <div>
             {filtered.map((g) => {
               const brandName = g.brand?.name ?? g.brandId;
-              const country = g.brand?.country ?? "";
+              const subtitle = g.subtitle ?? g.brand?.country ?? "";
+              const RowIcon = g.Icon ?? Building2;
               const count = g.products.length;
               const handleClick = () => {
                 navigate({ to: "/brand/$brandId", params: { brandId: g.brandId } });
@@ -258,7 +261,7 @@ function CategoryResult() {
                   style={{
                     width: "100%",
                     height: "68px",
-                    gap: "14px",
+                    gap: "12px",
                     padding: "0 16px",
                     borderBottom: "0.5px solid #F4F7F4",
                     background: "#FFFFFF",
@@ -277,7 +280,7 @@ function CategoryResult() {
                       borderRadius: "10px",
                     }}
                   >
-                    <Building2 size={20} color="#5B8C6A" strokeWidth={1.75} />
+                    <RowIcon size={20} color="#5B8C6A" strokeWidth={1.75} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div style={{ fontSize: "15px", fontWeight: 500, color: "#1A2E1A" }}>
@@ -291,23 +294,26 @@ function CategoryResult() {
                         marginTop: "4px",
                       }}
                     >
-                      {country}
+                      {subtitle}
                     </div>
                   </div>
-                  <span
-                    style={{
-                      fontSize: "12px",
-                      fontWeight: 400,
-                      color: "#AAC0AA",
-                      flexShrink: 0,
-                    }}
-                  >
-                    {count} produit{count > 1 ? "s" : ""}
-                  </span>
+                  {!isNourritureBoissons && count > 0 && (
+                    <span
+                      style={{
+                        fontSize: "12px",
+                        fontWeight: 400,
+                        color: "#AAC0AA",
+                        flexShrink: 0,
+                      }}
+                    >
+                      {count} produit{count > 1 ? "s" : ""}
+                    </span>
+                  )}
                   <ChevronRight size={16} color="#DDE8DD" strokeWidth={1.75} />
                 </button>
               );
             })}
+
             <div style={{ height: "24px" }} />
           </div>
         )}
