@@ -423,7 +423,7 @@ function BrandPage() {
           style={{
             display: "flex",
             gap: "8px",
-            padding: "14px",
+            padding: "18px 14px",
             borderTop: `0.5px solid ${C.border}`,
             borderBottom: `0.5px solid ${C.border}`,
           }}
@@ -440,14 +440,16 @@ function BrandPage() {
                 textAlign: "center",
               }}
             >
-              <div style={{ fontSize: "15px", fontWeight: 500, color: C.dark }}>{s.value}</div>
+              <div style={{ fontSize: "17px", fontWeight: 500, color: C.dark }}>{s.value}</div>
               <div
                 style={{
-                  fontSize: "9px",
+                  fontSize: "10px",
                   fontWeight: 400,
                   color: C.muted,
-                  marginTop: "3px",
-                  lineHeight: 1.4,
+                  marginTop: "4px",
+                  lineHeight: 1.5,
+                  overflow: "visible",
+                  whiteSpace: "normal",
                 }}
               >
                 {s.label}
@@ -464,7 +466,7 @@ function BrandPage() {
             color: C.faint,
             textTransform: "uppercase",
             letterSpacing: "0.05em",
-            padding: "14px 14px 10px",
+            padding: "18px 14px 12px",
           }}
         >
           Structure actionnariale
@@ -475,11 +477,11 @@ function BrandPage() {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "8px",
+              gap: "10px",
               background: C.lightGreen,
               border: `0.5px solid ${C.primary}`,
               borderRadius: "10px",
-              padding: "8px 12px",
+              padding: "10px 12px",
             }}
           >
             <div
@@ -497,12 +499,26 @@ function BrandPage() {
               <Building2 size={13} color="#FFFFFF" strokeWidth={2} />
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: "12px", fontWeight: 500, color: C.dark }}>
+              <div style={{ fontSize: "14px", fontWeight: 500, color: C.dark }}>
                 {brand.name} SA
               </div>
-              <div style={{ fontSize: "10px", color: C.muted }}>Siège social · Paris, France</div>
+              <div style={{ fontSize: "11px", color: C.muted, marginTop: "2px" }}>
+                Siège social · Paris, France
+              </div>
             </div>
-            <div style={{ fontSize: "12px", fontWeight: 500, color: C.primary }}>CAC 40</div>
+            <div
+              style={{
+                fontSize: "10px",
+                fontWeight: 500,
+                color: "#FFFFFF",
+                background: C.primary,
+                borderRadius: "20px",
+                padding: "3px 10px",
+                flexShrink: 0,
+              }}
+            >
+              CAC 40
+            </div>
           </div>
 
           {/* Vertical trunk */}
@@ -521,10 +537,7 @@ function BrandPage() {
           {/* Children */}
           <div style={{ display: "flex", gap: "8px" }}>
             {shareholders.map((s) => (
-              <div
-                key={s.name}
-                style={{ flex: 1, display: "flex", flexDirection: "column" }}
-              >
+              <div key={s.name} style={{ flex: 1, display: "flex", flexDirection: "column" }}>
                 <div
                   style={{
                     width: "2px",
@@ -538,19 +551,19 @@ function BrandPage() {
                     background: s.faint ? C.bg : "#FFFFFF",
                     border: `0.5px solid ${s.faint ? C.border : C.primary}`,
                     borderRadius: "10px",
-                    padding: "7px 10px",
+                    padding: "8px 10px",
                   }}
                 >
-                  <div style={{ fontSize: "11px", fontWeight: 500, color: C.dark }}>{s.name}</div>
-                  <div style={{ fontSize: "9px", color: C.muted, marginTop: "2px" }}>
+                  <div style={{ fontSize: "13px", fontWeight: 500, color: C.dark }}>{s.name}</div>
+                  <div style={{ fontSize: "11px", color: C.muted, marginTop: "2px" }}>
                     {s.detail}
                   </div>
                   <div
                     style={{
-                      fontSize: "11px",
+                      fontSize: "13px",
                       fontWeight: 500,
                       color: C.primary,
-                      marginTop: "3px",
+                      marginTop: "4px",
                     }}
                   >
                     {s.percentage}
@@ -568,12 +581,13 @@ function BrandPage() {
             fontFamily: FONT,
             fontSize: "10px",
             color: C.faint,
-            padding: "10px 14px 16px",
+            padding: "12px 14px 20px",
           }}
         >
           <ExternalLink size={10} strokeWidth={1.75} />
           <span>SEC Filings · Euronext · 2024</span>
         </div>
+
 
 
         {/* Products section */}
