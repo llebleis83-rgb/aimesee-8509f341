@@ -513,6 +513,28 @@ export const mockBrands: Brand[] = [
       fabrication: { facts: [] },
     },
   },
+  {
+    id: "pepsico",
+    name: "Pepsico",
+    country: "USA",
+    sections: {
+      actionnariat: { name: "PepsiCo Inc.", type: "Société mère" },
+      politique: { facts: [] },
+      ecologie: { facts: [], matieres_premieres: { facts: [] } },
+      fabrication: { facts: [] },
+    },
+  },
+  {
+    id: "lactalis",
+    name: "Lactalis",
+    country: "France",
+    sections: {
+      actionnariat: { name: "Groupe Lactalis", type: "Société mère" },
+      politique: { facts: [] },
+      ecologie: { facts: [], matieres_premieres: { facts: [] } },
+      fabrication: { facts: [] },
+    },
+  },
 ];
 
 export const brandsById: Record<string, Brand> = Object.fromEntries(
