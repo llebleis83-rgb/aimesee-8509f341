@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { type ReactNode } from "react";
+import { type ReactNode, type ElementType } from "react";
 import {
   ArrowLeft,
   Building2,
@@ -8,11 +8,15 @@ import {
   ExternalLink,
   Cookie,
   Droplets,
+  Droplet,
+  Milk,
+  Baby,
   Shirt,
   CupSoda,
   Sparkles,
   Sofa,
 } from "lucide-react";
+
 import { getBrandById } from "@/lib/mockBrands";
 import { getProductsByBrandId } from "@/lib/mockProducts";
 import { CATEGORY_LABEL, type ProductFact, type ShareholderNode } from "@/lib/types";
