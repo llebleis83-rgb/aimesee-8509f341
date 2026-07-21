@@ -11,6 +11,12 @@ export type WikirateItem = {
   answer_url: string;
 };
 
+export type ConsumerFact = {
+  category: "ecologie" | "fabrication" | "actionnariat" | "politique";
+  text: string;
+  source: string;
+};
+
 export type LiveProduct = {
   barcode: string;
   name: string | null;
@@ -22,6 +28,7 @@ export type LiveProduct = {
   imageUrl: string | null;
   lastUpdated: string;
   wikirateData: WikirateItem[] | null;
+  consumerFacts: ConsumerFact[] | null;
 };
 
 export type ProductState =

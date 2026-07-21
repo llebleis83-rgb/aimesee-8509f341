@@ -353,20 +353,31 @@ function ProductSheet() {
       label: "Écologie",
       Icon: Leaf,
       content: (() => {
-        const ecoFacts = product.wikirateData?.filter(d =>
+        const facts = product.consumerFacts?.filter(f => f.category === "ecologie") ?? [];
+        const wikiEco = product.wikirateData?.filter(d =>
           d.metric === "Wikirate SDG Metric design+Common Environmental Metrics Reported"
-        ) ?? [];
-        const latest = ecoFacts.sort((a, b) => b.year - a.year)[0];
-        if (!latest) return <EmptyState />;
+        ).sort((a, b) => b.year - a.year)[0];
+        if (facts.length === 0 && !wikiEco) return <EmptyState />;
         return (
-          <FactRow
-            fact={{
-              text: `Ferrero SpA publie ${latest.value} indicateur(s) environnemental(aux) standardisé(s) dans ses rapports (${latest.year}).`,
-              source_name: "Wikirate",
-              source_year: latest.year,
-            }}
-            last
-          />
+          <>
+            {facts.map((f, i) => (
+              <FactRow
+                key={i}
+                fact={{ text: f.text, source_name: f.source, source_year: new Date().getFullYear() }}
+                last={i === facts.length - 1 && !wikiEco}
+              />
+            ))}
+            {wikiEco && (
+              <FactRow
+                fact={{
+                  text: `Ferrero SpA publie ${wikiEco.value} indicateur(s) environnemental(aux) standardisé(s) (${wikiEco.year}).`,
+                  source_name: "Wikirate",
+                  source_year: wikiEco.year,
+                }}
+                last
+              />
+            )}
+          </>
         );
       })(),
     },
@@ -375,32 +386,24 @@ function ProductSheet() {
       label: "Fabrication",
       Icon: MapPin,
       content: (() => {
-        const labourFact = product.wikirateData?.find(d =>
-          d.metric === "Commons+Child Labour Policy"
-        );
-        const reportYears = product.wikirateData?.filter(x => x.metric === "Core+Company Report Available").map(x => x.year) ?? [0];
-        const maxReportYear = Math.max(...reportYears);
-        const reportFact = product.wikirateData?.find(d =>
-          d.metric === "Core+Company Report Available" && d.year === maxReportYear
-        );
-        if (!labourFact && !reportFact) return <EmptyState />;
+        const facts = product.consumerFacts?.filter(f => f.category === "fabrication") ?? [];
+        const labourFact = product.wikirateData?.find(d => d.metric === "Commons+Child Labour Policy");
+        if (facts.length === 0 && !labourFact) return <EmptyState />;
         return (
           <>
+            {facts.map((f, i) => (
+              <FactRow
+                key={i}
+                fact={{ text: f.text, source_name: f.source, source_year: new Date().getFullYear() }}
+                last={i === facts.length - 1 && !labourFact}
+              />
+            ))}
             {labourFact && (
               <FactRow
                 fact={{
-                  text: `Politique travail des enfants : ${labourFact.value === "Partial" ? "politique partielle en place" : labourFact.value} (${labourFact.year}).`,
+                  text: `Politique travail des enfants (Ferrero SpA) : ${labourFact.value === "Partial" ? "politique partielle en place" : labourFact.value} (${labourFact.year}).`,
                   source_name: "Wikirate · Commons",
                   source_year: labourFact.year,
-                }}
-              />
-            )}
-            {reportFact && (
-              <FactRow
-                fact={{
-                  text: `Rapport de durabilité disponible : ${reportFact.value === "Yes" ? "Oui" : "Non"} (${reportFact.year}).`,
-                  source_name: "Wikirate · Core",
-                  source_year: reportFact.year,
                 }}
                 last
               />
