@@ -446,7 +446,7 @@ function ProductSheet() {
 
         {!heroVisible ? (
           <button
-            onClick={() => favStore.toggle(product.id)}
+            onClick={() => favStore.toggle(product.barcode)}
             aria-label="favori"
             style={{
               width: "34px",
