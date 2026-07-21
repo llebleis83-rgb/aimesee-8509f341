@@ -74,7 +74,7 @@ function format(row: Record<string, unknown>) {
     name: row.product_name ?? null,
     brand: row.brand ?? null,
     manufacturer: row.manufacturer ?? null,
-    countryOfOrigin: row.country_of_origin ?? null,
+    countryOfOrigin: row.manufacturing_places ?? row.country_of_origin ?? null,
     manufacturingPlaces: row.manufacturing_places ?? null,
     ingredients: row.ingredients_text ?? null,
     imageUrl: row.image_url ?? null,
