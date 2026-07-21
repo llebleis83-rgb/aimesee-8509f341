@@ -14,7 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      products: {
+        Row: {
+          barcode: string
+          brand: string | null
+          country_of_origin: string | null
+          created_at: string
+          id: string
+          image_url: string | null
+          ingredients_text: string | null
+          last_fetched_at: string
+          manufacturer: string | null
+          manufacturing_places: string | null
+          product_name: string | null
+          raw_off_data: Json | null
+        }
+        Insert: {
+          barcode: string
+          brand?: string | null
+          country_of_origin?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          ingredients_text?: string | null
+          last_fetched_at?: string
+          manufacturer?: string | null
+          manufacturing_places?: string | null
+          product_name?: string | null
+          raw_off_data?: Json | null
+        }
+        Update: {
+          barcode?: string
+          brand?: string | null
+          country_of_origin?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          ingredients_text?: string | null
+          last_fetched_at?: string
+          manufacturer?: string | null
+          manufacturing_places?: string | null
+          product_name?: string | null
+          raw_off_data?: Json | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
