@@ -1,6 +1,16 @@
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
+export type WikirateItem = {
+  metric: string;
+  value: string;
+  year: number;
+  company: string;
+  comments?: string;
+  sources?: string[];
+  answer_url: string;
+};
+
 export type LiveProduct = {
   barcode: string;
   name: string | null;
@@ -11,6 +21,7 @@ export type LiveProduct = {
   ingredients: string | null;
   imageUrl: string | null;
   lastUpdated: string;
+  wikirateData: WikirateItem[] | null;
 };
 
 export type ProductState =
