@@ -16,11 +16,10 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { getProductById } from "@/lib/mockProducts";
-import { getBrandById } from "@/lib/mockBrands";
+import { useProduct } from "@/hooks/useProduct";
 import { favStore, useFavorites } from "@/lib/favorites-store";
 import { historyStore } from "@/lib/history-store";
-import { CATEGORY_LABEL, type ProductFact, type ShareholderNode } from "@/lib/types";
+import { type ProductFact, type ShareholderNode } from "@/lib/types";
 import { ProductThumb } from "@/components/ProductThumb";
 
 export const Route = createFileRoute("/_app/produit/$id")({
