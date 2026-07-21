@@ -54,7 +54,13 @@ export function useProduct() {
 
       // 2. Appel Open Food Facts
       const res = await fetch(
-        `https://world.openfoodfacts.org/api/v2/product/${barcode.trim()}.json`
+        `https://world.openfoodfacts.org/api/v2/product/${barcode.trim()}.json`,
+        {
+          headers: {
+            "Accept": "application/json",
+            "User-Agent": "aimesee/1.0 (contact@aimesee.app)",
+          },
+        }
       );
       const data = await res.json();
 
