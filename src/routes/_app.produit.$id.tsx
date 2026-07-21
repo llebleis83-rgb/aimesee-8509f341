@@ -489,8 +489,8 @@ function ProductSheet() {
           }}
         >
           <ProductThumb
-            src={product.thumbnail_url}
-            alt={product.name}
+            src={product.imageUrl ?? ""}
+            alt={product.name ?? ""}
             Icon={Package}
             width={110}
             height={110}
