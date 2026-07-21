@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Search, User, Flashlight } from "lucide-react";
-import { getProductByBarcode } from "@/lib/mockProducts";
+import { useProduct } from "@/hooks/useProduct";
 
 export const Route = createFileRoute("/_app/")({
   component: Scanner,
@@ -9,6 +9,8 @@ export const Route = createFileRoute("/_app/")({
 
 function Scanner() {
   const navigate = useNavigate();
+  const { state, lookup } = useProduct();
+  const [searchInput, setSearchInput] = useState("");
 
   useEffect(() => {
     try {
@@ -20,17 +22,26 @@ function Scanner() {
     }
   }, [navigate]);
 
+  // Quand un produit est trouvé → naviguer vers la fiche
+  useEffect(() => {
+    if (state.status === "found") {
+      navigate({
+        to: "/produit/$id",
+        params: { id: state.product.barcode },
+      });
+    }
+    if (state.status === "not_found") {
+      navigate({ to: "/produit-non-trouve" });
+    }
+  }, [state, navigate]);
 
-
-  // Simulated barcode-scan entry point — kept available for any future hardware integration.
-  const handleBarcode = (barcode: string) => {
-    const p = getProductByBarcode(barcode);
-    if (p) navigate({ to: "/produit/$id", params: { id: p.id } });
-    else navigate({ to: "/produit-non-trouve" });
+  const handleSearch = () => {
+    if (searchInput.trim()) lookup(searchInput.trim());
   };
-  // Expose for non-UI callers without changing layout.
+
+  // Expose pour intégration scanner caméra future
   if (typeof window !== "undefined") {
-    (window as unknown as { __aimeseeScan?: (b: string) => void }).__aimeseeScan = handleBarcode;
+    (window as unknown as { __aimeseeScan?: (b: string) => void }).__aimeseeScan = lookup;
   }
 
   const Corner = ({ style }: { style: React.CSSProperties }) => (
@@ -45,6 +56,8 @@ function Scanner() {
       }}
     />
   );
+
+  const isLoading = state.status === "loading";
 
   return (
     <div className="flex flex-col" style={{ height: "calc(100vh - 64px)" }}>
@@ -127,7 +140,7 @@ function Scanner() {
                 color: "rgba(255,255,255,0.6)",
               }}
             >
-              Pointez vers un code-barres
+              {isLoading ? "Recherche en cours…" : "Pointez vers un code-barres"}
             </div>
           </div>
 
@@ -150,9 +163,8 @@ function Scanner() {
 
       {/* Search CTA */}
       <div className="shrink-0" style={{ margin: "24px 16px" }}>
-        <button
-          onClick={() => navigate({ to: "/categories", search: { focus: "1" } })}
-          className="flex items-center justify-center gap-2 w-full"
+        <div
+          className="flex items-center gap-2 w-full"
           style={{
             background: "#3A503A",
             borderRadius: "12px",
@@ -161,10 +173,43 @@ function Scanner() {
           }}
         >
           <Search size={18} color="#FFFFFF" />
-          <span style={{ fontSize: "14px", fontWeight: 500, color: "#FFFFFF" }}>
-            Rechercher un produit
-          </span>
-        </button>
+          <input
+            type="text"
+            inputMode="numeric"
+            placeholder="Entrer un code-barres…"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+            disabled={isLoading}
+            style={{
+              flex: 1,
+              background: "transparent",
+              border: "none",
+              outline: "none",
+              fontSize: "14px",
+              fontWeight: 500,
+              color: "#FFFFFF",
+              fontFamily: "'DM Sans', system-ui, sans-serif",
+            }}
+          />
+          {searchInput.trim() && (
+            <button
+              onClick={handleSearch}
+              disabled={isLoading}
+              style={{
+                background: "transparent",
+                border: "none",
+                color: "#FFFFFF",
+                fontSize: "13px",
+                fontWeight: 600,
+                cursor: "pointer",
+                padding: "0 4px",
+              }}
+            >
+              {isLoading ? "…" : "OK"}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
