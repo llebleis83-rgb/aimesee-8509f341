@@ -673,49 +673,7 @@ function ProductSheet() {
           })}
         </div>
 
-        {alternatives.map((a) => (
-          <Link
-            key={a.id}
-            to="/produit/$id"
-            params={{ id: a.id }}
-            style={{
-              textDecoration: "none",
-              border: `0.5px solid ${C.border}`,
-              borderRadius: "14px",
-              padding: "12px",
-              margin: "0 12px 8px",
-              background: "white",
-              display: "flex",
-              gap: "10px",
-            }}
-          >
-            <ProductThumb
-              src={a.thumbnail_url}
-              alt={a.name}
-              Icon={Leaf}
-              width={36}
-              height={36}
-              radius={8}
-              fallbackBg={C.lightGreen}
-              iconColor={C.primary}
-              iconSize={18}
-            />
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: "13px", fontWeight: 500, color: C.dark }}>{a.name}</div>
-              <div
-                style={{
-                  fontSize: "11px",
-                  fontWeight: 400,
-                  color: C.muted,
-                  marginTop: "4px",
-                  lineHeight: 1.5,
-                }}
-              >
-                {getBrandById(a.brand_id)?.name ?? ""} · {a.country}
-              </div>
-            </div>
-          </Link>
-        ))}
+        {alternatives.map(() => null)}
 
         <div style={{ height: "24px" }} />
       </div>
