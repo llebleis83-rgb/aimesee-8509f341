@@ -530,10 +530,10 @@ function ProductSheet() {
               {brand?.name ?? ""}
             </div>
             <div style={{ fontSize: "12px", fontWeight: 400, color: C.faint }}>
-              {product.country} · {categoryLabel}
+              {product.countryOfOrigin ?? ""} {categoryLabel ? `· ${categoryLabel}` : ""}
             </div>
             <button
-              onClick={() => favStore.toggle(product.id)}
+              onClick={() => favStore.toggle(product.barcode)}
               aria-label="favori"
               style={{
                 background: "transparent",
