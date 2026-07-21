@@ -16,11 +16,10 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { getProductById } from "@/lib/mockProducts";
-import { getBrandById } from "@/lib/mockBrands";
+import { useProduct } from "@/hooks/useProduct";
 import { favStore, useFavorites } from "@/lib/favorites-store";
 import { historyStore } from "@/lib/history-store";
-import { CATEGORY_LABEL, type ProductFact, type ShareholderNode } from "@/lib/types";
+import { type ProductFact, type ShareholderNode } from "@/lib/types";
 import { ProductThumb } from "@/components/ProductThumb";
 
 export const Route = createFileRoute("/_app/produit/$id")({
@@ -284,20 +283,24 @@ function ProductSheet() {
   const [heroVisible, setHeroVisible] = useState(true);
   const heroRef = useRef<HTMLDivElement | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
-  const product = getProductById(id);
+  const { state, lookup } = useProduct();
 
   useEffect(() => {
-    setLoading(true);
-    const t = setTimeout(() => {
-      if (!product) {
-        navigate({ to: "/not-found" });
-        return;
-      }
-      historyStore.record(product.id);
+    lookup(id);
+  }, [id]);
+
+  const product = state.status === "found" ? state.product : null;
+
+  useEffect(() => {
+    if (state.status === "found") {
+      historyStore.record(product!.barcode);
       setLoading(false);
-    }, 150);
-    return () => clearTimeout(t);
-  }, [id, product, navigate]);
+    } else if (state.status === "not_found" || state.status === "error") {
+      navigate({ to: "/produit-non-trouve" });
+    } else {
+      setLoading(true);
+    }
+  }, [state, navigate, product]);
 
   useEffect(() => {
     if (loading) return;
@@ -327,8 +330,9 @@ function ProductSheet() {
     );
   }
 
-  const isFav = favorites.has(product.id);
-  const brand = getBrandById(product.brand_id);
+  const isFav = favorites.has(product.barcode);
+  const brand: { name: string; sections?: { actionnariat?: ShareholderNode; politique?: { facts: ProductFact[] }; fabrication?: { conditions_travail?: { facts: ProductFact[] } } } } | null =
+    product.brand ? { name: product.brand } : null;
   const toggle = (sid: string) => setOpen((o) => ({ ...o, [sid]: !o[sid] }));
 
   const sections: { id: string; label: string; Icon: LucideIcon; content: ReactNode }[] = [
@@ -336,17 +340,13 @@ function ProductSheet() {
       id: "actionnariat",
       label: "Actionnariat",
       Icon: Building2,
-      content: brand && brand.sections.actionnariat.children?.length ? (
-        <ActionnariatBlock root={brand.sections.actionnariat} />
-      ) : (
-        <EmptyState />
-      ),
+      content: <EmptyState />,
     },
     {
       id: "politique",
       label: "Politique & Lobbying",
       Icon: Landmark,
-      content: <FactsList facts={brand?.sections.politique.facts ?? []} />,
+      content: <FactsList facts={[]} />,
     },
     {
       id: "ecologie",
@@ -354,9 +354,9 @@ function ProductSheet() {
       Icon: Leaf,
       content: (
         <>
-          <FactsList facts={product.sections.ecologie.facts} />
+          <FactsList facts={[]} />
           <SubLabel>Matières premières</SubLabel>
-          <FactsList facts={product.sections.ecologie.matieres_premieres?.facts ?? []} />
+          <FactsList facts={[]} />
         </>
       ),
     },
@@ -364,32 +364,21 @@ function ProductSheet() {
       id: "fabrication",
       label: "Fabrication",
       Icon: MapPin,
-      content: (() => {
-        const ct =
-          product.sections.fabrication.conditions_travail ??
-          brand?.sections.fabrication.conditions_travail;
-        return (
-          <>
-            <FactsList facts={product.sections.fabrication.facts} />
-            {ct && ct.facts.length > 0 && (
-              <>
-                <SubLabel>Conditions de travail</SubLabel>
-                <FactsList facts={ct.facts} />
-              </>
-            )}
-          </>
-        );
-      })(),
+      content: (
+        <>
+          <FactsList facts={[]} />
+          <SubLabel>Conditions de travail</SubLabel>
+          <FactsList facts={[]} />
+        </>
+      ),
     },
   ];
 
   const activeFilterDef = FILTERS.find((f) => f.id === activeFilter)!;
-  const alternatives = product.similar_product_ids
-    .map((sid) => getProductById(sid))
-    .filter((p): p is NonNullable<typeof p> => !!p)
-    .filter((p) => p[activeFilterDef.key]);
+  void activeFilterDef;
+  const alternatives: never[] = [];
 
-  const categoryLabel = CATEGORY_LABEL[product.category_slug] ?? product.category_slug;
+  const categoryLabel = "";
 
   return (
     <div
@@ -457,7 +446,7 @@ function ProductSheet() {
 
         {!heroVisible ? (
           <button
-            onClick={() => favStore.toggle(product.id)}
+            onClick={() => favStore.toggle(product.barcode)}
             aria-label="favori"
             style={{
               width: "34px",
@@ -500,8 +489,8 @@ function ProductSheet() {
           }}
         >
           <ProductThumb
-            src={product.thumbnail_url}
-            alt={product.name}
+            src={product.imageUrl ?? ""}
+            alt={product.name ?? ""}
             Icon={Package}
             width={110}
             height={110}
@@ -541,10 +530,10 @@ function ProductSheet() {
               {brand?.name ?? ""}
             </div>
             <div style={{ fontSize: "12px", fontWeight: 400, color: C.faint }}>
-              {product.country} · {categoryLabel}
+              {product.countryOfOrigin ?? ""} {categoryLabel ? `· ${categoryLabel}` : ""}
             </div>
             <button
-              onClick={() => favStore.toggle(product.id)}
+              onClick={() => favStore.toggle(product.barcode)}
               aria-label="favori"
               style={{
                 background: "transparent",
@@ -684,49 +673,7 @@ function ProductSheet() {
           })}
         </div>
 
-        {alternatives.map((a) => (
-          <Link
-            key={a.id}
-            to="/produit/$id"
-            params={{ id: a.id }}
-            style={{
-              textDecoration: "none",
-              border: `0.5px solid ${C.border}`,
-              borderRadius: "14px",
-              padding: "12px",
-              margin: "0 12px 8px",
-              background: "white",
-              display: "flex",
-              gap: "10px",
-            }}
-          >
-            <ProductThumb
-              src={a.thumbnail_url}
-              alt={a.name}
-              Icon={Leaf}
-              width={36}
-              height={36}
-              radius={8}
-              fallbackBg={C.lightGreen}
-              iconColor={C.primary}
-              iconSize={18}
-            />
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: "13px", fontWeight: 500, color: C.dark }}>{a.name}</div>
-              <div
-                style={{
-                  fontSize: "11px",
-                  fontWeight: 400,
-                  color: C.muted,
-                  marginTop: "4px",
-                  lineHeight: 1.5,
-                }}
-              >
-                {getBrandById(a.brand_id)?.name ?? ""} · {a.country}
-              </div>
-            </div>
-          </Link>
-        ))}
+        {alternatives.map(() => null)}
 
         <div style={{ height: "24px" }} />
       </div>
