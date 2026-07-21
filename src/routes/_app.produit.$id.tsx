@@ -352,25 +352,62 @@ function ProductSheet() {
       id: "ecologie",
       label: "Écologie",
       Icon: Leaf,
-      content: (
-        <>
-          <FactsList facts={[]} />
-          <SubLabel>Matières premières</SubLabel>
-          <FactsList facts={[]} />
-        </>
-      ),
+      content: (() => {
+        const ecoFacts = product.wikirateData?.filter(d =>
+          d.metric === "Wikirate SDG Metric design+Common Environmental Metrics Reported"
+        ) ?? [];
+        const latest = ecoFacts.sort((a, b) => b.year - a.year)[0];
+        if (!latest) return <EmptyState />;
+        return (
+          <FactRow
+            fact={{
+              text: `Ferrero SpA publie ${latest.value} indicateur(s) environnemental(aux) standardisé(s) dans ses rapports (${latest.year}).`,
+              source_name: "Wikirate",
+              source_year: latest.year,
+            }}
+            last
+          />
+        );
+      })(),
     },
     {
       id: "fabrication",
       label: "Fabrication",
       Icon: MapPin,
-      content: (
-        <>
-          <FactsList facts={[]} />
-          <SubLabel>Conditions de travail</SubLabel>
-          <FactsList facts={[]} />
-        </>
-      ),
+      content: (() => {
+        const labourFact = product.wikirateData?.find(d =>
+          d.metric === "Commons+Child Labour Policy"
+        );
+        const reportYears = product.wikirateData?.filter(x => x.metric === "Core+Company Report Available").map(x => x.year) ?? [0];
+        const maxReportYear = Math.max(...reportYears);
+        const reportFact = product.wikirateData?.find(d =>
+          d.metric === "Core+Company Report Available" && d.year === maxReportYear
+        );
+        if (!labourFact && !reportFact) return <EmptyState />;
+        return (
+          <>
+            {labourFact && (
+              <FactRow
+                fact={{
+                  text: `Politique travail des enfants : ${labourFact.value === "Partial" ? "politique partielle en place" : labourFact.value} (${labourFact.year}).`,
+                  source_name: "Wikirate · Commons",
+                  source_year: labourFact.year,
+                }}
+              />
+            )}
+            {reportFact && (
+              <FactRow
+                fact={{
+                  text: `Rapport de durabilité disponible : ${reportFact.value === "Yes" ? "Oui" : "Non"} (${reportFact.year}).`,
+                  source_name: "Wikirate · Core",
+                  source_year: reportFact.year,
+                }}
+                last
+              />
+            )}
+          </>
+        );
+      })(),
     },
   ];
 
