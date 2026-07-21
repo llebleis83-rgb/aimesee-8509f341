@@ -22,9 +22,7 @@ function Scanner() {
     }
   }, [navigate]);
 
-  // Quand un produit est trouvé → naviguer vers la fiche
   useEffect(() => {
-    console.log('state:', JSON.stringify(state));
     if (state.status === "found") {
       navigate({
         to: "/produit/$id",
@@ -34,10 +32,8 @@ function Scanner() {
     if (state.status === "not_found") {
       navigate({ to: "/produit-non-trouve" });
     }
-    if (state.status === "error") {
-      console.error('Erreur lookup:', state.message);
-    }
   }, [state, navigate]);
+
 
   const handleSearch = () => {
     if (searchInput.trim()) lookup(searchInput.trim());
