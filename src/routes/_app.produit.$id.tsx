@@ -388,30 +388,61 @@ function ProductSheet() {
       content: (() => {
         const facts = product.consumerFacts?.filter(f => f.category === "fabrication") ?? [];
         const labourFact = product.wikirateData?.find(d => d.metric === "Commons+Child Labour Policy");
-        if (facts.length === 0 && !labourFact) return <EmptyState />;
+        const ktcScore = product.wikirateData?.find(d => d.metric === "KnowTheChain+1.1 Commitment");
+        const ktcSupplier = product.wikirateData?.find(d => d.metric === "KnowTheChain+1.2 Supplier Code of Conduct");
+        const ktcMgmt = product.wikirateData?.find(d => d.metric === "KnowTheChain+1.3 Management and Accountability");
+
         return (
           <>
             {facts.map((f, i) => (
               <FactRow
                 key={i}
                 fact={{ text: f.text, source_name: f.source, source_year: new Date().getFullYear() }}
-                last={i === facts.length - 1 && !labourFact}
               />
             ))}
             {labourFact && (
               <FactRow
                 fact={{
-                  text: `Politique travail des enfants (Ferrero SpA) : ${labourFact.value === "Partial" ? "politique partielle en place" : labourFact.value} (${labourFact.year}).`,
+                  text: `Politique travail des enfants : ${labourFact.value === "Partial" ? "politique partielle en place" : labourFact.value} (${labourFact.year}).`,
                   source_name: "Wikirate · Commons",
                   source_year: labourFact.year,
+                }}
+              />
+            )}
+            {ktcScore && (
+              <FactRow
+                fact={{
+                  text: `KnowTheChain — Engagement contre le travail forcé : ${ktcScore.value}/100 points (${ktcScore.year}).`,
+                  source_name: "Wikirate · KnowTheChain",
+                  source_year: ktcScore.year,
+                }}
+              />
+            )}
+            {ktcSupplier && (
+              <FactRow
+                fact={{
+                  text: `KnowTheChain — Code de conduite fournisseurs : ${ktcSupplier.value}/100 points (${ktcSupplier.year}).`,
+                  source_name: "Wikirate · KnowTheChain",
+                  source_year: ktcSupplier.year,
+                }}
+              />
+            )}
+            {ktcMgmt && (
+              <FactRow
+                fact={{
+                  text: `KnowTheChain — Gestion et responsabilité : ${ktcMgmt.value}/100 points (${ktcMgmt.year}).`,
+                  source_name: "Wikirate · KnowTheChain",
+                  source_year: ktcMgmt.year,
                 }}
                 last
               />
             )}
+            {!labourFact && !ktcScore && facts.length === 0 && <EmptyState />}
           </>
         );
       })(),
     },
+
   ];
 
   const activeFilterDef = FILTERS.find((f) => f.id === activeFilter)!;
